@@ -139,7 +139,7 @@ The plugin uses the Untappd check-in ID (extracted from GUID) to prevent duplica
 ```php
 function bj_checkin_exists($checkin_id) {
     $args = [
-        'post_type' => 'beer',
+        'post_type' => 'beer_checkin',
         'post_status' => 'any',
         'meta_query' => [
             [

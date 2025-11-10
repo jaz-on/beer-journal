@@ -7,7 +7,7 @@ Beer Journal uses WordPress's native database structure with Custom Post Types, 
 ## WordPress Core Tables Used
 
 ### `wp_posts`
-Stores the check-in posts (Custom Post Type: `beer`)
+Stores the check-in posts (Custom Post Type: `beer_checkin`)
 
 **Key Fields**:
 - `ID`: Post ID (primary key)
@@ -15,7 +15,7 @@ Stores the check-in posts (Custom Post Type: `beer`)
 - `post_content`: User comment (optional)
 - `post_date`: Check-in date (important for chronological order)
 - `post_status`: 'publish' or 'draft'
-- `post_type`: 'beer'
+- `post_type`: 'beer_checkin'
 - `post_name`: Auto-generated slug
 - `post_author`: User ID who imported (usually admin)
 
@@ -78,11 +78,11 @@ Stores image metadata
 - `_bj_image_hash`: MD5 hash for duplicate detection
 - `_bj_image_source_url`: Original Untappd URL
 
-## Custom Post Type: `beer`
+## Custom Post Type: `beer_checkin`
 
 ### Registration
 ```php
-register_post_type('beer', [
+register_post_type('beer_checkin', [
     'public' => true,
     'show_in_rest' => true,        // REST API support
     'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],

@@ -204,7 +204,7 @@ function bj_log_debug($message) {
 **Implementation**:
 ```php
 add_submenu_page(
-    'edit.php?post_type=beer',
+    'edit.php?post_type=beer_checkin',
     __('Logs', 'beer-journal'),
     __('Logs', 'beer-journal'),
     'manage_options',

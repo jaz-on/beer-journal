@@ -204,7 +204,7 @@ function bj_admin_notices() {
                 <a href="%s">Review drafts</a></p>
             </div>',
             $draft_count,
-            admin_url('edit.php?post_type=beer&post_status=draft')
+            admin_url('edit.php?post_type=beer_checkin&post_status=draft')
         );
     }
 }
