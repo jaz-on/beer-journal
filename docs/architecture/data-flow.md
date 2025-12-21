@@ -259,12 +259,27 @@ wp_set_object_terms($post_id, $term_name, $taxonomy);
   - Clear post cache
   - Clear taxonomy cache
   - Clear stats transients
+  - Clear transients liés aux requêtes d’archives (si applicable)
 
 #### Step 6.3: Trigger Hooks
 - **Component**: `BJ_Importer`
 - **Actions**:
   - `bj_after_checkin_imported` (with post_id)
   - `bj_after_batch_import` (with count)
+
+---
+
+## Exclusion de synchronisation (Protection des edits)
+
+Lorsque `_bj_exclude_sync` vaut `'1'` sur un check-in existant, toute tentative de mise à jour lors d’une synchronisation est ignorée. Cette protection évite l’écrasement d’éditions manuelles ou la réapparition de doublons.
+
+Points d’entrée concernés:
+- Mise à jour via RSS Sync (nouveaux GUID pointant vers un post existant)
+- Ré-imports déclenchés par le crawler historique
+
+Effets:
+- Le post est conservé tel quel
+- Les compteurs/statistiques peuvent néanmoins être recalculés
 
 ---
 

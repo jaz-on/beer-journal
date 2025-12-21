@@ -4,6 +4,8 @@
 
 Beer Journal provides numerous hooks (actions) and filters for customization. All hooks are prefixed with `bj_` to avoid conflicts.
 
+Note: This page is the source of truth for frontend hooks/filters. Pages in `docs/wordpress/*.md` should reference this document to avoid duplication.
+
 ## Actions (Hooks)
 
 Actions allow you to execute code at specific points in the plugin execution.
@@ -111,6 +113,20 @@ do_action('bj_after_rss_sync', $imported_count);
 ---
 
 ## Filters
+### Check-in Content
+
+```php
+/**
+ * Filter full check-in content HTML
+ *
+ * @param string $content  Full HTML
+ * @param int    $post_id  Post ID
+ * @return string
+ */
+apply_filters('bj_checkin_content', $content, $post_id);
+```
+
+---
 
 Filters allow you to modify data before it's used or displayed.
 

@@ -39,6 +39,18 @@ Beer Journal provides theme-agnostic templates that can be overridden by your th
 
 ---
 
+## Microformats
+
+Templates appliquent par défaut des microformats utiles à l’écosystème IndieWeb:
+- `h-entry` sur l’élément principal (single)
+- `p-name` pour le titre
+- `e-content` pour le contenu
+- `dt-published` pour la date
+
+Ces microformats peuvent être désactivés via l’option `bj_microformats_enabled`. Voir [Schema Documentation](../development/schema.md).
+
+---
+
 ### Taxonomy Templates
 
 #### Beer Style Archive
@@ -80,6 +92,13 @@ Beer Journal provides theme-agnostic templates that can be overridden by your th
 - Filter by other criteria
 
 **Location**: `public/templates/taxonomy-venue.php`
+
+---
+
+## Future: Menu Taxonomy Archive
+
+Une archive pour `beer_menu` (collections éditoriales) est prévue dans une version future (pas MVP).
+Le rendu suivra les mêmes principes (grid/table, filtres), exposé via blocks et filtres (pas de shortcodes).
 
 ---
 

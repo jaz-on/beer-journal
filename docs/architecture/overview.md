@@ -125,6 +125,23 @@ The complete data flow from Untappd to WordPress:
 - **Organization**: Hierarchical organization (beer styles)
 - **SEO**: Better URL structure and organization
 
+### Competitive Differentiators
+- **API-free mode**: Fonctionne avec RSS public + scraping (pas d’API Untappd requise)
+- **Rating mapping system**: Règles et labels personnalisables
+- **Action Scheduler**: File persistante, retries
+- **Modern blocks + filters**: Pas de shortcodes/widgets, personnalisation via filtres
+- **Data quality gating**: Publication conditionnée par la complétude (ex: note requise)
+
+### SEO & Markup
+- **Schema.org JSON-LD**: Type Review/Product injecté dans `wp_head` (activé par défaut)
+- **Microformats**: `h-entry`/`e-content` dans les templates (activé par défaut)
+- **Options**: `bj_schema_enabled`, `bj_microformats_enabled` pour activer/désactiver
+
+### Caching Strategy
+- **Transients**: `bj_*` comme préfixe, TTL recommandés (scraping 3h, stats 1h, requêtes 30min)
+- **Invalidation**: Au moment des imports/syncs pour conserver la fraîcheur
+- **Version initiale (1.0.0)**: Option A (automatique)
+
 ## Technology Stack
 
 - **WordPress**: 6.0+ (Custom Post Types, Taxonomies, REST API)

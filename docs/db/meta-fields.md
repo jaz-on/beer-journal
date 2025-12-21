@@ -49,6 +49,7 @@ Data specific to this check-in instance.
 | `_bj_serving_type` | string | Type of serving | `"Draft"`, `"Bottle"`, `"Can"`, `"Cask"` | ○ |
 | `_bj_purchase_venue` | string | Where beer was purchased (if different from consumption venue) | `"Beer Store"` | ○ |
 | `_bj_checkin_date` | datetime | Check-in date (ISO 8601 format) | `"2025-11-10T18:13:18Z"` | ✓ |
+| `_bj_exclude_sync` | string (`'1'`/`''`) | Prevents automatic sync from updating this post | `'1'` | ○ |
 
 **Rating Fields**: Both `_bj_rating_raw` and `_bj_rating_rounded` are stored. The raw rating preserves original data, while rounded is used for display and filtering.
 

@@ -260,9 +260,139 @@ while ($attempt < $max_attempts) {
 
 ---
 
+## RSS Cache System
+
+### Purpose
+
+Prevent duplicate processing of RSS items by caching processed URLs. This ensures idempotence and avoids unnecessary scraping.
+
+### Cache Structure
+
+**Transient Cache** (Primary):
+- **Key**: `bj_untappd_rss_cache`
+- **TTL**: 6 hours (aligned with polling frequency)
+- **Format**: Array of check-in URLs (strings)
+- **Purpose**: Fast lookup for recent syncs
+
+**Persistent Cache** (Backup):
+- **Option**: `bj_untappd_rss_cache_persistent`
+- **Format**: Array of check-in URLs (strings)
+- **Purpose**: Recovery after server restart or transient expiration
+- **Update**: Saved after each successful sync
+
+### Cache Format
+
+**Structure**:
+```php
+// Transient format
+$cache = [
+    'https://untappd.com/user/jaz_on/checkin/1527514863',
+    'https://untappd.com/user/jaz_on/checkin/1527514862',
+    'https://untappd.com/user/jaz_on/checkin/1527514861',
+    // ... more URLs
+];
+
+// Stored as serialized array in WordPress
+set_transient('bj_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
+update_option('bj_untappd_rss_cache_persistent', $cache);
+```
+
+### Cache Operations
+
+#### Load Cache
+
+```php
+function bj_load_rss_cache() {
+    // Try transient first (faster)
+    $cache = get_transient('bj_untappd_rss_cache');
+    
+    if ($cache === false) {
+        // Fallback to persistent option
+        $cache = get_option('bj_untappd_rss_cache_persistent', []);
+        
+        // Restore transient if persistent exists
+        if (!empty($cache)) {
+            set_transient('bj_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
+        }
+    }
+    
+    // Convert to Set for O(1) lookup
+    return array_flip($cache); // Use keys for fast lookup
+}
+```
+
+#### Save Cache
+
+```php
+function bj_save_rss_cache($processed_urls) {
+    $urls_array = array_values($processed_urls); // Convert Set to array
+    
+    // Update transient (primary)
+    set_transient('bj_untappd_rss_cache', $urls_array, 6 * HOUR_IN_SECONDS);
+    
+    // Update persistent option (backup)
+    update_option('bj_untappd_rss_cache_persistent', $urls_array);
+}
+```
+
+#### Check if URL Processed
+
+```php
+function bj_is_url_processed($url, $cache) {
+    return isset($cache[$url]);
+}
+```
+
+### Cache Invalidation
+
+**Automatic**:
+- Transient expires after 6 hours
+- Persistent cache remains until manual clear
+
+**Manual**:
+- Admin action: "Clear RSS Cache"
+- Option: `bj_clear_rss_cache` (WP-CLI command)
+
+**Implementation**:
+```php
+function bj_clear_rss_cache() {
+    delete_transient('bj_untappd_rss_cache');
+    delete_option('bj_untappd_rss_cache_persistent');
+}
+```
+
+### Cache Size Management
+
+**Limitation**: Prevent unbounded growth
+
+**Strategy**: Keep only last N URLs (e.g., 1000)
+
+```php
+function bj_trim_rss_cache($cache, $max_size = 1000) {
+    if (count($cache) > $max_size) {
+        // Keep most recent URLs (assuming chronological order)
+        return array_slice($cache, -$max_size, null, true);
+    }
+    return $cache;
+}
+```
+
+### Performance Considerations
+
+**Lookup Time**: O(1) with array keys (hash map)
+
+**Memory**: ~100 bytes per URL (1000 URLs ≈ 100KB)
+
+**Storage**: Transient in object cache (if available), option in database
+
+**Optimization**: Use `array_flip()` for Set-like behavior in PHP
+
+---
+
 ## Related Documentation
 
 - [RSS Sync Architecture](../architecture/rss-sync.md)
 - [Polling Adaptive](polling-adaptive.md)
 - [Synchronization Flow](../user-flows/sync.md)
+- [Untappd Integration](untappd-integration.md)
 

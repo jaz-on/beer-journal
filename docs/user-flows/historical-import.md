@@ -21,6 +21,9 @@ flowchart TD
     ExtractCheckins --> ProcessBatch[Process Batch]
     ProcessBatch --> Scrape[Scrape Each Check-in]
     Scrape --> Import[Import to WordPress]
+    Import --> ExcludeCheck{Excluded from Sync?}
+    ExcludeCheck -->|Yes| Checkpoint
+    ExcludeCheck -->|No| Checkpoint
     Import --> Checkpoint[Save Checkpoint]
     Checkpoint --> MorePages{More Pages?}
     MorePages -->|Yes| NextPage[Fetch Next Page]

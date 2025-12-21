@@ -157,6 +157,37 @@ composer test
 
 ---
 
+### Documentation Workflow
+
+When updating documentation:
+
+1. **Small corrections**: Commit directly to `docs` branch
+2. **Feature documentation**: Create `docs/feature-name` branch
+3. **Major updates**: Create `docs/update-topic` branch
+4. **Validation**: Run `scripts/validate-docs.sh` before merging
+
+**Documentation Structure**:
+- Architecture docs: `docs/architecture/`
+- Database schema: `docs/db/`
+- Features: `docs/features/`
+- User flows: `docs/user-flows/`
+- Development guides: `docs/development/`
+
+**Tools**:
+- `scripts/validate-docs.sh` - Validate documentation
+- `scripts/analyze-docs.php` - Analyze and generate reports
+- [Prompts réutilisables](prompts-reutilisables.md) - AI-assisted analysis
+- [Template de plan](template-plan-developpement.md) - Development plan template
+
+**Before merging documentation**:
+- [ ] All links work correctly
+- [ ] Mermaid diagrams are valid
+- [ ] Naming conventions are consistent (bj_, BJ_, _bj_)
+- [ ] Cross-references are correct
+- [ ] Validation script passes
+
+---
+
 ## Submission Checklist
 
 Before submitting a PR:

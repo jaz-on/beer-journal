@@ -194,6 +194,41 @@ npm start
 - `feature/`: Feature branches
 - `docs/`: Documentation branch
 
+### Documentation Workflow
+
+The `docs` branch is used for documentation maintenance and updates.
+
+**Structure**:
+```
+main (production)
+  ↑
+  ├── docs (documentation stable)
+  │   ├── docs/feature-name (documentation for a feature)
+  │   └── docs/update-topic (major documentation updates)
+  │
+  └── develop (code in development)
+      └── feature/* (code branches)
+```
+
+**Rules**:
+- **Small corrections**: Directly on `docs`, then merge to `main`
+- **Feature documentation**: Create `docs/feature-name` branch from `docs`
+- **Major updates**: Create `docs/update-topic` branch from `docs`
+- **Validation**: Always validate links and consistency before merge
+
+**Lifecycle**:
+1. Code development on `develop` or `feature/*`
+2. Parallel documentation on `docs/feature-name`
+3. Merge code → `develop`
+4. Merge doc → `docs`
+5. Validate and merge `docs` → `main`
+6. Merge `develop` → `main` (with up-to-date documentation)
+
+**Tools**:
+- `scripts/validate-docs.sh` - Validate documentation structure and links
+- `scripts/analyze-docs.php` - Analyze documentation and generate reports
+- See [Prompts réutilisables](docs/development/prompts-reutilisables.md) for AI-assisted analysis
+
 ### Commit Messages
 
 Follow Conventional Commits format:

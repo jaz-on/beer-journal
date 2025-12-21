@@ -185,7 +185,7 @@ if (!extension_loaded('curl') && !ini_get('allow_url_fopen')) {
 
 **Features**:
 - Template hierarchy support
-- Block editor integration (Phase 2)
+ - Block editor integration (version 1.0.0)
 
 ---
 

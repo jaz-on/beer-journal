@@ -88,6 +88,7 @@ flowchart TD
 - Image import settings
 - Rating system preferences
 - General options
+ - SEO: Schema.org JSON-LD et Microformats (activés par défaut, désactivables)
 
 ---
 

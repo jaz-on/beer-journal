@@ -24,6 +24,22 @@ RSS sync configuration and state.
 
 ---
 
+### Untappd Options
+
+Integration-specific options (optionnelles selon méthode utilisée).
+
+| Option Name | Type | Description | Default |
+|-------------|------|-------------|---------|
+| `bj_untappd_username` | string | Untappd username | `""` |
+| `bj_untappd_rss_key` | string | RSS/API key if required (optional) | `""` |
+| `bj_excluded_checkins` | array | List of check-in IDs to exclude from sync | `[]` |
+
+Notes:
+- `bj_excluded_checkins` complète la méta `_bj_exclude_sync` au niveau post (protection fine).
+- Pour l’import d’images, utiliser l’option existante `bj_import_images`.
+
+---
+
 ### Rating System Options
 
 Rating mapping and label configuration.
@@ -109,6 +125,21 @@ General plugin configuration.
 
 ---
 
+### SEO Options
+
+Structured data and microformats configuration.
+
+| Option Name | Type | Description | Default |
+|-------------|------|-------------|---------|
+| `bj_schema_enabled` | bool | Enable Schema.org JSON-LD (Review/Product) | `true` |
+| `bj_microformats_enabled` | bool | Enable microformats in templates (`h-entry`, `e-content`) | `true` |
+
+Notes:
+- These options are enabled by default. They can be disabled in Settings > Advanced.
+- Always escape JSON output and avoid sensitive data.
+
+---
+
 ### Notification Options
 
 Admin notification settings.
@@ -159,6 +190,21 @@ Temporary data stored in transients (not in `wp_options`, but related).
 | `bj_top_breweries` | array | Cached top breweries list | 1 day |
 
 **Usage**: Transients are automatically expired and don't need manual cleanup.
+
+---
+
+## Future Options (v1.5)
+
+### Cache Configuration (Option B)
+
+| Option Name | Type | Description | Default |
+|-------------|------|-------------|---------|
+| `bj_cache_enabled` | bool | Enable/disable application-level caching | `true` |
+| `bj_cache_hours` | int | Cache duration in hours (applies to scraping/stats/queries) | `3` |
+
+Notes:
+- MVP uses Option A (automatic, no UI).
+- Option B will provide a simple setting and a “Clear cache” button.
 
 ---
 

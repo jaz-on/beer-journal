@@ -77,43 +77,12 @@ If hierarchical parsing is too complex initially:
 - Less flexible for filtering/grouping
 - Can be migrated to hierarchical later
 
-### Recommendation
+### Recommandation (version initiale 1.0.0)
 
-**Phase 1 (MVP)**: Start with flat structure
+Commencer avec une structure plate
 - Simpler implementation
 - Faster to develop
 - Can parse hierarchy later
-
-**Phase 2**: Migrate to hierarchical
-- Add migration script
-- Parse existing terms
-- Create parent-child relationships
-
-### Migration Script (Future)
-
-```php
-function bj_migrate_styles_to_hierarchical() {
-    $terms = get_terms([
-        'taxonomy' => 'beer_style',
-        'hide_empty' => false,
-    ]);
-    
-    foreach ($terms as $term) {
-        $parts = explode(' - ', $term->name, 2);
-        
-        if (count($parts) === 2) {
-            $parent_name = trim($parts[0]);
-            $parent_term = bj_get_or_create_term('beer_style', $parent_name, [
-                'parent' => 0,
-            ]);
-            
-            wp_update_term($term->term_id, 'beer_style', [
-                'parent' => $parent_term->term_id,
-            ]);
-        }
-    }
-}
-```
 
 ## Related Documentation
 

@@ -31,7 +31,7 @@ composer install --no-dev
 npm install
 ```
 
-**Purpose**: Gutenberg blocks (Phase 2)
+**Purpose**: Gutenberg blocks (version 1.0.0)
 
 ---
 
@@ -103,7 +103,7 @@ composer phpstan
 
 ### 4. Build Assets
 
-**Gutenberg Blocks** (Phase 2):
+**Gutenberg Blocks** (version 1.0.0):
 ```bash
 npm run build
 ```

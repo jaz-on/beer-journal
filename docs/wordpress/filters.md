@@ -4,6 +4,8 @@
 
 Beer Journal provides numerous filters for customizing data, templates, and behavior. All filters are prefixed with `bj_`.
 
+Note: Pour éviter les divergences, la source de vérité des filtres frontend est `docs/frontend/hooks-filters.md`. Cette page référence et complète, sans dupliquer toute la matière.
+
 ## Template Filters
 
 ### Check-in Template

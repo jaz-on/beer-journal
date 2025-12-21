@@ -11,7 +11,7 @@ beer-journal/
 ├── includes/          # Core functionality
 ├── admin/             # Admin interface
 ├── public/            # Frontend
-├── blocks/            # Gutenberg blocks (Phase 2)
+├── blocks/            # Gutenberg blocks
 └── languages/         # Translations
 ```
 
@@ -290,5 +290,5 @@ BJ_Public
 
 - [Architecture Overview](../architecture/overview.md)
 - [Components](../architecture/components.md)
-- [MVP Features](mvp-features.md)
+- [Checklist](checklist.md)
 

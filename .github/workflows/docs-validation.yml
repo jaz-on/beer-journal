@@ -1,0 +1,68 @@
+name: Documentation Validation
+
+on:
+  push:
+    branches:
+      - docs
+      - main
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs-validation.yml'
+  pull_request:
+    branches:
+      - docs
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  validate:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Validate documentation structure
+        run: |
+          # Vérifier que les fichiers requis existent
+          test -f docs/architecture/overview.md || exit 1
+          test -f docs/architecture/components.md || exit 1
+          test -f docs/db/schema.md || exit 1
+          test -f docs/features/checklist.md || exit 1
+          test -f DEVELOPMENT.md || exit 1
+          echo "✓ Structure de documentation valide"
+      
+      - name: Run validation script
+        run: |
+          chmod +x scripts/validate-docs.sh
+          ./scripts/validate-docs.sh || true
+          cat docs-validation-report.txt
+      
+      - name: Check for broken links
+        run: |
+          # Vérifier les liens markdown de base
+          find docs -name "*.md" -type f | while read file; do
+            # Extraire les liens relatifs et vérifier qu'ils existent
+            grep -oP '\[.*?\]\(\K[^)]+' "$file" | grep -v '^http' | while read link; do
+              link_path=$(dirname "$file")/$link
+              if [ ! -f "$link_path" ] && [ ! -d "$link_path" ]; then
+                echo "⚠️  Lien potentiellement cassé dans $file : $link"
+              fi
+            done
+          done
+      
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs-validation-report
+          path: docs-validation-report.txt
+          retention-days: 7
+

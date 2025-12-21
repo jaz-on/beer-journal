@@ -17,7 +17,9 @@ flowchart TD
     CompareGUID -->|No| NoNew[No New Check-ins]
     CompareGUID -->|Yes| LoopItems[Loop Through Items]
     LoopItems --> CheckExists{Already Imported?}
-    CheckExists -->|Yes| NextItem[Next Item]
+    CheckExists -->|Yes| CheckExcluded{Excluded from Sync?}
+    CheckExcluded -->|Yes| NextItem[Skip (Protected)]
+    CheckExcluded -->|No| NextItem[Next Item]
     CheckExists -->|No| Scrape[Scrape Check-in Page]
     Scrape --> Validate{Data Valid?}
     Validate -->|No| SaveDraft[Save as Draft]

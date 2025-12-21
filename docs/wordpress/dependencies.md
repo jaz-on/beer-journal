@@ -98,14 +98,14 @@ Beer Journal dependencies: Composer packages, npm packages, and WordPress requir
 
 **Version**: Latest
 
-**Purpose**: Build tools for Gutenberg blocks (Phase 2)
+**Purpose**: Build tools for Gutenberg blocks (version 1.0.0)
 
 **Usage**:
 - Building Gutenberg blocks
 - JavaScript/SCSS compilation
 - Block development
 
-**Required**: Only for Phase 2 (Gutenberg blocks)
+**Required**: Required for Gutenberg blocks
 
 ---
 

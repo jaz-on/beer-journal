@@ -153,6 +153,41 @@ if (is_wp_error($result)) {
 
 ---
 
+## Cache Helper (Guidelines)
+
+### `bj_get_cached_data()` (contrat recommandé)
+
+Centralise l’accès aux transients avec une clé normalisée et un TTL par défaut.
+
+**Signature (contrat)**:
+```php
+function bj_get_cached_data($key, callable $producer, int $ttlSeconds = null)
+```
+
+**Paramètres**:
+- `$key` (string): Suffixe de clé sans préfixe (`'bj_'` sera ajouté en interne)
+- `$producer` (callable): Fonction productrice appelée en cas de cache manquant
+- `$ttlSeconds` (int|null): TTL en secondes, défaut 3 heures si `null`
+
+**Retour**: Valeur produite ou mise en cache (type mixte selon usage)
+
+**Exemple**:
+```php
+$stats = bj_get_cached_data('global_stats', function () {
+    // compute stats...
+    return ['total' => 200, 'unique' => 150];
+}, HOUR_IN_SECONDS);
+```
+
+**Conventions de clés**:
+- Préfixe `bj_` ajouté automatiquement
+- Noms courts et déterministes: `bj_global_stats`, `bj_scrape_{id}`, `bj_query_archive_{hash}`
+
+**Notes**:
+- Voir la page [Caching](../development/caching.md) pour TTL recommandés et invalidation.
+
+---
+
 ## Logging Functions
 
 ### `bj_get_log_directory()`

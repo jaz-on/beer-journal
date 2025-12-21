@@ -57,6 +57,10 @@ Complete audit and validation of Beer Journal documentation structure, content, 
   - `docs/development/coding-standards.md`
   - `docs/development/logging-strategy.md`
   - `docs/features/error-handling-detailed.md`
+ - Clarified policy: no shortcodes/widgets; prefer blocks + filters
+ - Added SEO options: `bj_schema_enabled`, `bj_microformats_enabled` (default ON)
+ - Documented exclude-from-sync meta: `_bj_exclude_sync`
+ - Added caching conventions page and references (Option A by default)
 
 ### Structure Preparation
 - Created `.gitkeep` files in all code directories to maintain Git structure
@@ -76,6 +80,9 @@ Complete audit and validation of Beer Journal documentation structure, content, 
 2. Follow development order outlined in `DEVELOPMENT.md`
 3. Reference documentation in `/docs/` during implementation
 4. Follow coding standards from `docs/development/coding-standards.md`
+5. Implement exclude-from-sync check and respect during imports/sync
+6. Inject Schema.org JSON-LD and microformats (guarded by options)
+7. Use caching helper conventions for scraping/stats/queries
 
 ### For Documentation Maintenance
 1. Keep documentation updated as code evolves

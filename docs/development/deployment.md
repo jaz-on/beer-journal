@@ -182,6 +182,54 @@ svn ci -m "Tag version 1.0.0"
 
 ---
 
+## GitHub Updater (Development Only)
+
+### Purpose
+
+During development phase, GitHub Updater allows automatic updates from GitHub releases without requiring WordPress.org submission. This is **removed before WordPress.org submission**.
+
+### Configuration
+
+**Plugin Headers** (in `beer-journal.php`):
+```php
+/**
+ * Plugin Name: Beer Journal
+ * ...
+ * GitHub Plugin URI: jaz-on/beer-journal
+ * GitHub Branch: main
+ * Primary Branch: main
+ */
+```
+
+**Composer Dependency** (optional):
+```json
+{
+  "require-dev": {
+    "afragen/git-updater": "^11.0"
+  }
+}
+```
+
+### Usage
+
+1. Install GitHub Updater plugin (if using Composer dependency)
+2. Create GitHub releases for each version
+3. Plugin auto-updates from GitHub releases
+4. **Before WordPress.org submission**: Remove GitHub headers from plugin file
+
+### Removal Before Submission
+
+**Required Steps**:
+- [ ] Remove `GitHub Plugin URI` header
+- [ ] Remove `GitHub Branch` header
+- [ ] Remove `Primary Branch` header
+- [ ] Remove `afragen/git-updater` from Composer (if added)
+- [ ] Test plugin without GitHub Updater
+
+**Note**: This is a repository configuration, not a plugin feature. It should not appear in the final WordPress.org submission.
+
+---
+
 ## Related Documentation
 
 - [Build Process](build-process.md)

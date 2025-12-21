@@ -1,8 +1,10 @@
-# Gutenberg Blocks
+# Gutenberg Blocks — version initiale (1.0.0)
 
 ## Overview
 
-Beer Journal provides Gutenberg blocks for displaying check-ins in the block editor. Blocks are available in Phase 2 (Version 1.5).
+Beer Journal fournit des blocks Gutenberg pour afficher les check-ins dans l'éditeur de blocs. Ces blocks font partie de la version initiale (1.0.0).
+
+Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et filtres (`bj_*`).
 
 ## Available Blocks
 
@@ -279,4 +281,46 @@ function bj_render_checkins_list_block($attributes) {
 - [Templates](templates.md)
 - [Template Tags](template-tags.md)
 - [Styling](styling.md)
+
+---
+
+## Validation des blocks (version initiale 1.0.0)
+
+### Critères fonctionnels
+- Insertion depuis l’éditeur (palette, recherche “Beer Journal”)
+- Rendu côté front identique/équivalent au rendu éditeur
+- Attributs appliqués correctement (tri, filtres, options d’affichage)
+- Dégradé acceptable sans JavaScript côté front (si applicable)
+
+### Accessibilité (a11y)
+- Navigation clavier complète (focus visible, ordre logique)
+- Alt text d’images renseigné (“{beer_name} - {brewery}”)
+- Contrastes conformes WCAG sur composants rendus
+- Roles/ARIA pertinents si nécessaire
+
+### Internationalisation
+- Toutes les chaînes via `__()`, `_x()`, `sprintf()` (`beer-journal`)
+- Formats localisés (dates, nombres)
+
+### Performance
+- Build avec `@wordpress/scripts` (dépendances minimales)
+- CSS scopé aux blocks et chargement conditionnel
+- Requêtes WP_Query paginées, paramètres filtrables, caches WP si nécessaire
+
+### Qualité et sécurité
+- Lint JS/CSS OK
+- Échappement en sortie côté PHP pour SSR
+- Conformité WPCS côté PHP
+
+### Tests manuels minimaux
+- Éditeur: insertion/suppression, dupliquer, undo/redo, changement d’attributs
+- Front: affichage public, thèmes variés, responsive
+- Cas limites: zéro check-in, grand volume, champs manquants (image, style)
+
+### Définition de terminé (DoD)
+- Spécifications et attributs documentés ici
+- Traductions prêtes (.pot)
+- Lint/build passent sans erreur
+- Vérifications a11y de base effectuées
+- Revue visuelle sur mobile/tablette/desktop
 

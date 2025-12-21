@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes navigation between different views: archive, single, and taxonomy pages.
+This document describes navigation between different views: archive, single, and taxonomy pages, as well as admin interface navigation.
 
 ## Navigation Structure
 
@@ -260,9 +260,86 @@ Users can customize permalink structure via WordPress settings:
 
 ---
 
+## Admin Interface Navigation
+
+### Settings Page Structure
+
+**Location**: `Beer Journal > Settings`
+
+**Tab Navigation**:
+The settings page uses WordPress native tab navigation with 5 tabs:
+
+1. **Synchronization** - RSS sync configuration, adaptive polling settings
+2. **Historical Import** - Manual import interface, crawler settings
+3. **Rating System** - Rating mapping rules, custom labels
+4. **Taxonomies** - Review and merge taxonomy terms
+5. **Advanced** - Cache settings, Schema.org options, logs, debug
+
+### Tab Implementation
+
+**WordPress Native Tabs**:
+```php
+<div class="nav-tab-wrapper">
+    <a href="?page=beer-journal&tab=sync" class="nav-tab <?php echo $active_tab === 'sync' ? 'nav-tab-active' : ''; ?>">
+        <?php esc_html_e('Synchronization', 'beer-journal'); ?>
+    </a>
+    <!-- ... other tabs ... -->
+</div>
+```
+
+**Tab Content**:
+- Each tab displays its settings form
+- Tabs maintain state via URL parameter (`?tab=sync`)
+- Active tab highlighted with `nav-tab-active` class
+
+### Inline Help Texts
+
+**Purpose**: Provide contextual help directly under each settings section.
+
+**Implementation**:
+```php
+<p class="description">
+    <?php esc_html_e('RSS sync runs automatically based on your activity. Active users sync every 6 hours, inactive users sync weekly.', 'beer-journal'); ?>
+</p>
+```
+
+**Guidelines**:
+- Use `wp_kses_post()` for rich text help (if needed)
+- Position: Directly under each settings section
+- Format: Standard WordPress `.description` class
+- Optional icon: `dashicons-editor-help` (if needed for emphasis)
+- All text must be translatable (`esc_html_e()` or `esc_html__()`)
+
+**Example Sections with Help**:
+- **Synchronization Tab**: Help text explaining adaptive polling logic
+- **Historical Import Tab**: Help text about batch sizes and delays
+- **Rating System Tab**: Help text about mapping rules
+- **Advanced Tab**: Help text about cache and Schema.org options
+
+### Admin Interface Best Practices
+
+**WordPress Native Classes**:
+- Use `.nav-tab-wrapper` for tab container
+- Use `.nav-tab` and `.nav-tab-active` for tabs
+- Use `.description` for help texts
+- Use `.form-table` for settings forms
+
+**Minimal Custom CSS**:
+- Prefer WordPress native admin styles
+- Only add custom CSS when absolutely necessary
+- Test responsiveness on mobile devices
+
+**Accessibility**:
+- Proper ARIA labels for tabs
+- Keyboard navigation support
+- Screen reader friendly
+
+---
+
 ## Related Documentation
 
 - [Display Flow](display.md)
 - [Templates](../frontend/templates.md)
 - [Template Hierarchy](../frontend/template-hierarchy.md)
+- [Admin Interface](../architecture/components.md#9-admin-interface-bj_admin)
 
