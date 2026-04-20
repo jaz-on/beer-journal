@@ -13,8 +13,8 @@ wp-content/cache/supercache/
 
 # Dependencies
 node_modules/
-vendor/
-composer.lock
+# vendor/ and composer.lock are committed so installs from Git / Git Updater include
+# runtime Composer packages without running composer on the server.
 package-lock.json
 yarn.lock
 

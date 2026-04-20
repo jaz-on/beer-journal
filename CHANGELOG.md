@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - RSS sync records `bj_last_rss_sync_at` on every successful run; import invalidates stats transient
+- `vendor/` (runtime Composer packages) and `composer.lock` are versioned so Git / Git Updater installs work without `composer install` on the server
 
 ### Planned for future versions
 - Gutenberg blocks (checkins-list, checkin-card, stats-dashboard)
@@ -51,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `uninstall.php` to remove plugin options
 
 ### Notes
-- Requires `composer install` (see `vendor/`); Untappd HTML structure may change and affect scraping.
+- Runtime dependencies ship in `vendor/`; Untappd HTML structure may change and affect scraping.
 
 ## [0.1.0] - 2026-04-19
 

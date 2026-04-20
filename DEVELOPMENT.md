@@ -24,11 +24,13 @@ This guide will help you get started developing Beer Journal.
 
 ### 1. Install PHP Dependencies
 
+Runtime Composer packages are **committed** in `vendor/` so Git-based installs work out of the box. To add **dev** dependencies (PHPUnit, PHPCS, WPCS), run:
+
 ```bash
 composer install
 ```
 
-This will install:
+This will install (or ensure you have):
 - Guzzle HTTP client
 - Symfony DomCrawler
 - Symfony CSS Selector
