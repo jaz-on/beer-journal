@@ -24,3 +24,8 @@ Ordre cible : `Plugin Name`, `Plugin URI`, `Description`, `Version`, `Requires a
 
 - Liens d’action : filtre `plugin_action_links_{plugin_basename( __FILE__ )}` avec **Settings** vers la vraie page d’admin.
 - Ligne meta : `plugin_row_meta` (priorité 10), retour anticipé si `plugin_basename( __FILE__ ) !== $plugin_file`.
+
+## `Primary Branch` (Git Updater)
+
+- Valeur dans l’en-tête : **`main`** pour que les installs par défaut depuis GitHub suivent la branche stable.
+- Pour un site de dev qui suit **`dev`**, configurer la branche dans l’admin Git Updater (pas besoin de `Primary Branch: dev` dans le dépôt).

@@ -3,7 +3,7 @@
 ## Repository and branches
 
 - **`main`**: default branch on GitHub; reference tree, releases, and PR target. Protected (no force-push).
-- **`dev`**: integration branch for day-to-day work; typical target for [Git Updater](https://git-updater.com/) on a development site (`Primary Branch: dev` in plugin headers).
+- **`dev`**: integration branch for day-to-day work. The plugin header uses `Primary Branch: main` so default GitHub / Git Updater installs track stable work; on a development site (e.g. dev.jasonrouet.com), set the branch to `dev` in Git Updater’s settings per plugin.
 - **Documentation** lives in `docs/` on the same branches (no separate long-lived `docs` branch).
 
 **Plugin status:** `0.1.0` is an installable bootstrap (`beer-journal.php` only). MVP behaviour is described under `docs/` and in [CHANGELOG.md](CHANGELOG.md) as *target scope*, not as shipped code.
