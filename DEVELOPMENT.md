@@ -30,6 +30,8 @@ Runtime Composer packages are **committed** in `vendor/` so Git-based installs w
 composer install
 ```
 
+The committed tree matches **`composer install --no-dev`** (runtime packages only). After a full `composer install`, Git may show changes under `vendor/`; before committing unrelated work, run `composer install --no-dev` again (or `git restore vendor` if you did not mean to change dependencies).
+
 This will install (or ensure you have):
 - Guzzle HTTP client
 - Symfony DomCrawler

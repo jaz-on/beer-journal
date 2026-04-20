@@ -3,7 +3,7 @@
         'name' => 'beer-journal/beer-journal',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '495c7191002877724da30f599121405f3cea939a',
+        'reference' => 'd93ce31dd123587f35e71f9b88ea273807573d3d',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'beer-journal/beer-journal' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '495c7191002877724da30f599121405f3cea939a',
+            'reference' => 'd93ce31dd123587f35e71f9b88ea273807573d3d',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
