@@ -21,6 +21,7 @@ class BJ_Activator {
 	 */
 	public static function activate() {
 		BJ_Settings::ensure_defaults();
+		BJ_DB_Install::maybe_add_indexes();
 		flush_rewrite_rules();
 		do_action( 'bj_plugin_activated' );
 	}

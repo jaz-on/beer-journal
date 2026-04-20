@@ -113,7 +113,13 @@ class BJ_Action_Scheduler {
 		$importer = new BJ_Importer();
 		$result   = $parser->sync_new_items( $importer );
 		if ( is_wp_error( $result ) ) {
-			BJ_Logger::error( 'RSS sync failed: ' . $result->get_error_message() );
+			$msg = $result->get_error_message();
+			BJ_Logger::error( 'RSS sync failed: ' . $msg );
+			bj_send_notification_email(
+				'[Beer Journal] ' . __( 'RSS sync failed', 'beer-journal' ),
+				$msg,
+				'error'
+			);
 		}
 		$this->reschedule_adaptive();
 	}

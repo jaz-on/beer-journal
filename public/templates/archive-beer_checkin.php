@@ -14,23 +14,10 @@ $mf = get_option( 'bj_microformats_enabled', true ) ? 'h-feed' : '';
 		<header class="page-header">
 			<h1 class="page-title"><?php esc_html_e( 'Beer check-ins', 'beer-journal' ); ?></h1>
 		</header>
-
-		<?php if ( have_posts() ) : ?>
-			<div class="bj-checkin-grid">
-				<?php
-				while ( have_posts() ) :
-					the_post();
-					$part = BJ_PLUGIN_DIR . 'public/partials/checkin-card.php';
-					if ( file_exists( $part ) ) {
-						include $part;
-					}
-				endwhile;
-				?>
-			</div>
-			<?php the_posts_pagination(); ?>
-		<?php else : ?>
-			<p><?php esc_html_e( 'No check-ins yet.', 'beer-journal' ); ?></p>
-		<?php endif; ?>
+		<?php
+		$bj_empty_message = __( 'No check-ins yet.', 'beer-journal' );
+		include BJ_PLUGIN_DIR . 'public/partials/archive-loop.php';
+		?>
 	</main>
 </div>
 <?php

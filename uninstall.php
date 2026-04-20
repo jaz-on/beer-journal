@@ -31,6 +31,13 @@ $defaults = array(
 	'bj_log_retention_days',
 	'bj_import_social_data',
 	'bj_import_venues',
+	'bj_notify_on_sync',
+	'bj_notify_on_error',
+	'bj_notification_email',
+	'bj_archive_layout',
+	'bj_placeholder_image_id',
+	'bj_last_rss_sync_at',
+	'bj_db_index_checkin_v1',
 );
 
 foreach ( $defaults as $key ) {

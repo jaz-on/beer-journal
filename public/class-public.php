@@ -25,6 +25,21 @@ class BJ_Public {
 		add_filter( 'template_include', array( $this, 'template_include' ), 99 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_head', array( $this, 'output_json_ld' ), 20 );
+		add_filter( 'body_class', array( $this, 'body_class_layout' ) );
+	}
+
+	/**
+	 * Add layout class for beer journal archives and taxonomies.
+	 *
+	 * @param array<int, string> $classes Body classes.
+	 * @return array<int, string>
+	 */
+	public function body_class_layout( $classes ) {
+		if ( is_post_type_archive( BJ_Post_Type::POST_TYPE )
+			|| is_tax( array( BJ_Taxonomies::STYLE, BJ_Taxonomies::BREWERY, BJ_Taxonomies::VENUE ) ) ) {
+			$classes[] = 'bj-archive-layout-' . bj_get_archive_layout();
+		}
+		return $classes;
 	}
 
 	/**

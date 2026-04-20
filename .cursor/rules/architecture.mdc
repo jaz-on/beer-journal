@@ -285,6 +285,9 @@ function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
 - **Messages**: Clear and descriptive
 - **Scope**: One logical change per commit
 
+### Version numbers
+- Do not bump the plugin `Version` header, `BJ_VERSION`, or add a new semver heading in `CHANGELOG.md` unless the maintainer explicitly authorizes it. New work can go under `[Unreleased]` until then.
+
 ## Testing
 
 ### Requirements

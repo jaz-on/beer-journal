@@ -56,6 +56,12 @@ class BJ_Settings {
 			'bj_log_retention_days'     => 30,
 			'bj_import_social_data'     => true,
 			'bj_import_venues'          => true,
+			'bj_notify_on_sync'         => false,
+			'bj_notify_on_error'        => true,
+			'bj_notification_email'     => '',
+			'bj_archive_layout'         => 'grid',
+			'bj_placeholder_image_id'   => 0,
+			'bj_last_rss_sync_at'       => '',
 		);
 	}
 
@@ -110,6 +116,8 @@ class BJ_Settings {
 			case 'bj_debug_mode':
 			case 'bj_import_social_data':
 			case 'bj_import_venues':
+			case 'bj_notify_on_sync':
+			case 'bj_notify_on_error':
 				return (bool) $value;
 			case 'bj_import_batch_size':
 			case 'bj_import_delay':
@@ -129,6 +137,16 @@ class BJ_Settings {
 			case 'bj_import_mode':
 				$v = sanitize_text_field( (string) $value );
 				return in_array( $v, array( 'manual', 'background' ), true ) ? $v : 'manual';
+			case 'bj_archive_layout':
+				$v = sanitize_text_field( (string) $value );
+				return in_array( $v, array( 'grid', 'table' ), true ) ? $v : 'grid';
+			case 'bj_placeholder_image_id':
+				return absint( $value );
+			case 'bj_notification_email':
+				$e = sanitize_email( (string) $value );
+				return '' === $e ? '' : $e;
+			case 'bj_last_rss_sync_at':
+				return sanitize_text_field( (string) $value );
 			default:
 				return is_scalar( $value ) ? sanitize_text_field( (string) $value ) : $value;
 		}

@@ -33,6 +33,7 @@ $tabs     = array(
 		<?php settings_fields( BJ_Settings::OPTION_GROUP ); ?>
 
 		<?php if ( 'sync' === $tab ) : ?>
+			<?php include BJ_PLUGIN_DIR . 'admin/views/stats-box.php'; ?>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><label for="bj_rss_feed_url"><?php esc_html_e( 'Untappd RSS feed URL', 'beer-journal' ); ?></label></th>
@@ -94,6 +95,23 @@ $tabs     = array(
 			<p class="description"><?php esc_html_e( 'Discovery scans your profile HTML for check-in links; import runs in batches to respect rate limits.', 'beer-journal' ); ?></p>
 		<?php elseif ( 'general' === $tab ) : ?>
 			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Archive layout', 'beer-journal' ); ?></th>
+					<td>
+						<select name="bj_archive_layout" id="bj_archive_layout">
+							<option value="grid" <?php selected( get_option( 'bj_archive_layout', 'grid' ), 'grid' ); ?>><?php esc_html_e( 'Grid (cards)', 'beer-journal' ); ?></option>
+							<option value="table" <?php selected( get_option( 'bj_archive_layout', 'grid' ), 'table' ); ?>><?php esc_html_e( 'Table', 'beer-journal' ); ?></option>
+						</select>
+						<p class="description"><?php esc_html_e( 'How check-ins are listed on archives and style/brewery/venue pages.', 'beer-journal' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="bj_placeholder_image_id"><?php esc_html_e( 'Placeholder image (attachment ID)', 'beer-journal' ); ?></label></th>
+					<td>
+						<input name="bj_placeholder_image_id" id="bj_placeholder_image_id" type="number" min="0" class="small-text" value="<?php echo esc_attr( (string) (int) get_option( 'bj_placeholder_image_id', 0 ) ); ?>" />
+						<p class="description"><?php esc_html_e( 'If set, used when a beer photo cannot be downloaded. Upload an image in Media Library and paste its ID.', 'beer-journal' ); ?></p>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Images', 'beer-journal' ); ?></th>
 					<td>
@@ -189,6 +207,36 @@ $tabs     = array(
 					<?php esc_html_e( 'Beer Journal reads public Untappd RSS and HTML only. Untappd may change pages at any time. You are responsible for complying with Untappd’s terms and for republishing only data you are allowed to use. See the repository file docs/legal/scraping-notice.md for details.', 'beer-journal' ); ?>
 				</p>
 			</div>
+			<h2><?php esc_html_e( 'Email notifications', 'beer-journal' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Notify on sync', 'beer-journal' ); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="bj_notify_on_sync" value="0" />
+							<input name="bj_notify_on_sync" type="checkbox" value="1" <?php checked( get_option( 'bj_notify_on_sync', false ) ); ?> />
+							<?php esc_html_e( 'Send an email when new check-ins are imported via RSS.', 'beer-journal' ); ?>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Notify on error', 'beer-journal' ); ?></th>
+					<td>
+						<label>
+							<input type="hidden" name="bj_notify_on_error" value="0" />
+							<input name="bj_notify_on_error" type="checkbox" value="1" <?php checked( get_option( 'bj_notify_on_error', true ) ); ?> />
+							<?php esc_html_e( 'Send an email when RSS sync fails (e.g. feed unreachable).', 'beer-journal' ); ?>
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="bj_notification_email"><?php esc_html_e( 'Notification email', 'beer-journal' ); ?></label></th>
+					<td>
+						<input name="bj_notification_email" id="bj_notification_email" type="email" class="regular-text" value="<?php echo esc_attr( get_option( 'bj_notification_email', '' ) ); ?>" placeholder="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" />
+						<p class="description"><?php esc_html_e( 'Leave empty to use the site admin email.', 'beer-journal' ); ?></p>
+					</td>
+				</tr>
+			</table>
 			<h2><?php esc_html_e( 'Logs (today)', 'beer-journal' ); ?></h2>
 			<textarea readonly rows="12" class="large-text code"><?php echo esc_textarea( BJ_Logger::tail_today( 300 ) ); ?></textarea>
 			<p class="description">

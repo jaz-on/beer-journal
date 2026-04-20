@@ -128,6 +128,11 @@ class BJ_Admin {
 		$importer = new BJ_Importer();
 		$result   = $parser->sync_new_items( $importer );
 		if ( is_wp_error( $result ) ) {
+			bj_send_notification_email(
+				'[Beer Journal] ' . __( 'RSS sync failed', 'beer-journal' ),
+				$result->get_error_message(),
+				'error'
+			);
 			wp_send_json_error( array( 'message' => $result->get_error_message() ), 500 );
 		}
 		wp_send_json_success( array( 'message' => __( 'Sync finished.', 'beer-journal' ) ) );

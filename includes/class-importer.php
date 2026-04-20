@@ -144,6 +144,8 @@ class BJ_Importer {
 
 		do_action( 'bj_after_checkin_imported', $post_id, $data );
 
+		bj_invalidate_stats_cache();
+
 		return (int) $post_id;
 	}
 

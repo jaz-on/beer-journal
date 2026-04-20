@@ -38,6 +38,7 @@ class BJ_RSS_Parser {
 		$items = $feed->get_items( 0, 50 );
 		if ( empty( $items ) ) {
 			BJ_Logger::info( 'RSS sync: no items in feed.' );
+			bj_touch_last_rss_sync_time();
 			return true;
 		}
 
@@ -45,6 +46,7 @@ class BJ_RSS_Parser {
 		$last_guid   = get_option( 'bj_last_imported_guid', '' );
 		if ( is_string( $last_guid ) && '' !== $last_guid && $latest_guid === $last_guid ) {
 			BJ_Logger::info( 'RSS sync: no new check-ins (GUID match).' );
+			bj_touch_last_rss_sync_time();
 			return true;
 		}
 
@@ -82,28 +84,44 @@ class BJ_RSS_Parser {
 		if ( empty( $to_import ) ) {
 			update_option( 'bj_last_imported_guid', $latest_guid, false );
 			BJ_Logger::info( 'RSS sync: all items already imported.' );
+			bj_touch_last_rss_sync_time();
 			return true;
 		}
 
-		// Oldest first among new items for nicer post order.
 		$to_import = array_reverse( $to_import );
 
+		$imported = 0;
 		foreach ( $to_import as $row ) {
 			$result = $importer->import_from_rss_row( $row );
 			if ( is_wp_error( $result ) ) {
 				BJ_Logger::warning( $result->get_error_message() );
+			} else {
+				++$imported;
 			}
 		}
 
 		update_option( 'bj_last_imported_guid', $latest_guid, false );
-		if ( ! empty( $to_import ) ) {
-			$last = end( $to_import );
-			if ( isset( $last['checkin_date'] ) ) {
-				update_option( 'bj_last_checkin_date', $last['checkin_date'], false );
-			}
+		$last = end( $to_import );
+		if ( isset( $last['checkin_date'] ) ) {
+			update_option( 'bj_last_checkin_date', $last['checkin_date'], false );
 		}
 
 		BJ_Logger::info( 'RSS sync completed. Imported batch count: ' . count( $to_import ) );
+
+		bj_touch_last_rss_sync_time();
+
+		if ( $imported > 0 && get_option( 'bj_notify_on_sync', false ) ) {
+			bj_send_notification_email(
+				'[Beer Journal] ' . __( 'RSS sync completed', 'beer-journal' ),
+				sprintf(
+					/* translators: %d: number of check-ins imported */
+					__( 'Imported %d new check-in(s).', 'beer-journal' ),
+					$imported
+				),
+				'sync'
+			);
+		}
+
 		return true;
 	}
 

@@ -113,7 +113,7 @@ svn ci -m "Tag version 1.0.0"
 
 **Examples**:
 - `1.0.0` - Initial release
-- `1.0.1` - Bug fix
+- `1.0.2` - Bug fix (patch)
 - `1.1.0` - New features
 - `2.0.0` - Breaking changes
 

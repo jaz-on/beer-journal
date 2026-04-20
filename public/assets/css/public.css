@@ -35,3 +35,32 @@
 .bj-stars {
 	letter-spacing: 0.1em;
 }
+
+.bj-checkin-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1.5rem;
+}
+
+.bj-checkin-table th,
+.bj-checkin-table td {
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	padding: 0.5rem 0.75rem;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.bj-checkin-table thead th {
+	font-weight: 600;
+	background: rgba(0, 0, 0, 0.03);
+}
+
+.bj-col-thumb {
+	width: 80px;
+}
+
+.bj-row__thumb img {
+	max-width: 72px;
+	height: auto;
+	display: block;
+}

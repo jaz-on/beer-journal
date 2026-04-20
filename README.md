@@ -4,7 +4,7 @@ A WordPress plugin to automatically sync and display your Untappd beer check-ins
 
 ## Development status
 
-**Current release: 1.0.0** — full MVP: CPT `beer_checkin`, taxonomies, RSS sync with adaptive cron, HTML scraping, historical import (discover + batched AJAX), admin settings (5 tabs), logging, frontend templates, JSON-LD / microformats options. See [CHANGELOG.md](CHANGELOG.md) and [DEVELOPMENT.md](DEVELOPMENT.md).
+**Current release: 1.0.0** — Phase 1 (MVP) complete: CPT `beer_checkin`, taxonomies, RSS sync with adaptive cron, HTML scraping, historical import (discover + batched AJAX), admin settings (5 tabs), logging, frontend templates, JSON-LD / microformats options. See [CHANGELOG.md](CHANGELOG.md) and [DEVELOPMENT.md](DEVELOPMENT.md).
 
 **Dependencies:** run `composer install` in the plugin directory so `vendor/` exists (the plugin uses Symfony DomCrawler and registers autoloaded classes). If you deploy with Git Updater, ensure Composer has been run on the target site or commit `vendor/` for distribution builds.
 
@@ -82,14 +82,14 @@ beer-journal/
 
 ## Features by Phase
 
-### Phase 1 (MVP) - Version 1.0
+### Phase 1 (MVP) — **complete** (latest: **1.0.0**)
 - Custom Post Type + Taxonomies + Metadata
-- RSS automatic synchronization
+- RSS automatic synchronization (adaptive cron, optional email alerts)
 - Historical manual crawler
-- Local image import
-- Default frontend templates
-- Complete admin settings page
-- Logs and error handling
+- Local image import (+ optional placeholder image if download fails)
+- Default frontend templates (grid or table archive)
+- Complete admin settings page + at-a-glance stats
+- Logs, error handling, and optional email notifications
 
 ### Phase 2 (Advanced) - Version 1.5
 - Gutenberg blocks (3 blocks)

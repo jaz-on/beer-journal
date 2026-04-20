@@ -8,12 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Legal notice for site owners: [docs/legal/scraping-notice.md](docs/legal/scraping-notice.md)
-- Info notice on **Beer Journal → Advanced** tab summarizing scraping responsibility
-- README: link to legal notice; note on WP-Cron vs real cron on low-traffic sites
+- Admin “At a glance” stats (cached counts + last RSS sync time); `bj_get_cached_data()` / `bj_invalidate_stats_cache()`
+- Optional **email notifications** (sync success, RSS errors) with dedicated address; wired for cron, manual sync, and AJAX
+- **Archive layout** option: grid (cards) or **table** on archive and taxonomy templates; shared `archive-loop` partial; `body_class` layout hint
+- **Placeholder image** (attachment ID) when sideload fails
+- Best-effort **DB index** `bj_checkin_meta` on `wp_postmeta` (activation + init); state stored in `bj_db_index_checkin_v1`
 
 ### Changed
-- Plugin header `Primary Branch` set to `dev` for Git Updater workflows targeting the integration branch
+- RSS sync records `bj_last_rss_sync_at` on every successful run; import invalidates stats transient
 
 ### Planned for future versions
 - Gutenberg blocks (checkins-list, checkin-card, stats-dashboard)

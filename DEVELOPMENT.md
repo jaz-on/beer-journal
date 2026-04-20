@@ -118,10 +118,10 @@ Follow this order when implementing features:
 - [x] Template tags (`public/template-tags.php`)
 
 ### 9. Polish & Optimization
-- [ ] Caching (transients — partial / future tuning)
+- [x] Caching (`bj_get_cached_data`, stats transient invalidation — see CHANGELOG [Unreleased])
 - [x] Logging
 - [x] Error handling refinement (core paths)
-- [ ] Performance optimization (ongoing)
+- [x] Phase 1 polish (stats UI, email alerts, archive layout, placeholder, optional DB index — see CHANGELOG [Unreleased])
 
 ## Coding Standards
 

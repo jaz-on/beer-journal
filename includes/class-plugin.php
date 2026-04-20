@@ -39,6 +39,8 @@ class BJ_Plugin {
 	 * @return void
 	 */
 	public function init() {
+		add_action( 'init', array( 'BJ_DB_Install', 'maybe_add_indexes' ), 1 );
+
 		$post_type = new BJ_Post_Type();
 		$post_type->register();
 

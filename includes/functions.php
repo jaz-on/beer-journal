@@ -153,3 +153,97 @@ function bj_get_post_id_by_checkin_id( $checkin_id ) {
 	);
 	return $post_id ? absint( $post_id ) : 0;
 }
+
+/**
+ * Transient-backed cache helper (see docs/development/caching.md).
+ *
+ * @param string   $key      Short key (prefix bj_ added).
+ * @param callable $producer Callback returning data to cache.
+ * @param int|null $ttl      TTL seconds; default 1 hour.
+ * @return mixed
+ */
+function bj_get_cached_data( $key, $producer, $ttl = null ) {
+	$key       = preg_replace( '/[^a-z0-9_\-]/i', '', (string) $key );
+	$cache_key = 'bj_' . $key;
+	$cached    = get_transient( $cache_key );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+	$data = call_user_func( $producer );
+	$ttl  = null !== $ttl ? absint( $ttl ) : HOUR_IN_SECONDS;
+	set_transient( $cache_key, $data, max( 60, $ttl ) );
+	return $data;
+}
+
+/**
+ * Invalidate global stats transient after imports.
+ *
+ * @return void
+ */
+function bj_invalidate_stats_cache() {
+	delete_transient( 'bj_global_stats' );
+}
+
+/**
+ * Cached post counts for beer_checkin.
+ *
+ * @return array{publish: int, draft: int}
+ */
+function bj_get_global_stats() {
+	return bj_get_cached_data(
+		'global_stats',
+		function () {
+			$counts = wp_count_posts( BJ_Post_Type::POST_TYPE );
+			return array(
+				'publish' => isset( $counts->publish ) ? (int) $counts->publish : 0,
+				'draft'   => isset( $counts->draft ) ? (int) $counts->draft : 0,
+			);
+		},
+		HOUR_IN_SECONDS
+	);
+}
+
+/**
+ * Send admin notification email (sync / errors).
+ *
+ * @param string $subject Email subject.
+ * @param string $body    Plain body.
+ * @param string $type    sync|error.
+ * @return void
+ */
+function bj_send_notification_email( $subject, $body, $type = 'error' ) {
+	if ( 'sync' === $type && ! get_option( 'bj_notify_on_sync', false ) ) {
+		return;
+	}
+	if ( 'error' === $type && ! get_option( 'bj_notify_on_error', true ) ) {
+		return;
+	}
+	$to = get_option( 'bj_notification_email', '' );
+	if ( ! is_string( $to ) || '' === trim( $to ) ) {
+		$to = (string) get_option( 'admin_email', '' );
+	}
+	$to = sanitize_email( $to );
+	if ( ! is_email( $to ) ) {
+		return;
+	}
+	wp_mail( $to, wp_strip_all_tags( $subject ), wp_strip_all_tags( $body ) );
+}
+
+/**
+ * Record last successful RSS sync attempt time (ISO 8601).
+ *
+ * @return void
+ */
+function bj_touch_last_rss_sync_time() {
+	update_option( 'bj_last_rss_sync_at', gmdate( 'c' ), false );
+}
+
+/**
+ * Archive layout: grid or table (option bj_archive_layout).
+ *
+ * @return string grid|table
+ */
+function bj_get_archive_layout() {
+	$l = get_option( 'bj_archive_layout', 'grid' );
+	return in_array( $l, array( 'grid', 'table' ), true ) ? $l : 'grid';
+}
