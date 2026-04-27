@@ -1,150 +1,7 @@
 /**
- * Beer Journal — settings & tools (WordPress admin).
+ * Beer Journal — admin styles specific to this plugin (stats, import, rating, logs, media).
+ * Shared layout: jardin-admin-shell.css (keep in sync across Jardin plugins).
  */
-
-.bj-admin-wrap {
-	--bj-admin-accent: var(--wp-admin-theme-color, #2271b1);
-	--bj-admin-accent-dim: color-mix(in srgb, var(--bj-admin-accent) 12%, transparent);
-	--bj-admin-border: #dcdcde;
-	--bj-admin-surface: #fff;
-	--bj-admin-muted: #646970;
-	max-width: 960px;
-}
-
-.bj-settings-hero {
-	margin: 0 0 0.5rem;
-}
-
-.bj-settings-hero h1 {
-	font-size: 1.6rem;
-	font-weight: 600;
-	line-height: 1.25;
-	padding: 0;
-	margin: 0 0 0.35rem;
-}
-
-.bj-settings-hero__lead {
-	margin: 0;
-	font-size: 14px;
-	color: var(--bj-admin-muted);
-	max-width: 52em;
-	line-height: 1.5;
-}
-
-/* Tabs: align with WordPress nav-tab but add spacing */
-.bj-admin-wrap .nav-tab-wrapper.bj-nav-tabs {
-	margin: 1.25rem 0 0;
-	border-bottom: 1px solid var(--bj-admin-border);
-	padding-top: 0;
-}
-
-.bj-tab-panel {
-	margin-top: 1rem;
-}
-
-.bj-tab-intro {
-	margin: 0 0 1.25rem;
-	font-size: 14px;
-	line-height: 1.55;
-	color: var(--bj-admin-muted);
-	max-width: 52em;
-}
-
-/* Panels (card-style) */
-.bj-panel {
-	background: var(--bj-admin-surface);
-	border: 1px solid var(--bj-admin-border);
-	border-radius: 6px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-	margin-bottom: 1rem;
-	overflow: hidden;
-}
-
-.bj-panel__header {
-	padding: 1rem 1.25rem 0.75rem;
-	border-bottom: 1px solid var(--bj-admin-border);
-	background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
-}
-
-.bj-panel__title {
-	margin: 0;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 1.3;
-}
-
-.bj-panel__summary {
-	margin: 0.5rem 0 0;
-	font-size: 13px;
-	line-height: 1.5;
-	color: var(--bj-admin-muted);
-	max-width: 52em;
-}
-
-.bj-panel__body {
-	padding: 0.5rem 1.25rem 1rem;
-}
-
-.bj-panel__body--inline {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.75rem 1rem;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-}
-
-.bj-panel--actions .bj-panel__body--inline {
-	padding-top: 0.75rem;
-}
-
-.bj-panel--notice {
-	border-color: #c3d9ed;
-	background: #f0f6fc;
-	box-shadow: none;
-}
-
-.bj-panel--notice .bj-panel__body {
-	padding: 1rem 1.25rem;
-}
-
-.bj-panel__notice-text {
-	display: flex;
-	gap: 0.5rem;
-	align-items: flex-start;
-	margin: 0;
-	font-size: 13px;
-	line-height: 1.5;
-	color: #1d2327;
-}
-
-.bj-panel__notice-text .dashicons {
-	margin-top: 2px;
-	color: var(--bj-admin-accent);
-	flex-shrink: 0;
-}
-
-/* Form table density */
-.bj-admin-wrap .form-table th {
-	font-weight: 600;
-	padding-top: 0.85rem;
-	width: 200px;
-}
-
-.bj-admin-wrap .form-table td .description {
-	margin-top: 0.35rem;
-}
-
-.bj-toggle {
-	display: inline-flex;
-	align-items: flex-start;
-	gap: 0.5rem;
-	line-height: 1.5;
-}
-
-.bj-toggle input[type="checkbox"] {
-	margin-top: 3px;
-}
 
 /* Stats strip */
 .bj-stats-strip {
@@ -153,17 +10,23 @@
 	gap: 1rem;
 	margin: 0 0 1.25rem;
 	padding: 0.75rem 1rem;
-	background: var(--bj-admin-surface);
-	border: 1px solid var(--bj-admin-border);
+	background: var(--jd-admin-surface, #fff);
+	border: 1px solid var(--jd-admin-border, #dcdcde);
 	border-radius: 6px;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.bj-admin-wrap .bj-stats-strip {
+	/* Use shell variables when shell is loaded */
+	background: var(--jd-admin-surface);
+	border-color: var(--jd-admin-border);
 }
 
 .bj-stats-strip__item {
 	min-width: 100px;
 	padding: 0.35rem 0.75rem;
 	border-radius: 4px;
-	background: var(--bj-admin-accent-dim);
+	background: var(--jd-admin-accent-dim, color-mix(in srgb, var(--wp-admin-theme-color, #2271b1) 12%, transparent));
 }
 
 .bj-stats-strip__item--wide {
@@ -189,7 +52,7 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
-	color: var(--bj-admin-muted);
+	color: var(--jd-admin-muted, #646970);
 	margin-top: 0.2rem;
 }
 
@@ -198,14 +61,14 @@
 	margin-left: 0;
 	font-size: 13px;
 	font-style: normal;
-	color: var(--bj-admin-muted);
+	color: var(--jd-admin-muted, #646970);
 }
 
 /* Rating editor */
 .bj-rating-edit {
 	margin-top: 1rem;
 	padding-top: 1rem;
-	border-top: 1px solid var(--bj-admin-border);
+	border-top: 1px solid var(--jd-admin-border, #dcdcde);
 }
 
 .bj-rating-edit > h3 {
@@ -229,7 +92,7 @@
 .bj-rating-edit-table__n {
 	width: 2.25rem;
 	text-align: center;
-	color: var(--bj-admin-muted);
+	color: var(--jd-admin-muted, #646970);
 	font-variant-numeric: tabular-nums;
 }
 
@@ -248,13 +111,6 @@
 	font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
 	font-size: 12px;
 	line-height: 1.45;
-}
-
-/* Footer */
-.bj-settings-footer {
-	margin-top: 1.5rem;
-	padding-top: 1rem;
-	border-top: 1px solid var(--bj-admin-border);
 }
 
 .bj-field-row {
@@ -277,7 +133,7 @@
 	max-height: 80px;
 	width: auto;
 	border-radius: 4px;
-	border: 1px solid var(--bj-admin-border);
+	border: 1px solid var(--jd-admin-border, #dcdcde);
 }
 
 .bj-archive-url a {

@@ -68,10 +68,18 @@ class BJ_Admin {
 		if ( false === strpos( $hook_suffix, BJ_Post_Type::ADMIN_MENU_SLUG ) ) {
 			return;
 		}
+		$shell_path = BJ_PLUGIN_DIR . 'admin/assets/css/jardin-admin-shell.css';
+		$shell_ver  = is_readable( $shell_path ) ? (string) filemtime( $shell_path ) : BJ_VERSION;
+		wp_enqueue_style(
+			'jardin-admin-shell',
+			BJ_PLUGIN_URL . 'admin/assets/css/jardin-admin-shell.css',
+			array( 'dashicons' ),
+			$shell_ver
+		);
 		wp_enqueue_style(
 			'beer-journal-admin',
 			BJ_PLUGIN_URL . 'admin/assets/css/admin.css',
-			array( 'dashicons' ),
+			array( 'jardin-admin-shell' ),
 			BJ_VERSION
 		);
 		wp_enqueue_media();
