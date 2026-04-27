@@ -28,6 +28,18 @@ define( 'BJ_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'BJ_GITHUB_URL', 'https://github.com/jaz-on/beer-journal' );
 define( 'BJ_KOFI_URL', 'https://ko-fi.com/jasonrouet' );
 
+// Load before Composer so a stale classmap (paths to removed `* 2.php` files) cannot fatal the site.
+foreach ( array(
+	BJ_PLUGIN_DIR . 'includes/class-taxonomies.php',
+	BJ_PLUGIN_DIR . 'includes/class-logger.php',
+	BJ_PLUGIN_DIR . 'includes/class-meta-fields.php',
+	BJ_PLUGIN_DIR . 'public/class-public.php',
+) as $bj_bootstrap_file ) {
+	if ( is_readable( $bj_bootstrap_file ) ) {
+		require_once $bj_bootstrap_file;
+	}
+}
+
 $bj_autoload = BJ_PLUGIN_DIR . 'vendor/autoload.php';
 if ( is_readable( $bj_autoload ) ) {
 	require_once $bj_autoload;
