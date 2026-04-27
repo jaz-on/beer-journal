@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Composer **classmap** referenced Finder duplicate filenames (`class-* 2.php`, `class-public 2.php`) that are not deployed on Linux servers; autoload now targets the canonical files and duplicate copies were removed from the tree.
+
 ### Added
 - RSS sync **queue** (`bj_rss_sync_queue`) with per-cron cap (`bj_rss_max_per_run`, Advanced settings) and follow-up hook `bj_rss_queue_tick`; batch meta lookup `bj_get_post_ids_by_checkin_ids()`; manual “Run sync now” uses higher cap via `bj_rss_manual_sync_max_items`
 - **Sync health** (Advanced): queue depth, incomplete draft count, scraper markup version; stats strip shows RSS queue and incomplete drafts
