@@ -15,12 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class BJ_Admin {
 
 	/**
+	 * Slug for the tabbed settings page under the CPT (admin.php?page=…).
+	 */
+	public const SETTINGS_PAGE_SLUG = 'bj_beer_journal_settings';
+
+	/**
 	 * Register hooks.
 	 *
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'register_menu' ), 5 );
+		add_action( 'admin_init', array( $this, 'maybe_redirect_legacy_settings_url' ) );
+		add_action( 'admin_menu', array( $this, 'register_settings_submenu' ), 100 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_action( 'wp_ajax_bj_sync_now', array( $this, 'ajax_sync_now' ) );
 		add_action( 'wp_ajax_bj_crawl_discover', array( $this, 'ajax_crawl_discover' ) );
@@ -31,31 +37,51 @@ class BJ_Admin {
 	}
 
 	/**
-	 * Top-level menu and settings page.
+	 * Redirect old admin.php?page=beer-journal bookmarks to the new settings URL.
 	 *
 	 * @return void
 	 */
-	public function register_menu() {
-		$slug = BJ_Post_Type::ADMIN_MENU_SLUG;
+	public function maybe_redirect_legacy_settings_url() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) || 'beer-journal' !== $_GET['page'] ) {
+			return;
+		}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		$dest = self::get_settings_url();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+		if ( $tab ) {
+			$dest = add_query_arg( 'tab', $tab, $dest );
+		}
+		wp_safe_redirect( $dest );
+		exit;
+	}
 
-		add_menu_page(
-			__( 'Beer Journal', 'beer-journal' ),
-			__( 'Beer Journal', 'beer-journal' ),
-			'manage_options',
-			$slug,
-			array( $this, 'render_settings_page' ),
-			'dashicons-beer',
-			58
-		);
-
+	/**
+	 * Settings as last submenu: Check-ins (list) → taxonomies → Settings.
+	 *
+	 * @return void
+	 */
+	public function register_settings_submenu() {
 		add_submenu_page(
-			$slug,
+			BJ_Post_Type::ADMIN_MENU_SLUG,
 			__( 'Beer Journal Settings', 'beer-journal' ),
 			__( 'Settings', 'beer-journal' ),
 			'manage_options',
-			$slug,
+			self::SETTINGS_PAGE_SLUG,
 			array( $this, 'render_settings_page' )
 		);
+	}
+
+	/**
+	 * Admin URL of the settings UI.
+	 *
+	 * @return string
+	 */
+	public static function get_settings_url() {
+		return admin_url( 'admin.php?page=' . self::SETTINGS_PAGE_SLUG );
 	}
 
 	/**
@@ -65,7 +91,8 @@ class BJ_Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook_suffix ) {
-		if ( false === strpos( $hook_suffix, BJ_Post_Type::ADMIN_MENU_SLUG ) ) {
+		$settings_hook = BJ_Post_Type::POST_TYPE . '_page_' . self::SETTINGS_PAGE_SLUG;
+		if ( $settings_hook !== $hook_suffix ) {
 			return;
 		}
 		$shell_path = BJ_PLUGIN_DIR . 'admin/assets/css/jardin-admin-shell.css';

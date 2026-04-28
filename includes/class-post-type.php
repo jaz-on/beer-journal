@@ -20,10 +20,10 @@ class BJ_Post_Type {
 	public const POST_TYPE = 'beer_checkin';
 
 	/**
-	 * Top-level admin menu slug (see BJ_Admin::register_menu).
-	 * CPT and taxonomies must use the same value so taxonomy screens nest under Beer Journal.
+	 * Parent file for CPT + taxonomy admin submenus (same as native posts under "Posts").
+	 * Must be `edit.php?post_type=…` so check-ins load first, then taxonomy screens nest correctly.
 	 */
-	public const ADMIN_MENU_SLUG = 'beer-journal';
+	public const ADMIN_MENU_SLUG = 'edit.php?post_type=beer_checkin';
 
 	/**
 	 * Register hooks.
@@ -43,7 +43,8 @@ class BJ_Post_Type {
 		$labels = array(
 			'name'               => __( 'Beer check-ins', 'beer-journal' ),
 			'singular_name'      => __( 'Beer check-in', 'beer-journal' ),
-			'menu_name'          => __( 'Beer check-ins', 'beer-journal' ),
+			'menu_name'          => __( 'Beer Journal', 'beer-journal' ),
+			'all_items'          => __( 'Check-ins', 'beer-journal' ),
 			'add_new'            => __( 'Add check-in', 'beer-journal' ),
 			'add_new_item'       => __( 'Add new check-in', 'beer-journal' ),
 			'edit_item'          => __( 'Edit check-in', 'beer-journal' ),
@@ -59,7 +60,7 @@ class BJ_Post_Type {
 			'public'             => true,
 			'publicly_queryable' => true,
 			'show_ui'            => true,
-			'show_in_menu'       => self::ADMIN_MENU_SLUG,
+			'show_in_menu'       => true,
 			'show_in_nav_menus'  => true,
 			'show_in_admin_bar'  => true,
 			'show_in_rest'       => true,

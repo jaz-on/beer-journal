@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$base_url = admin_url( 'admin.php?page=beer-journal' );
+$base_url = BJ_Admin::get_settings_url();
 $tabs     = array(
 	'sync'     => __( 'Synchronization', 'beer-journal' ),
 	'import'   => __( 'Historical import', 'beer-journal' ),

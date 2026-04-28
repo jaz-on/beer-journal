@@ -108,7 +108,7 @@ add_action( 'admin_init', 'bj_register_plugin_list_hooks' );
 function bj_plugin_action_links( $links ) {
 	$settings_link = sprintf(
 		'<a href="%s">%s</a>',
-		esc_url( admin_url( 'admin.php?page=beer-journal' ) ),
+		esc_url( BJ_Admin::get_settings_url() ),
 		esc_html__( 'Settings', 'beer-journal' )
 	);
 	array_unshift( $links, $settings_link );
