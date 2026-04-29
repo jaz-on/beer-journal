@@ -15,6 +15,23 @@ wp-content/cache/supercache/
 node_modules/
 # vendor/ and composer.lock are committed so installs from Git / Git Updater include
 # runtime Composer packages without running composer on the server.
+#
+# NOTE: only a small subset of Composer packages is intentionally tracked (see `vendor/` in git).
+# Local dev installs may pull PHPCS/PHPUnit/etc.; keep those out of Git noise.
+/vendor/bin/
+/vendor/dealerdirect/
+/vendor/myclabs/
+/vendor/nikic/
+/vendor/phar-io/
+/vendor/php-stubs/
+/vendor/phpcsstandards/
+/vendor/phpstan/
+/vendor/phpunit/
+/vendor/sebastian/
+/vendor/squizlabs/
+/vendor/szepeviktor/
+/vendor/theseer/
+/vendor/wp-coding-standards/
 package-lock.json
 yarn.lock
 
