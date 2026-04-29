@@ -175,7 +175,7 @@ Home > Check-ins > [Beer Name]
 ### Implementation
 
 ```php
-function bj_breadcrumb() {
+function jb_breadcrumb() {
     $breadcrumb = [];
     $breadcrumb[] = '<a href="' . home_url() . '">Home</a>';
     $breadcrumb[] = '<a href="' . get_post_type_archive_link('beer') . '">Check-ins</a>';
@@ -264,7 +264,7 @@ Users can customize permalink structure via WordPress settings:
 
 ### Settings Page Structure
 
-**Location**: `Beer Journal > Settings`
+**Location**: `Jardin Beer > Settings`
 
 **Tab Navigation**:
 The settings page uses WordPress native tab navigation with 5 tabs:
@@ -280,8 +280,8 @@ The settings page uses WordPress native tab navigation with 5 tabs:
 **WordPress Native Tabs**:
 ```php
 <div class="nav-tab-wrapper">
-    <a href="?page=beer-journal&tab=sync" class="nav-tab <?php echo $active_tab === 'sync' ? 'nav-tab-active' : ''; ?>">
-        <?php esc_html_e('Synchronization', 'beer-journal'); ?>
+    <a href="?page=jardin-beer&tab=sync" class="nav-tab <?php echo $active_tab === 'sync' ? 'nav-tab-active' : ''; ?>">
+        <?php esc_html_e('Synchronization', 'jardin-beer'); ?>
     </a>
     <!-- ... other tabs ... -->
 </div>
@@ -299,7 +299,7 @@ The settings page uses WordPress native tab navigation with 5 tabs:
 **Implementation**:
 ```php
 <p class="description">
-    <?php esc_html_e('RSS sync runs automatically based on your activity. Active users sync every 6 hours, inactive users sync weekly.', 'beer-journal'); ?>
+    <?php esc_html_e('RSS sync runs automatically based on your activity. Active users sync every 6 hours, inactive users sync weekly.', 'jardin-beer'); ?>
 </p>
 ```
 
@@ -341,5 +341,5 @@ The settings page uses WordPress native tab navigation with 5 tabs:
 - [Display Flow](display.md)
 - [Templates](../frontend/templates.md)
 - [Template Hierarchy](../frontend/template-hierarchy.md)
-- [Admin Interface](../architecture/components.md#9-admin-interface-bj_admin)
+- [Admin Interface](../architecture/components.md#9-admin-interface-jb_admin)
 

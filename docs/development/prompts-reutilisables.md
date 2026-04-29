@@ -5,7 +5,7 @@ Ce document contient des prompts standardisés pour analyser la documentation et
 ## Prompt 1 : Analyse complète et plan MVP
 
 ```
-Analyse la documentation complète du plugin Beer Journal et crée un plan de développement détaillé pour la Phase 1 (MVP).
+Analyse la documentation complète du plugin Jardin Beer et crée un plan de développement détaillé pour la Phase 1 (MVP).
 
 Contexte :
 - Documentation complète dans /docs/
@@ -41,7 +41,7 @@ Références clés :
 ## Prompt 2 : Analyse d'un module spécifique
 
 ```
-Analyse la documentation de Beer Journal et crée un plan de développement pour implémenter le module [MODULE_NAME] (Phase 1, priorité [X] selon DEVELOPMENT.md).
+Analyse la documentation de Jardin Beer et crée un plan de développement pour implémenter le module [MODULE_NAME] (Phase 1, priorité [X] selon DEVELOPMENT.md).
 
 Analyse :
 1. Lire docs/architecture/[module].md
@@ -65,21 +65,21 @@ Format : Checklist détaillée avec code examples basés sur la documentation.
 ### Exemple d'utilisation : Module RSS Sync
 
 ```
-Analyse la documentation de Beer Journal et crée un plan de développement pour implémenter le module RSS Sync (Phase 1, priorité 2 selon DEVELOPMENT.md).
+Analyse la documentation de Jardin Beer et crée un plan de développement pour implémenter le module RSS Sync (Phase 1, priorité 2 selon DEVELOPMENT.md).
 
 Analyse :
 1. Lire docs/architecture/rss-sync.md
-2. Lire docs/architecture/components.md (section BJ_RSS_Parser)
+2. Lire docs/architecture/components.md (section JB_RSS_Parser)
 3. Lire docs/features/rss-sync-detailed.md
 4. Lire docs/user-flows/sync.md
 5. Identifier les dépendances (WordPress cron, SimplePie, etc.)
 
 Créer un plan avec :
-- Structure de la classe BJ_RSS_Parser
+- Structure de la classe JB_RSS_Parser
 - Méthodes à implémenter
 - Hooks WordPress à utiliser
 - Tests unitaires à prévoir
-- Intégration avec BJ_Importer
+- Intégration avec JB_Importer
 - Gestion d'erreurs
 - Logging
 

@@ -1,7 +1,7 @@
-# Plan d'audit et de documentation du codebase Beer Journal
+# Plan d'audit et de documentation du codebase Jardin Beer
 
 ## Vue d'ensemble
-Ce plan suit la stratégie "Docs First, Code Second" pour auditer et documenter le plugin WordPress Beer Journal avant d'écrire du code. L'objectif est de transformer un nouveau dépôt en système documenté et compréhensible.
+Ce plan suit la stratégie "Docs First, Code Second" pour auditer et documenter le plugin WordPress Jardin Beer avant d'écrire du code. L'objectif est de transformer un nouveau dépôt en système documenté et compréhensible.
 
 **Contexte du projet :**
 - Plugin WordPress pour synchroniser les check-ins Untappd
@@ -43,9 +43,9 @@ Ce plan suit la stratégie "Docs First, Code Second" pour auditer et documenter 
 - Documentation — docstrings sur tous les symboles publics
 - Documentation dans `/docs/**/*.md`
 - Architecture dans `.cursor/rules/*.mdc`
-- Préfixe des fonctions : `beer_journal_` (ou `bj_` pour les fonctions courtes)
-- Préfixe des classes : `BJ_` (ex: `BJ_Importer`, `BJ_Scraper`)
-- Text domain : `beer-journal`
+- Préfixe des fonctions : `jardin_beer_` (ou `jb_` pour les fonctions courtes)
+- Préfixe des classes : `JB_` (ex: `JB_Importer`, `JB_Scraper`)
+- Text domain : `jardin-beer`
 - Support WordPress : 6.0+ minimum
 - Sécurité : sanitization, escaping, nonces, capability checks
 - Internationalisation : toutes les chaînes visibles traduisibles
@@ -136,21 +136,21 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 
 #### 2.4 Gestion des Custom Post Types
 - [ ] Documenter `includes/class-post-type.php`
-- [ ] CPT `bj_checkin` (ou `beer_checkin`)
+- [ ] CPT `jb_checkin` (ou `beer_checkin`)
 - [ ] Configuration (public, REST API, supports, etc.)
 - [ ] Structure du post (title, content, date, featured image)
 
 #### 2.5 Système de taxonomies
 - [ ] Documenter `includes/class-taxonomies.php`
-- [ ] Taxonomie `bj_beer_style` (hiérarchique)
-- [ ] Taxonomie `bj_brewery` (non-hiérarchique)
-- [ ] Taxonomie `bj_venue` (non-hiérarchique, optionnelle)
+- [ ] Taxonomie `jb_beer_style` (hiérarchique)
+- [ ] Taxonomie `jb_brewery` (non-hiérarchique)
+- [ ] Taxonomie `jb_venue` (non-hiérarchique, optionnelle)
 - [ ] Auto-création immédiate avec notification admin
 - [ ] Gestion des doublons et merge
 
 #### 2.6 Gestion des métadonnées
 - [ ] Documenter `includes/class-meta-fields.php`
-- [ ] Identifiants uniques (`_bj_checkin_id`, `_bj_beer_id`, etc.)
+- [ ] Identifiants uniques (`_jb_checkin_id`, `_jb_beer_id`, etc.)
 - [ ] Données bière (nom, brasserie, style, ABV, IBU, description)
 - [ ] Données check-in (rating, serving type, date)
 - [ ] Données lieu (venue, city, country, lat/lng)
@@ -158,7 +158,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 - [ ] Métadonnées techniques (source, scraped_at, attempts)
 
 #### 2.7 Système de notation
-- [ ] Documenter le système de rating double (`_bj_rating_raw`, `_bj_rating_rounded`)
+- [ ] Documenter le système de rating double (`_jb_rating_raw`, `_jb_rating_rounded`)
 - [ ] Règles de mapping par défaut (0-5 stars)
 - [ ] Fonction de mapping personnalisable
 - [ ] Labels personnalisés par niveau
@@ -175,7 +175,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 #### 2.9 Cron jobs et scheduling
 - [ ] Documenter `includes/class-action-scheduler.php` (si utilisé)
 - [ ] Polling adaptatif (sixhourly/daily/weekly)
-- [ ] WP-Cron events (`bj_rss_sync`, `bj_background_import_batch`)
+- [ ] WP-Cron events (`jb_rss_sync`, `jb_background_import_batch`)
 - [ ] Checkpoints et reprise après interruption
 
 #### 2.10 Page de réglages admin
@@ -208,38 +208,38 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 **Objectif :** ERD et explications dans `/docs/db/`
 
 - [ ] Analyser les Custom Post Types :
-  - `bj_checkin` (check-ins Untappd)
+  - `jb_checkin` (check-ins Untappd)
   - Structure du post (title, content, date, status)
 - [ ] Analyser les taxonomies :
-  - `bj_beer_style` (hiérarchique, slug: `beer-style`)
-  - `bj_brewery` (non-hiérarchique, slug: `brewery`)
-  - `bj_venue` (non-hiérarchique, slug: `venue`)
+  - `jb_beer_style` (hiérarchique, slug: `beer-style`)
+  - `jb_brewery` (non-hiérarchique, slug: `brewery`)
+  - `jb_venue` (non-hiérarchique, slug: `venue`)
 - [ ] Analyser les meta fields (post meta) :
-  - Identifiants : `_bj_checkin_id`, `_bj_beer_id`, `_bj_brewery_id`, `_bj_checkin_url`
-  - Données bière : `_bj_beer_name`, `_bj_brewery_name`, `_bj_beer_style`, `_bj_beer_abv`, `_bj_beer_ibu`, `_bj_beer_description`
-  - Données check-in : `_bj_rating`, `_bj_serving_type`, `_bj_checkin_date`
-  - Données lieu : `_bj_venue_name`, `_bj_venue_city`, `_bj_venue_country`, `_bj_venue_lat`, `_bj_venue_lng`
-  - Données sociales : `_bj_toast_count`, `_bj_comment_count`, `_bj_badges_earned`
-  - Métadonnées techniques : `_bj_source`, `_bj_scraped_at`, `_bj_scraping_attempts`, `_bj_incomplete_reason`
-  - Système de notation : `_bj_rating_raw`, `_bj_rating_rounded`
+  - Identifiants : `_jb_checkin_id`, `_jb_beer_id`, `_jb_brewery_id`, `_jb_checkin_url`
+  - Données bière : `_jb_beer_name`, `_jb_brewery_name`, `_jb_beer_style`, `_jb_beer_abv`, `_jb_beer_ibu`, `_jb_beer_description`
+  - Données check-in : `_jb_rating`, `_jb_serving_type`, `_jb_checkin_date`
+  - Données lieu : `_jb_venue_name`, `_jb_venue_city`, `_jb_venue_country`, `_jb_venue_lat`, `_jb_venue_lng`
+  - Données sociales : `_jb_toast_count`, `_jb_comment_count`, `_jb_badges_earned`
+  - Métadonnées techniques : `_jb_source`, `_jb_scraped_at`, `_jb_scraping_attempts`, `_jb_incomplete_reason`
+  - Système de notation : `_jb_rating_raw`, `_jb_rating_rounded`
 - [ ] Documenter les options WordPress utilisées :
-  - `bj_last_checkin_date`
-  - `bj_last_imported_guid`
-  - `bj_rating_rules`
-  - `bj_rating_labels`
-  - `bj_new_terms_created`
-  - `bj_import_checkpoint`
+  - `jb_last_checkin_date`
+  - `jb_last_imported_guid`
+  - `jb_rating_rules`
+  - `jb_rating_labels`
+  - `jb_new_terms_created`
+  - `jb_import_checkpoint`
 - [ ] Documenter les transients :
-  - `bj_new_terms_notice`
-  - `bj_global_stats`
-  - `bj_top_breweries`
+  - `jb_new_terms_notice`
+  - `jb_global_stats`
+  - `jb_top_breweries`
 - [ ] Créer un diagramme ERD (Mermaid) avec :
   - Tables WordPress (posts, postmeta, terms, term_taxonomy, term_relationships)
   - Relations entre CPT et taxonomies
   - Meta fields et leurs types
 - [ ] Documenter les relations entre entités
 - [ ] Documenter les index database recommandés :
-  - Index unique sur `_bj_checkin_id`
+  - Index unique sur `_jb_checkin_id`
   - Index composé sur `post_type` + `post_date`
 
 **Fichiers à créer :**
@@ -272,19 +272,19 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 - [ ] Documenter le système de templates WordPress :
   - Hiérarchie de templates (thème > plugin)
   - Templates surchargeables
-  - Hooks de customisation (`bj_before_checkins_list`, `bj_after_checkin_card`, etc.)
-  - Filtres (`bj_checkin_template`, `bj_checkin_classes`, `bj_checkin_data`)
+  - Hooks de customisation (`jb_before_checkins_list`, `jb_after_checkin_card`, etc.)
+  - Filtres (`jb_checkin_template`, `jb_checkin_classes`, `jb_checkin_data`)
 - [ ] Documenter les partials réutilisables :
   - `public/partials/checkin-card.php`
   - `public/partials/rating-stars.php`
 - [ ] Documenter les template tags disponibles :
-  - `bj_get_checkin_data($post_id)`
-  - `bj_rating_stars($rating, $echo = true)`
-  - `bj_beer_style($post_id, $link = true)`
-  - `bj_brewery_link($post_id)`
-  - `bj_venue_info($post_id)`
-  - `bj_beer_image($post_id, $size = 'medium')`
-  - `bj_display_rating($post_id, $show_label, $show_raw)`
+  - `jb_get_checkin_data($post_id)`
+  - `jb_rating_stars($rating, $echo = true)`
+  - `jb_beer_style($post_id, $link = true)`
+  - `jb_brewery_link($post_id)`
+  - `jb_venue_info($post_id)`
+  - `jb_beer_image($post_id, $size = 'medium')`
+  - `jb_display_rating($post_id, $show_label, $show_raw)`
 - [ ] Documenter les shortcodes (si Phase 2)
 - [ ] Analyser les assets (CSS/JS) :
   - `public/assets/css/public.css`
@@ -299,9 +299,9 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
   - Responsive breakpoints
   - Classes utilitaires
 - [ ] Documenter les Gutenberg blocks (Phase 2) :
-  - `beer-journal/checkins-list` (paramètres, layouts, filtres)
-  - `beer-journal/checkin-card` (éléments affichés)
-  - `beer-journal/stats-dashboard` (statistiques, graphiques)
+  - `jardin-beer/checkins-list` (paramètres, layouts, filtres)
+  - `jardin-beer/checkin-card` (éléments affichés)
+  - `jardin-beer/stats-dashboard` (statistiques, graphiques)
 
 **Fichiers à créer :**
 - `/docs/frontend/templates.md`
@@ -397,7 +397,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
   - Génération thumbnails
   - Module : `includes/class-image-handler.php`
 - [ ] Gestion des Custom Post Types :
-  - CPT `bj_checkin`
+  - CPT `jb_checkin`
   - Configuration REST API
   - Module : `includes/class-post-type.php`
 - [ ] Système de taxonomies :
@@ -458,7 +458,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 - [ ] Créer `CHANGELOG.md`
 - [ ] Documenter les hooks WordPress utilisés :
   - Actions : `plugins_loaded`, `init`, `wp_enqueue_scripts`, `admin_notices`, etc.
-  - Filtres : `bj_checkin_template`, `bj_checkin_classes`, `bj_checkin_data`, `bj_rating_display`
+  - Filtres : `jb_checkin_template`, `jb_checkin_classes`, `jb_checkin_data`, `jb_rating_display`
 - [ ] Documenter la compatibilité :
   - Versions WordPress (6.0+ minimum, testé jusqu'à 6.7+)
   - Versions PHP (8.2+ minimum)
@@ -508,7 +508,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 
 ### Étape 4.3 : Documentation WordPress.org
 - [ ] Checklist de soumission WordPress.org :
-  - Fichiers requis (beer-journal.php, readme.txt, LICENSE)
+  - Fichiers requis (jardin-beer.php, readme.txt, LICENSE)
   - Code requirements (GPL, sanitization, nonces, etc.)
   - Assets (banners, icons, screenshots)
   - Security best practices
@@ -518,7 +518,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
   - Icon 256×256px
   - Screenshots (1280×960px recommandé)
 - [ ] Documentation i18n :
-  - Text domain : `beer-journal`
+  - Text domain : `jardin-beer`
   - Génération .pot file
   - Structure `/languages/`
   - Chargement text domain
@@ -570,7 +570,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
   - Personnalisation labels
   - Affichage frontend
 - [ ] Template tags :
-  - `bj_display_rating()`
+  - `jb_display_rating()`
   - Filtres disponibles
 
 **Fichiers à créer :**
@@ -692,7 +692,7 @@ Pour de gros chantiers uniquement documentation, utiliser une branche **`feature
 
 ## Notes importantes
 
-### Contexte spécifique au projet Beer Journal
+### Contexte spécifique au projet Jardin Beer
 - Plugin WordPress pour synchroniser les check-ins Untappd
 - Pas d'API officielle → scraping nécessaire
 - RSS feed limité (25 derniers check-ins)

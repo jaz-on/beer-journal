@@ -2,7 +2,7 @@
 /**
  * Main plugin bootstrap.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,21 +10,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Plugin
+ * Class JB_Plugin
  */
-class BJ_Plugin {
+class JB_Plugin {
 
 	/**
 	 * Singleton instance.
 	 *
-	 * @var BJ_Plugin|null
+	 * @var JB_Plugin|null
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get instance.
 	 *
-	 * @return BJ_Plugin
+	 * @return JB_Plugin
 	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
@@ -39,32 +39,32 @@ class BJ_Plugin {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'init', array( 'BJ_DB_Install', 'maybe_add_indexes' ), 1 );
+		add_action( 'init', array( 'JB_DB_Install', 'maybe_add_indexes' ), 1 );
 
-		$post_type = new BJ_Post_Type();
+		$post_type = new JB_Post_Type();
 		$post_type->register();
 
-		$tax = new BJ_Taxonomies();
+		$tax = new JB_Taxonomies();
 		$tax->register();
 
-		$meta = new BJ_Meta_Fields();
+		$meta = new JB_Meta_Fields();
 		$meta->register();
 
-		$settings = new BJ_Settings();
+		$settings = new JB_Settings();
 		$settings->register();
 
-		$scheduler = new BJ_Action_Scheduler();
+		$scheduler = new JB_Action_Scheduler();
 		$scheduler->register();
 
 		if ( is_admin() ) {
-			$admin = new BJ_Admin();
+			$admin = new JB_Admin();
 			$admin->register();
 		}
 
-		$public = new BJ_Public();
+		$public = new JB_Public();
 		$public->register();
 
-		$blocks = new BJ_Blocks();
+		$blocks = new JB_Blocks();
 		$blocks->register();
 	}
 }

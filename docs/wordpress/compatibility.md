@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal compatibility requirements and tested versions.
+Jardin Beer compatibility requirements and tested versions.
 
 ## WordPress Versions
 

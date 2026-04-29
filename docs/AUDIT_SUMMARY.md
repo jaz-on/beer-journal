@@ -4,7 +4,7 @@
 2025-11-10
 
 ## Overview
-Complete audit and validation of Beer Journal documentation structure, content, and consistency.
+Complete audit and validation of Jardin Beer documentation structure, content, and consistency.
 
 ## Validation Results
 
@@ -25,8 +25,8 @@ Complete audit and validation of Beer Journal documentation structure, content, 
 
 ### Phase 4: Consistency Validation ✅
 - **Cross-references**: 209 links verified, 4 broken links fixed
-- **Terminology**: 824 occurrences of prefixes (bj_, BJ_, _bj_) verified
-- **Text Domain**: 200 occurrences of 'beer-journal' verified
+- **Terminology**: 824 occurrences of prefixes (jb_, JB_, _jb_) verified
+- **Text Domain**: 200 occurrences of 'jardin-beer' verified
 - **Custom Post Type**: Standardized from 'beer' to 'beer_checkin' across all documentation
 - **WordPress Compliance**: 64 security mentions (sanitization, escaping, nonces) verified
 
@@ -55,8 +55,8 @@ Complete audit and validation of Beer Journal documentation structure, content, 
   - `docs/development/logging-strategy.md`
   - `docs/features/error-handling-detailed.md`
  - Clarified policy: no shortcodes/widgets; prefer blocks + filters
- - Added SEO options: `bj_schema_enabled`, `bj_microformats_enabled` (default ON)
- - Documented exclude-from-sync meta: `_bj_exclude_sync`
+ - Added SEO options: `jb_schema_enabled`, `jb_microformats_enabled` (default ON)
+ - Documented exclude-from-sync meta: `_jb_exclude_sync`
  - Added caching conventions page and references (Option A by default)
 
 ### Structure Preparation

@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Cette release marque la complétion de la documentation pour la Phase 1 (MVP) du plugin Beer Journal.
+Cette release marque la complétion de la documentation pour la Phase 1 (MVP) du plugin Jardin Beer.
 
 ## Contenu de la documentation
 
@@ -85,8 +85,8 @@ Cette release marque la complétion de la documentation pour la Phase 1 (MVP) du
 - **7 catégories** de documentation
 - **14 diagrammes Mermaid** validés
 - **209 références croisées** vérifiées
-- **824 occurrences** de préfixes standardisés (bj_, BJ_, _bj_)
-- **200 occurrences** du text domain 'beer-journal'
+- **824 occurrences** de préfixes standardisés (jb_, JB_, _jb_)
+- **200 occurrences** du text domain 'jardin-beer'
 
 ## Validation
 

@@ -2,7 +2,7 @@
 /**
  * Plugin activation.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Activator
+ * Class JB_Activator
  */
-class BJ_Activator {
+class JB_Activator {
 
 	/**
 	 * Run on activation.
@@ -20,9 +20,10 @@ class BJ_Activator {
 	 * @return void
 	 */
 	public static function activate() {
-		BJ_Settings::ensure_defaults();
-		BJ_DB_Install::maybe_add_indexes();
+		JB_Storage_Migration::maybe_migrate();
+		JB_Settings::ensure_defaults();
+		JB_DB_Install::maybe_add_indexes();
 		flush_rewrite_rules();
-		do_action( 'bj_plugin_activated' );
+		do_action( 'jb_plugin_activated' );
 	}
 }

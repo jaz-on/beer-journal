@@ -38,9 +38,9 @@ flowchart TD
 ### Phase 1: RSS Feed Processing
 
 #### Step 1.1: Polling Trigger
-- **Component**: `BJ_Action_Scheduler`
+- **Component**: `JB_Action_Scheduler`
 - **Frequency**: Adaptive (6h/daily/weekly based on activity)
-- **Action**: WordPress cron event `bj_rss_sync`
+- **Action**: WordPress cron event `jb_rss_sync`
 
 **Adaptive Logic**:
 ```php
@@ -56,13 +56,13 @@ if ($days_since_last < 7) {
 ```
 
 #### Step 1.2: Fetch RSS Feed
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Method**: `wp_remote_get()` or `fetch_feed()`
 - **URL**: `https://untappd.com/rss/user/{username}`
 - **Output**: RSS XML feed
 
 #### Step 1.3: Parse RSS XML
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Library**: WordPress SimplePie (built-in)
 - **Extracted Data**:
   - Title: "Jason is drinking a {beer_name} by {brewery_name} at {venue}"
@@ -72,7 +72,7 @@ if ($days_since_last < 7) {
   - Description: Sometimes contains image URL in CDATA
 
 #### Step 1.4: Extract Basic Data
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Parsing**: Regex or string manipulation on title
 - **Extracted**:
   - Beer name
@@ -83,8 +83,8 @@ if ($days_since_last < 7) {
   - Image URL (if in description)
 
 #### Step 1.5: GUID Comparison (Optimization)
-- **Component**: `BJ_RSS_Parser`
-- **Check**: Compare latest GUID with `bj_last_imported_guid` option
+- **Component**: `JB_RSS_Parser`
+- **Check**: Compare latest GUID with `jb_last_imported_guid` option
 - **Decision**: If same → skip scraping (save resources)
 - **If New**: Continue to scraping phase
 
@@ -93,14 +93,14 @@ if ($days_since_last < 7) {
 ### Phase 2: HTML Scraping
 
 #### Step 2.1: Scrape Check-in Page
-- **Component**: `BJ_Scraper`
+- **Component**: `JB_Scraper`
 - **Library**: Symfony DomCrawler + Guzzle
 - **URL**: From RSS link
 - **Rate Limiting**: 2-5 seconds delay between requests
 - **Error Handling**: Retry up to 3 times
 
 #### Step 2.2: Extract Complete Data
-- **Component**: `BJ_Scraper`
+- **Component**: `JB_Scraper`
 - **Selectors**: CSS selectors for Untappd HTML structure
 - **Extracted Data**:
   - Rating (0-5 with decimals) - **REQUIRED**
@@ -130,7 +130,7 @@ if ($days_since_last < 7) {
 ### Phase 3: Data Validation
 
 #### Step 3.1: Validate Data Completeness
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Required Fields**:
   - Beer name ✓
   - Brewery name ✓
@@ -148,7 +148,7 @@ if ($beer_name && $brewery_name && $date && $rating) {
     $status = 'publish';
 } else {
     $status = 'draft';
-    update_post_meta($post_id, '_bj_incomplete_reason', 'missing_rating');
+    update_post_meta($post_id, '_jb_incomplete_reason', 'missing_rating');
 }
 ```
 
@@ -157,20 +157,20 @@ if ($beer_name && $brewery_name && $date && $rating) {
 ### Phase 4: Image Processing
 
 #### Step 4.1: Download Image
-- **Component**: `BJ_Image_Handler`
+- **Component**: `JB_Image_Handler`
 - **Source**: URL from RSS or scraped HTML
 - **Method**: `wp_remote_get()` with timeout
 - **Validation**: Check file type, size
 
 #### Step 4.2: Check Duplicate
-- **Component**: `BJ_Image_Handler`
+- **Component**: `JB_Image_Handler`
 - **Method**: MD5 hash comparison
 - **Check**: Query Media Library for existing attachment
 - **If Exists**: Reuse attachment ID
 - **If New**: Continue to import
 
 #### Step 4.3: Import to Media Library
-- **Component**: `BJ_Image_Handler`
+- **Component**: `JB_Image_Handler`
 - **Methods**: `wp_upload_bits()`, `wp_insert_attachment()`
 - **Process**:
   1. Upload file
@@ -190,7 +190,7 @@ if ($beer_name && $brewery_name && $date && $rating) {
 ### Phase 5: WordPress Post Creation
 
 #### Step 5.1: Create Custom Post Type Entry
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Method**: `wp_insert_post()`
 - **Post Type**: `beer`
 - **Post Data**:
@@ -201,7 +201,7 @@ if ($beer_name && $brewery_name && $date && $rating) {
   - Featured Image: Attachment ID from image handler
 
 #### Step 5.2: Assign Taxonomies
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Method**: `wp_set_object_terms()`
 - **Taxonomies**:
   - `beer_style`: Auto-create if doesn't exist
@@ -219,26 +219,26 @@ wp_set_object_terms($post_id, $term_name, $taxonomy);
 ```
 
 #### Step 5.3: Set Meta Fields
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Method**: `update_post_meta()`
 - **Meta Fields**: See [Meta Fields Documentation](../db/meta-fields.md)
 
 **Key Meta Fields**:
-- `_bj_checkin_id`: Unique Untappd ID
-- `_bj_beer_name`: Beer name
-- `_bj_brewery_name`: Brewery name
-- `_bj_rating_raw`: Original rating (0-5)
-- `_bj_rating_rounded`: Mapped star rating (0-5)
-- `_bj_beer_abv`: ABV percentage
-- `_bj_beer_style`: Beer style
-- `_bj_venue_name`: Venue name
-- `_bj_checkin_url`: Original Untappd URL
-- `_bj_source`: 'rss' or 'crawler'
-- `_bj_scraped_at`: Timestamp
+- `_jb_checkin_id`: Unique Untappd ID
+- `_jb_beer_name`: Beer name
+- `_jb_brewery_name`: Brewery name
+- `_jb_rating_raw`: Original rating (0-5)
+- `_jb_rating_rounded`: Mapped star rating (0-5)
+- `_jb_beer_abv`: ABV percentage
+- `_jb_beer_style`: Beer style
+- `_jb_venue_name`: Venue name
+- `_jb_checkin_url`: Original Untappd URL
+- `_jb_source`: 'rss' or 'crawler'
+- `_jb_scraped_at`: Timestamp
 
 #### Step 5.4: Map Rating
-- **Component**: `BJ_Importer`
-- **Method**: `bj_map_rating()`
+- **Component**: `JB_Importer`
+- **Method**: `jb_map_rating()`
 - **Input**: Raw rating (0-5 with decimals)
 - **Output**: Rounded rating (0-5 stars)
 - **Rules**: Configurable mapping (default: 0-0.9→0, 1-1.9→1, etc.)
@@ -248,13 +248,13 @@ wp_set_object_terms($post_id, $term_name, $taxonomy);
 ### Phase 6: Post-Import Processing
 
 #### Step 6.1: Update Options
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Updates**:
-  - `bj_last_checkin_date`: Latest check-in date
-  - `bj_last_imported_guid`: Latest GUID
+  - `jb_last_checkin_date`: Latest check-in date
+  - `jb_last_imported_guid`: Latest GUID
 
 #### Step 6.2: Clear Cache
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Actions**:
   - Clear post cache
   - Clear taxonomy cache
@@ -262,16 +262,16 @@ wp_set_object_terms($post_id, $term_name, $taxonomy);
   - Clear transients liés aux requêtes d’archives (si applicable)
 
 #### Step 6.3: Trigger Hooks
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Actions**:
-  - `bj_after_checkin_imported` (with post_id)
-  - `bj_after_batch_import` (with count)
+  - `jb_after_checkin_imported` (with post_id)
+  - `jb_after_batch_import` (with count)
 
 ---
 
 ## Exclusion de synchronisation (Protection des edits)
 
-Lorsque `_bj_exclude_sync` vaut `'1'` sur un check-in existant, toute tentative de mise à jour lors d’une synchronisation est ignorée. Cette protection évite l’écrasement d’éditions manuelles ou la réapparition de doublons.
+Lorsque `_jb_exclude_sync` vaut `'1'` sur un check-in existant, toute tentative de mise à jour lors d’une synchronisation est ignorée. Cette protection évite l’écrasement d’éditions manuelles ou la réapparition de doublons.
 
 Points d’entrée concernés:
 - Mise à jour via RSS Sync (nouveaux GUID pointant vers un post existant)

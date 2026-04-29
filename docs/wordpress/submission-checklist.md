@@ -2,13 +2,13 @@
 
 ## Overview
 
-Complete checklist for submitting Beer Journal to WordPress.org plugin directory.
+Complete checklist for submitting Jardin Beer to WordPress.org plugin directory.
 
 ## Required Files
 
 ### Main Plugin File
 
-**File**: `beer-journal.php`
+**File**: `jardin-beer.php`
 
 **Requirements**:
 - [x] Standard WordPress plugin headers
@@ -22,15 +22,15 @@ Complete checklist for submitting Beer Journal to WordPress.org plugin directory
 ```php
 <?php
 /**
- * Plugin Name: Beer Journal for Untappd
- * Plugin URI: https://wordpress.org/plugins/beer-journal/
+ * Plugin Name: Jardin Beer for Untappd
+ * Plugin URI: https://wordpress.org/plugins/jardin-beer/
  * Description: Import and display your Untappd beer check-ins
  * Version: 1.0.0
  * Author: jazon
  * Author URI: https://example.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: beer-journal
+ * Text Domain: jardin-beer
  * Domain Path: /languages
  */
 ```
@@ -134,9 +134,9 @@ Complete checklist for submitting Beer Journal to WordPress.org plugin directory
 
 ### Function Prefixes
 
-- [x] All functions prefixed with `bj_`
-- [x] All classes prefixed with `BJ_`
-- [x] All constants prefixed with `BJ_`
+- [x] All functions prefixed with `jb_`
+- [x] All classes prefixed with `JB_`
+- [x] All constants prefixed with `JB_`
 - [x] No conflicts with other plugins
 
 ---
@@ -190,7 +190,7 @@ Complete checklist for submitting Beer Journal to WordPress.org plugin directory
 
 ### Text Domain
 
-- [x] Text domain: `beer-journal`
+- [x] Text domain: `jardin-beer`
 - [x] Consistent throughout codebase
 - [x] All user-facing strings translatable
 
@@ -198,7 +198,7 @@ Complete checklist for submitting Beer Journal to WordPress.org plugin directory
 
 ### .pot File
 
-**File**: `languages/beer-journal.pot`
+**File**: `languages/jardin-beer.pot`
 
 **Requirements**:
 - [x] Generated from codebase
@@ -207,14 +207,14 @@ Complete checklist for submitting Beer Journal to WordPress.org plugin directory
 
 **Generation**:
 ```bash
-wp i18n make-pot . languages/beer-journal.pot
+wp i18n make-pot . languages/jardin-beer.pot
 ```
 
 ---
 
 ### Language Files
 
-**Structure**: `languages/beer-journal-{locale}.po`
+**Structure**: `languages/jardin-beer-{locale}.po`
 
 **Optional**: Include translations if available
 
@@ -317,8 +317,8 @@ wp i18n make-pot . languages/beer-journal.pot
 ### Required Structure
 
 ```
-beer-journal/
-├── beer-journal.php
+jardin-beer/
+├── jardin-beer.php
 ├── readme.txt
 ├── LICENSE
 ├── .wordpress-org/

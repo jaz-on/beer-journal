@@ -1,65 +1,65 @@
-.bj-checkin-grid {
+.jb-checkin-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 	gap: 1.5rem;
 }
 
-.bj-card {
+.jb-card {
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	border-radius: 6px;
 	overflow: hidden;
 }
 
-.bj-card__thumb img {
+.jb-card__thumb img {
 	display: block;
 	width: 100%;
 	height: auto;
 }
 
-.bj-card__body {
+.jb-card__body {
 	padding: 1rem;
 }
 
-.bj-card__title {
+.jb-card__title {
 	margin: 0 0 0.5rem;
 	font-size: 1.1rem;
 }
 
-.bj-meta {
+.jb-meta {
 	display: flex;
 	gap: 1rem;
 	align-items: center;
 	margin-top: 0.5rem;
 }
 
-.bj-stars {
+.jb-stars {
 	letter-spacing: 0.1em;
 }
 
-.bj-checkin-table {
+.jb-checkin-table {
 	width: 100%;
 	border-collapse: collapse;
 	margin-bottom: 1.5rem;
 }
 
-.bj-checkin-table th,
-.bj-checkin-table td {
+.jb-checkin-table th,
+.jb-checkin-table td {
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	padding: 0.5rem 0.75rem;
 	text-align: left;
 	vertical-align: middle;
 }
 
-.bj-checkin-table thead th {
+.jb-checkin-table thead th {
 	font-weight: 600;
 	background: rgba(0, 0, 0, 0.03);
 }
 
-.bj-col-thumb {
+.jb-col-thumb {
 	width: 80px;
 }
 
-.bj-row__thumb img {
+.jb-row__thumb img {
 	max-width: 72px;
 	height: auto;
 	display: block;

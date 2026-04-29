@@ -2,30 +2,30 @@
 /**
  * At-a-glance stats (dashboard strip).
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$stats   = bj_get_global_stats();
-$last    = get_option( 'bj_last_rss_sync_at', '' );
-$queue   = bj_get_rss_sync_queue();
+$stats   = jb_get_global_stats();
+$last    = get_option( 'jb_last_rss_sync_at', '' );
+$queue   = jb_get_rss_sync_queue();
 $pending = is_array( $queue ) ? count( $queue ) : 0;
-$draft_i = bj_count_draft_incomplete_checkins();
+$draft_i = jb_count_draft_incomplete_checkins();
 ?>
-<div class="bj-stats-strip" role="region" aria-label="<?php esc_attr_e( 'Beer Journal summary', 'beer-journal' ); ?>">
-	<div class="bj-stats-strip__item">
-		<span class="bj-stats-strip__value"><?php echo esc_html( number_format_i18n( $stats['publish'] ) ); ?></span>
-		<span class="bj-stats-strip__label"><?php esc_html_e( 'Published', 'beer-journal' ); ?></span>
+<div class="jb-stats-strip" role="region" aria-label="<?php esc_attr_e( 'Jardin Beer summary', 'jardin-beer' ); ?>">
+	<div class="jb-stats-strip__item">
+		<span class="jb-stats-strip__value"><?php echo esc_html( number_format_i18n( $stats['publish'] ) ); ?></span>
+		<span class="jb-stats-strip__label"><?php esc_html_e( 'Published', 'jardin-beer' ); ?></span>
 	</div>
-	<div class="bj-stats-strip__item">
-		<span class="bj-stats-strip__value"><?php echo esc_html( number_format_i18n( $stats['draft'] ) ); ?></span>
-		<span class="bj-stats-strip__label"><?php esc_html_e( 'Drafts', 'beer-journal' ); ?></span>
+	<div class="jb-stats-strip__item">
+		<span class="jb-stats-strip__value"><?php echo esc_html( number_format_i18n( $stats['draft'] ) ); ?></span>
+		<span class="jb-stats-strip__label"><?php esc_html_e( 'Drafts', 'jardin-beer' ); ?></span>
 	</div>
-	<div class="bj-stats-strip__item bj-stats-strip__item--wide">
-		<span class="bj-stats-strip__value bj-stats-strip__value--small">
+	<div class="jb-stats-strip__item jb-stats-strip__item--wide">
+		<span class="jb-stats-strip__value jb-stats-strip__value--small">
 			<?php
 			if ( is_string( $last ) && '' !== $last ) {
 				echo esc_html(
@@ -39,14 +39,14 @@ $draft_i = bj_count_draft_incomplete_checkins();
 			}
 			?>
 		</span>
-		<span class="bj-stats-strip__label"><?php esc_html_e( 'Last RSS sync', 'beer-journal' ); ?></span>
+		<span class="jb-stats-strip__label"><?php esc_html_e( 'Last RSS sync', 'jardin-beer' ); ?></span>
 	</div>
-	<div class="bj-stats-strip__item">
-		<span class="bj-stats-strip__value"><?php echo esc_html( number_format_i18n( $pending ) ); ?></span>
-		<span class="bj-stats-strip__label"><?php esc_html_e( 'RSS queue', 'beer-journal' ); ?></span>
+	<div class="jb-stats-strip__item">
+		<span class="jb-stats-strip__value"><?php echo esc_html( number_format_i18n( $pending ) ); ?></span>
+		<span class="jb-stats-strip__label"><?php esc_html_e( 'RSS queue', 'jardin-beer' ); ?></span>
 	</div>
-	<div class="bj-stats-strip__item">
-		<span class="bj-stats-strip__value"><?php echo esc_html( number_format_i18n( $draft_i ) ); ?></span>
-		<span class="bj-stats-strip__label"><?php esc_html_e( 'Incomplete drafts', 'beer-journal' ); ?></span>
+	<div class="jb-stats-strip__item">
+		<span class="jb-stats-strip__value"><?php echo esc_html( number_format_i18n( $draft_i ) ); ?></span>
+		<span class="jb-stats-strip__label"><?php esc_html_e( 'Incomplete drafts', 'jardin-beer' ); ?></span>
 	</div>
 </div>

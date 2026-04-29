@@ -2,7 +2,7 @@
 
 ## Overview
 
-Thank you for your interest in contributing to Beer Journal! This guide will help you get started.
+Thank you for your interest in contributing to Jardin Beer! This guide will help you get started.
 
 ## Getting Started
 
@@ -20,8 +20,8 @@ Thank you for your interest in contributing to Beer Journal! This guide will hel
 
 1. **Clone Repository**:
 ```bash
-git clone https://github.com/your-username/beer-journal.git
-cd beer-journal
+git clone https://github.com/your-username/jardin-beer.git
+cd jardin-beer
 ```
 
 2. **Install Dependencies**:
@@ -184,7 +184,7 @@ When updating documentation:
 **Before merging documentation**:
 - [ ] All links work correctly
 - [ ] Mermaid diagrams are valid
-- [ ] Naming conventions are consistent (bj_, BJ_, _bj_)
+- [ ] Naming conventions are consistent (jb_, JB_, _jb_)
 - [ ] Cross-references are correct
 - [ ] Validation script passes
 

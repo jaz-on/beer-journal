@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap: Composer autoload + minimal WP stubs for pure helpers.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 define( 'ABSPATH', dirname( __DIR__ ) . '/' );

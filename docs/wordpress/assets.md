@@ -24,7 +24,7 @@ Assets required for WordPress.org plugin directory submission.
 - No text that becomes unreadable when scaled
 
 **Content Suggestions**:
-- Plugin name: "Beer Journal for Untappd"
+- Plugin name: "Jardin Beer for Untappd"
 - Tagline: "Import and display your Untappd check-ins"
 - Visual: Beer-related imagery or check-in cards
 
@@ -181,7 +181,7 @@ Assets required for WordPress.org plugin directory submission.
 ### Directory Structure
 
 ```
-beer-journal/
+jardin-beer/
 ├── .wordpress-org/
 │   ├── banner-1544x500.png
 │   ├── banner-772x250.png (optional)

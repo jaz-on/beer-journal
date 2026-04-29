@@ -7,8 +7,8 @@ Ce document liste uniquement les fonctionnalités du MVP (Phase 1, version 1.0).
 
 ## Fonctionnalités principales
 
-- **Exclude from Sync** : Protection des posts édités manuellement (méta `_bj_exclude_sync`)
-- **Content Filters** : Filtres WordPress pour personnaliser l'affichage (`bj_checkin_content`, `bj_rating_display`, etc.)
+- **Exclude from Sync** : Protection des posts édités manuellement (méta `_jb_exclude_sync`)
+- **Content Filters** : Filtres WordPress pour personnaliser l'affichage (`jb_checkin_content`, `jb_rating_display`, etc.)
 - **SEO par défaut** : JSON-LD (Schema.org) + microformats, avec options pour désactiver
 - **Caching Option A** : Transients automatiques avec TTL documentés
 - **UI Admin propre** : Interface avec onglets et aide contextuelle (documentation prête)

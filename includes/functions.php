@@ -1,8 +1,8 @@
 <?php
 /**
- * Global helper functions for Beer Journal.
+ * Global helper functions for Jardin Beer.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $url Check-in URL.
  * @return string|null Numeric ID or null.
  */
-function bj_parse_checkin_id_from_url( $url ) {
+function jb_parse_checkin_id_from_url( $url ) {
 	if ( ! is_string( $url ) || '' === $url ) {
 		return null;
 	}
@@ -30,7 +30,7 @@ function bj_parse_checkin_id_from_url( $url ) {
  *
  * @return array<int, array{min: float, max: float, round: int}>
  */
-function bj_get_default_rating_rules() {
+function jb_get_default_rating_rules() {
 	return array(
 		array( 'min' => 0.0, 'max' => 0.49, 'round' => 0 ),
 		array( 'min' => 0.5, 'max' => 1.49, 'round' => 1 ),
@@ -46,14 +46,14 @@ function bj_get_default_rating_rules() {
  *
  * @return array<int, string>
  */
-function bj_get_default_rating_labels() {
+function jb_get_default_rating_labels() {
 	return array(
-		0 => __( 'Undrinkable', 'beer-journal' ),
-		1 => __( 'Terrible', 'beer-journal' ),
-		2 => __( 'Poor', 'beer-journal' ),
-		3 => __( 'Okay', 'beer-journal' ),
-		4 => __( 'Good', 'beer-journal' ),
-		5 => __( 'Excellent', 'beer-journal' ),
+		0 => __( 'Undrinkable', 'jardin-beer' ),
+		1 => __( 'Terrible', 'jardin-beer' ),
+		2 => __( 'Poor', 'jardin-beer' ),
+		3 => __( 'Okay', 'jardin-beer' ),
+		4 => __( 'Good', 'jardin-beer' ),
+		5 => __( 'Excellent', 'jardin-beer' ),
 	);
 }
 
@@ -62,11 +62,11 @@ function bj_get_default_rating_labels() {
  *
  * @return array<int, string>
  */
-function bj_get_rating_labels() {
-	$defaults = bj_get_default_rating_labels();
-	$stored   = get_option( 'bj_rating_labels', false );
+function jb_get_rating_labels() {
+	$defaults = jb_get_default_rating_labels();
+	$stored   = get_option( 'jb_rating_labels', false );
 	if ( false === $stored || ! is_array( $stored ) ) {
-		return apply_filters( 'bj_rating_labels', $defaults );
+		return apply_filters( 'jb_rating_labels', $defaults );
 	}
 	$out = array();
 	for ( $i = 0; $i <= 5; $i++ ) {
@@ -74,22 +74,22 @@ function bj_get_rating_labels() {
 			? (string) $stored[ $i ]
 			: ( isset( $defaults[ $i ] ) ? $defaults[ $i ] : '' );
 	}
-	return apply_filters( 'bj_rating_labels', $out );
+	return apply_filters( 'jb_rating_labels', $out );
 }
 
 /**
  * Default Untappd RSS feed URL used when the option is not stored yet.
  *
- * Optional: define `BJ_RSS_FEED_URL` in wp-config.php to override the default feed URL.
+ * Optional: define `JB_RSS_FEED_URL` in wp-config.php to override the default feed URL.
  *
  * @return string
  */
-function bj_get_default_rss_feed_url() {
-	if ( defined( 'BJ_RSS_FEED_URL' ) && is_string( BJ_RSS_FEED_URL ) && '' !== trim( BJ_RSS_FEED_URL ) ) {
-		return apply_filters( 'bj_default_rss_feed_url', esc_url_raw( BJ_RSS_FEED_URL ) );
+function jb_get_default_rss_feed_url() {
+	if ( defined( 'JB_RSS_FEED_URL' ) && is_string( JB_RSS_FEED_URL ) && '' !== trim( JB_RSS_FEED_URL ) ) {
+		return apply_filters( 'jb_default_rss_feed_url', esc_url_raw( JB_RSS_FEED_URL ) );
 	}
 	return apply_filters(
-		'bj_default_rss_feed_url',
+		'jb_default_rss_feed_url',
 		'https://untappd.com/rss/user/jaz_on?key=89731ff4bd5fc508dc3eae87a6cf93f4'
 	);
 }
@@ -101,10 +101,10 @@ function bj_get_default_rss_feed_url() {
  *
  * @return string
  */
-function bj_get_rss_feed_url() {
-	$stored = get_option( 'bj_rss_feed_url', false );
+function jb_get_rss_feed_url() {
+	$stored = get_option( 'jb_rss_feed_url', false );
 	if ( false === $stored ) {
-		return bj_get_default_rss_feed_url();
+		return jb_get_default_rss_feed_url();
 	}
 	return trim( (string) $stored );
 }
@@ -114,8 +114,8 @@ function bj_get_rss_feed_url() {
  *
  * @return string
  */
-function bj_get_default_untappd_username() {
-	return apply_filters( 'bj_default_untappd_username', 'jaz_on' );
+function jb_get_default_untappd_username() {
+	return apply_filters( 'jb_default_untappd_username', 'jaz_on' );
 }
 
 /**
@@ -123,10 +123,10 @@ function bj_get_default_untappd_username() {
  *
  * @return string
  */
-function bj_get_untappd_username() {
-	$stored = get_option( 'bj_untappd_username', false );
+function jb_get_untappd_username() {
+	$stored = get_option( 'jb_untappd_username', false );
 	if ( false === $stored ) {
-		return bj_get_default_untappd_username();
+		return jb_get_default_untappd_username();
 	}
 	return (string) $stored;
 }
@@ -137,7 +137,7 @@ function bj_get_untappd_username() {
  * @param string $url RSS URL.
  * @return string Username slug or empty.
  */
-function bj_parse_username_from_rss_url( $url ) {
+function jb_parse_username_from_rss_url( $url ) {
 	if ( ! is_string( $url ) || '' === trim( $url ) ) {
 		return '';
 	}
@@ -152,7 +152,7 @@ function bj_parse_username_from_rss_url( $url ) {
  *
  * @return string
  */
-function bj_get_checkin_archive_url() {
+function jb_get_checkin_archive_url() {
 	$pt = 'beer_checkin';
 	if ( ! post_type_exists( $pt ) ) {
 		return home_url( '/' );
@@ -167,7 +167,7 @@ function bj_get_checkin_archive_url() {
  * @param string $content Raw or HTML comment.
  * @return string
  */
-function bj_normalize_imported_post_content( $content ) {
+function jb_normalize_imported_post_content( $content ) {
 	$content = trim( (string) $content );
 	if ( '' === $content ) {
 		return '';
@@ -186,15 +186,15 @@ function bj_normalize_imported_post_content( $content ) {
  * @param float|null $raw Raw rating.
  * @return int|null Rounded 0–5 or null if unknown.
  */
-function bj_map_rating_raw_to_rounded( $raw ) {
+function jb_map_rating_raw_to_rounded( $raw ) {
 	if ( null === $raw || '' === $raw ) {
 		return null;
 	}
 	$raw = floatval( $raw );
-	$rules = get_option( 'bj_rating_rules', bj_get_default_rating_rules() );
-	$rules = apply_filters( 'bj_rating_rules', $rules );
+	$rules = get_option( 'jb_rating_rules', jb_get_default_rating_rules() );
+	$rules = apply_filters( 'jb_rating_rules', $rules );
 	if ( ! is_array( $rules ) || empty( $rules ) ) {
-		$rules = bj_get_default_rating_rules();
+		$rules = jb_get_default_rating_rules();
 	}
 	foreach ( $rules as $rule ) {
 		if ( ! is_array( $rule ) || ! isset( $rule['min'], $rule['max'], $rule['round'] ) ) {
@@ -213,7 +213,7 @@ function bj_map_rating_raw_to_rounded( $raw ) {
  * @param string $title Item title.
  * @return array{beer: string, brewery: string, venue: string}
  */
-function bj_parse_rss_item_title( $title ) {
+function jb_parse_rss_item_title( $title ) {
 	$out = array(
 		'beer'    => '',
 		'brewery' => '',
@@ -237,12 +237,12 @@ function bj_parse_rss_item_title( $title ) {
  *
  * @return string|false Absolute path or false.
  */
-function bj_get_log_directory() {
+function jb_get_log_directory() {
 	$upload = wp_upload_dir();
 	if ( ! empty( $upload['error'] ) ) {
 		return false;
 	}
-	$dir = trailingslashit( $upload['basedir'] ) . 'beer-journal/logs/';
+	$dir = trailingslashit( $upload['basedir'] ) . 'jardin-beer/logs/';
 	if ( ! wp_mkdir_p( $dir ) ) {
 		return false;
 	}
@@ -259,13 +259,13 @@ function bj_get_log_directory() {
  * @param string $checkin_id Untappd check-in ID.
  * @return int Post ID or 0.
  */
-function bj_get_post_id_by_checkin_id( $checkin_id ) {
+function jb_get_post_id_by_checkin_id( $checkin_id ) {
 	global $wpdb;
 	$checkin_id = sanitize_text_field( (string) $checkin_id );
 	if ( '' === $checkin_id ) {
 		return 0;
 	}
-	$key = '_bj_checkin_id';
+	$key = '_jb_checkin_id';
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$post_id = $wpdb->get_var(
 		$wpdb->prepare(
@@ -283,7 +283,7 @@ function bj_get_post_id_by_checkin_id( $checkin_id ) {
  * @param array<int, string|int> $checkin_ids Check-in IDs.
  * @return array<string, int> checkin_id => post_id
  */
-function bj_get_post_ids_by_checkin_ids( array $checkin_ids ) {
+function jb_get_post_ids_by_checkin_ids( array $checkin_ids ) {
 	global $wpdb;
 	$clean = array();
 	foreach ( $checkin_ids as $id ) {
@@ -300,7 +300,7 @@ function bj_get_post_ids_by_checkin_ids( array $checkin_ids ) {
 	$placeholders = implode( ',', array_fill( 0, count( $ids ), '%s' ) );
 	// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPlaceholder
 	$sql = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value IN ({$placeholders})";
-	$params = array_merge( array( '_bj_checkin_id' ), $ids );
+	$params = array_merge( array( '_jb_checkin_id' ), $ids );
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$prepared = $wpdb->prepare( $sql, $params );
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -323,14 +323,14 @@ function bj_get_post_ids_by_checkin_ids( array $checkin_ids ) {
  * @param bool $manual True when triggered from admin AJAX.
  * @return int
  */
-function bj_get_rss_sync_max_per_run( $manual = false ) {
+function jb_get_rss_sync_max_per_run( $manual = false ) {
 	if ( $manual ) {
-		$max = (int) apply_filters( 'bj_rss_manual_sync_max_items', 500 );
+		$max = (int) apply_filters( 'jb_rss_manual_sync_max_items', 500 );
 		return max( 1, $max );
 	}
-	$n = class_exists( 'BJ_Settings' ) ? (int) BJ_Settings::get( 'bj_rss_max_per_run' ) : absint( get_option( 'bj_rss_max_per_run', 10 ) );
+	$n = class_exists( 'JB_Settings' ) ? (int) JB_Settings::get( 'jb_rss_max_per_run' ) : absint( get_option( 'jb_rss_max_per_run', 10 ) );
 	$n = max( 1, min( 100, $n ) );
-	return (int) apply_filters( 'bj_rss_max_per_run', $n );
+	return (int) apply_filters( 'jb_rss_max_per_run', $n );
 }
 
 /**
@@ -339,10 +339,10 @@ function bj_get_rss_sync_max_per_run( $manual = false ) {
  *
  * @return int
  */
-function bj_get_scraping_delay_seconds() {
-	$d = class_exists( 'BJ_Settings' ) ? (int) BJ_Settings::get( 'bj_scraping_delay' ) : absint( get_option( 'bj_scraping_delay', 3 ) );
+function jb_get_scraping_delay_seconds() {
+	$d = class_exists( 'JB_Settings' ) ? (int) JB_Settings::get( 'jb_scraping_delay' ) : absint( get_option( 'jb_scraping_delay', 3 ) );
 	$d = max( 1, $d );
-	return (int) apply_filters( 'bj_scraping_delay_seconds', $d );
+	return (int) apply_filters( 'jb_scraping_delay_seconds', $d );
 }
 
 /**
@@ -350,8 +350,8 @@ function bj_get_scraping_delay_seconds() {
  *
  * @return array<int, array<string, mixed>>
  */
-function bj_get_rss_sync_queue() {
-	$q = get_option( 'bj_rss_sync_queue', array() );
+function jb_get_rss_sync_queue() {
+	$q = get_option( 'jb_rss_sync_queue', array() );
 	return is_array( $q ) ? array_values( $q ) : array();
 }
 
@@ -361,8 +361,8 @@ function bj_get_rss_sync_queue() {
  * @param array<int, array<string, mixed>> $queue Rows (FIFO).
  * @return void
  */
-function bj_save_rss_sync_queue( array $queue ) {
-	update_option( 'bj_rss_sync_queue', array_values( $queue ), false );
+function jb_save_rss_sync_queue( array $queue ) {
+	update_option( 'jb_rss_sync_queue', array_values( $queue ), false );
 }
 
 /**
@@ -372,7 +372,7 @@ function bj_save_rss_sync_queue( array $queue ) {
  * @param array<int, array<string, mixed>> $rows  Rows to append.
  * @return array<int, array<string, mixed>>
  */
-function bj_rss_queue_merge_unique( array $queue, array $rows ) {
+function jb_rss_queue_merge_unique( array $queue, array $rows ) {
 	$seen = array();
 	$out  = array();
 	foreach ( $queue as $row ) {
@@ -403,26 +403,26 @@ function bj_rss_queue_merge_unique( array $queue, array $rows ) {
  *
  * @return void
  */
-function bj_maybe_schedule_rss_queue_tick() {
-	$q = bj_get_rss_sync_queue();
+function jb_maybe_schedule_rss_queue_tick() {
+	$q = jb_get_rss_sync_queue();
 	if ( empty( $q ) ) {
 		return;
 	}
-	$delay = max( 60, bj_get_scraping_delay_seconds() );
-	$group = bj_action_scheduler_group();
+	$delay = max( 60, jb_get_scraping_delay_seconds() );
+	$group = jb_action_scheduler_group();
 
-	if ( bj_using_action_scheduler() ) {
-		if ( as_next_scheduled_action( 'bj_rss_queue_tick', array(), $group ) ) {
+	if ( jb_using_action_scheduler() ) {
+		if ( as_next_scheduled_action( 'jb_rss_queue_tick', array(), $group ) ) {
 			return;
 		}
-		as_schedule_single_action( time() + $delay, 'bj_rss_queue_tick', array(), $group );
+		as_schedule_single_action( time() + $delay, 'jb_rss_queue_tick', array(), $group );
 		return;
 	}
 
-	if ( wp_next_scheduled( 'bj_rss_queue_tick' ) ) {
+	if ( wp_next_scheduled( 'jb_rss_queue_tick' ) ) {
 		return;
 	}
-	wp_schedule_single_event( time() + $delay, 'bj_rss_queue_tick' );
+	wp_schedule_single_event( time() + $delay, 'jb_rss_queue_tick' );
 }
 
 /**
@@ -430,32 +430,32 @@ function bj_maybe_schedule_rss_queue_tick() {
  *
  * @return bool
  */
-function bj_using_action_scheduler() {
+function jb_using_action_scheduler() {
 	return function_exists( 'as_schedule_recurring_action' )
 		&& function_exists( 'as_next_scheduled_action' )
 		&& function_exists( 'as_schedule_single_action' );
 }
 
 /**
- * Action Scheduler group for all Beer Journal jobs.
+ * Action Scheduler group for all Jardin Beer jobs.
  *
  * @return string
  */
-function bj_action_scheduler_group() {
-	return 'beer-journal';
+function jb_action_scheduler_group() {
+	return 'jardin-beer';
 }
 
 /**
  * Transient-backed cache helper (see docs/development/caching.md).
  *
- * @param string   $key      Short key (prefix bj_ added).
+ * @param string   $key      Short key (prefix jb_ added).
  * @param callable $producer Callback returning data to cache.
  * @param int|null $ttl      TTL seconds; default 1 hour.
  * @return mixed
  */
-function bj_get_cached_data( $key, $producer, $ttl = null ) {
+function jb_get_cached_data( $key, $producer, $ttl = null ) {
 	$key       = preg_replace( '/[^a-z0-9_\-]/i', '', (string) $key );
-	$cache_key = 'bj_' . $key;
+	$cache_key = 'jb_' . $key;
 	$cached    = get_transient( $cache_key );
 	if ( false !== $cached ) {
 		return $cached;
@@ -471,9 +471,9 @@ function bj_get_cached_data( $key, $producer, $ttl = null ) {
  *
  * @return void
  */
-function bj_invalidate_stats_cache() {
-	delete_transient( 'bj_global_stats' );
-	delete_transient( 'bj_incomplete_checkin_count' );
+function jb_invalidate_stats_cache() {
+	delete_transient( 'jb_global_stats' );
+	delete_transient( 'jb_incomplete_checkin_count' );
 }
 
 /**
@@ -481,16 +481,16 @@ function bj_invalidate_stats_cache() {
  *
  * @return int
  */
-function bj_count_draft_incomplete_checkins() {
-	if ( ! post_type_exists( BJ_Post_Type::POST_TYPE ) ) {
+function jb_count_draft_incomplete_checkins() {
+	if ( ! post_type_exists( JB_Post_Type::POST_TYPE ) ) {
 		return 0;
 	}
-	return (int) bj_get_cached_data(
+	return (int) jb_get_cached_data(
 		'incomplete_checkin_count',
 		static function () {
 			$q = new WP_Query(
 				array(
-					'post_type'              => BJ_Post_Type::POST_TYPE,
+					'post_type'              => JB_Post_Type::POST_TYPE,
 					'post_status'            => 'draft',
 					'fields'                 => 'ids',
 					'posts_per_page'         => 200,
@@ -499,7 +499,7 @@ function bj_count_draft_incomplete_checkins() {
 					'update_post_term_cache' => false,
 					'meta_query'             => array(
 						array(
-							'key'     => '_bj_incomplete_reason',
+							'key'     => '_jb_incomplete_reason',
 							'compare' => 'EXISTS',
 						),
 					),
@@ -517,36 +517,36 @@ function bj_count_draft_incomplete_checkins() {
  * @param int $post_id Post ID.
  * @return int|WP_Error Post ID on success.
  */
-function bj_rescrape_checkin_post( $post_id ) {
+function jb_rescrape_checkin_post( $post_id ) {
 	$post_id = absint( $post_id );
 	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
-		return new WP_Error( 'forbidden', __( 'You cannot edit this check-in.', 'beer-journal' ) );
+		return new WP_Error( 'forbidden', __( 'You cannot edit this check-in.', 'jardin-beer' ) );
 	}
-	if ( get_post_type( $post_id ) !== BJ_Post_Type::POST_TYPE ) {
-		return new WP_Error( 'wrong_type', __( 'Not a beer check-in post.', 'beer-journal' ) );
+	if ( get_post_type( $post_id ) !== JB_Post_Type::POST_TYPE ) {
+		return new WP_Error( 'wrong_type', __( 'Not a beer check-in post.', 'jardin-beer' ) );
 	}
-	$url = get_post_meta( $post_id, '_bj_checkin_url', true );
+	$url = get_post_meta( $post_id, '_jb_checkin_url', true );
 	if ( ! is_string( $url ) || '' === $url || false === strpos( $url, 'untappd.com' ) ) {
-		return new WP_Error( 'no_url', __( 'No valid Untappd check-in URL on this post.', 'beer-journal' ) );
+		return new WP_Error( 'no_url', __( 'No valid Untappd check-in URL on this post.', 'jardin-beer' ) );
 	}
-	$cid = get_post_meta( $post_id, '_bj_checkin_id', true );
+	$cid = get_post_meta( $post_id, '_jb_checkin_id', true );
 	$data = array(
-		'checkin_id'   => is_string( $cid ) && '' !== $cid ? $cid : (string) bj_parse_checkin_id_from_url( $url ),
+		'checkin_id'   => is_string( $cid ) && '' !== $cid ? $cid : (string) jb_parse_checkin_id_from_url( $url ),
 		'checkin_url'  => esc_url_raw( $url ),
-		'checkin_date' => (string) get_post_meta( $post_id, '_bj_checkin_date', true ),
+		'checkin_date' => (string) get_post_meta( $post_id, '_jb_checkin_date', true ),
 	);
 	if ( '' === $data['checkin_id'] ) {
-		return new WP_Error( 'no_id', __( 'Missing check-in ID.', 'beer-journal' ) );
+		return new WP_Error( 'no_id', __( 'Missing check-in ID.', 'jardin-beer' ) );
 	}
-	$scraper = new BJ_Scraper();
+	$scraper = new JB_Scraper();
 	$scraped = $scraper->scrape_checkin_url( $url );
 	if ( ! is_wp_error( $scraped ) ) {
 		$data = array_merge( $data, $scraped );
 	} else {
-		BJ_Logger::warning( 'Re-scrape failed for post ' . $post_id . ': ' . $scraped->get_error_message() );
+		JB_Logger::warning( 'Re-scrape failed for post ' . $post_id . ': ' . $scraped->get_error_message() );
 		return $scraped;
 	}
-	$importer = new BJ_Importer();
+	$importer = new JB_Importer();
 	return $importer->import_checkin_data( $data, 'rss' );
 }
 
@@ -555,11 +555,11 @@ function bj_rescrape_checkin_post( $post_id ) {
  *
  * @return array{publish: int, draft: int}
  */
-function bj_get_global_stats() {
-	return bj_get_cached_data(
+function jb_get_global_stats() {
+	return jb_get_cached_data(
 		'global_stats',
 		function () {
-			$counts = wp_count_posts( BJ_Post_Type::POST_TYPE );
+			$counts = wp_count_posts( JB_Post_Type::POST_TYPE );
 			return array(
 				'publish' => isset( $counts->publish ) ? (int) $counts->publish : 0,
 				'draft'   => isset( $counts->draft ) ? (int) $counts->draft : 0,
@@ -577,14 +577,14 @@ function bj_get_global_stats() {
  * @param string $type    sync|error.
  * @return void
  */
-function bj_send_notification_email( $subject, $body, $type = 'error' ) {
-	if ( 'sync' === $type && ! get_option( 'bj_notify_on_sync', false ) ) {
+function jb_send_notification_email( $subject, $body, $type = 'error' ) {
+	if ( 'sync' === $type && ! get_option( 'jb_notify_on_sync', false ) ) {
 		return;
 	}
-	if ( 'error' === $type && ! get_option( 'bj_notify_on_error', true ) ) {
+	if ( 'error' === $type && ! get_option( 'jb_notify_on_error', true ) ) {
 		return;
 	}
-	$to = get_option( 'bj_notification_email', '' );
+	$to = get_option( 'jb_notification_email', '' );
 	if ( ! is_string( $to ) || '' === trim( $to ) ) {
 		$to = (string) get_option( 'admin_email', '' );
 	}
@@ -600,16 +600,16 @@ function bj_send_notification_email( $subject, $body, $type = 'error' ) {
  *
  * @return void
  */
-function bj_touch_last_rss_sync_time() {
-	update_option( 'bj_last_rss_sync_at', gmdate( 'c' ), false );
+function jb_touch_last_rss_sync_time() {
+	update_option( 'jb_last_rss_sync_at', gmdate( 'c' ), false );
 }
 
 /**
- * Archive layout: grid or table (option bj_archive_layout).
+ * Archive layout: grid or table (option jb_archive_layout).
  *
  * @return string grid|table
  */
-function bj_get_archive_layout() {
-	$l = get_option( 'bj_archive_layout', 'grid' );
+function jb_get_archive_layout() {
+	$l = get_option( 'jb_archive_layout', 'grid' );
 	return in_array( $l, array( 'grid', 'table' ), true ) ? $l : 'grid';
 }

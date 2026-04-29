@@ -51,7 +51,7 @@ The polling frequency adapts based on user activity to optimize resource usage:
 
 ```php
 // Get last check-in date
-$last_checkin_date = get_option('bj_last_checkin_date');
+$last_checkin_date = get_option('jb_last_checkin_date');
 $days_since_last = (time() - strtotime($last_checkin_date)) / DAY_IN_SECONDS;
 
 // Determine schedule based on activity
@@ -67,8 +67,8 @@ if ($days_since_last < 7) {
 }
 
 // Update schedule
-wp_clear_scheduled_hook('bj_rss_sync');
-wp_schedule_event(time(), $cron_schedule, 'bj_rss_sync');
+wp_clear_scheduled_hook('jb_rss_sync');
+wp_schedule_event(time(), $cron_schedule, 'jb_rss_sync');
 ```
 
 ### Custom Cron Schedule
@@ -76,12 +76,12 @@ wp_schedule_event(time(), $cron_schedule, 'bj_rss_sync');
 WordPress doesn't have a built-in `sixhourly` schedule, so it must be registered:
 
 ```php
-add_filter('cron_schedules', 'bj_add_cron_schedules');
+add_filter('cron_schedules', 'jb_add_cron_schedules');
 
-function bj_add_cron_schedules($schedules) {
+function jb_add_cron_schedules($schedules) {
     $schedules['sixhourly'] = [
         'interval' => 6 * HOUR_IN_SECONDS,
-        'display' => __('Every 6 Hours', 'beer-journal'),
+        'display' => __('Every 6 Hours', 'jardin-beer'),
     ];
     return $schedules;
 }
@@ -101,11 +101,11 @@ $rss = fetch_feed($rss_url);
 $latest_guid = $rss->get_items()[0]->get_id();
 
 // Compare with last known GUID
-$last_imported_guid = get_option('bj_last_imported_guid');
+$last_imported_guid = get_option('jb_last_imported_guid');
 
 if ($latest_guid === $last_imported_guid) {
     // No new check-ins → SKIP (saves resources)
-    error_log('Beer Journal: No new check-ins, skipping sync');
+    error_log('Jardin Beer: No new check-ins, skipping sync');
     return;
 }
 
@@ -147,13 +147,13 @@ flowchart TD
 ### Detailed Steps
 
 #### 1. Fetch RSS Feed
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Method**: `fetch_feed()` (WordPress SimplePie)
 - **Error Handling**: Retry up to 3 times on failure
 - **Timeout**: 10 seconds
 
 #### 2. Parse XML
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Library**: WordPress SimplePie (built-in)
 - **Extract**:
   - Title
@@ -163,7 +163,7 @@ flowchart TD
   - Description (may contain image URL)
 
 #### 3. Extract Basic Data from Title
-- **Component**: `BJ_RSS_Parser`
+- **Component**: `JB_RSS_Parser`
 - **Pattern**: "User is drinking a {beer_name} by {brewery_name} at {venue}"
 - **Method**: Regex or string manipulation
 - **Extract**:
@@ -172,26 +172,26 @@ flowchart TD
   - Venue (if present)
 
 #### 4. Check for Duplicates
-- **Component**: `BJ_Importer`
-- **Method**: Query posts by `_bj_checkin_id` meta field
+- **Component**: `JB_Importer`
+- **Method**: Query posts by `_jb_checkin_id` meta field
 - **Source**: Extract ID from GUID (last part of URL)
 - **If Exists**: Skip to next item
 - **If New**: Continue to scraping
 
 #### 5. Scrape Check-in Page
-- **Component**: `BJ_Scraper`
+- **Component**: `JB_Scraper`
 - **URL**: From RSS link
 - **Purpose**: Extract complete metadata (rating, ABV, style, etc.)
 - **See**: [Scraping Documentation](scraping.md)
 
 #### 6. Import to WordPress
-- **Component**: `BJ_Importer`
+- **Component**: `JB_Importer`
 - **Process**: Create post, assign taxonomies, set meta fields
 - **See**: [Import Process Documentation](import-process.md)
 
 #### 7. Update Last GUID
-- **Component**: `BJ_RSS_Parser`
-- **Option**: `bj_last_imported_guid`
+- **Component**: `JB_RSS_Parser`
+- **Option**: `jb_last_imported_guid`
 - **Purpose**: Track last imported check-in for next sync
 
 ## Error Handling
@@ -199,11 +199,11 @@ flowchart TD
 ### Network Errors
 - **Retry Logic**: Up to 3 attempts
 - **Delay**: Exponential backoff (1s, 2s, 4s)
-- **Logging**: All errors logged to `wp-content/uploads/beer-journal/logs/`
+- **Logging**: All errors logged to `wp-content/uploads/jardin-beer/logs/`
 
 ### Scraping Failures
 - **Result**: Check-in saved as draft
-- **Reason**: Stored in `_bj_incomplete_reason` meta field
+- **Reason**: Stored in `_jb_incomplete_reason` meta field
 - **Notification**: Admin notified via dashboard notice
 - **Retry**: Automatic retry scheduled (3 attempts over 24 hours)
 
@@ -219,7 +219,7 @@ flowchart TD
 **Note**: All logs are written to a unified log file. See [Logging Strategy](../development/logging-strategy.md) for details.
 
 ```
-wp-content/uploads/beer-journal/logs/beer-journal-{YYYY-MM-DD}.log
+wp-content/uploads/jardin-beer/logs/jardin-beer-{YYYY-MM-DD}.log
 ```
 
 ### Log Format
@@ -246,11 +246,11 @@ wp-content/uploads/beer-journal/logs/beer-journal-{YYYY-MM-DD}.log
 - **Debug Mode**: Enable detailed logging
 
 ### WordPress Options
-- `bj_rss_feed_url`: RSS feed URL
-- `bj_last_checkin_date`: Date of last imported check-in
-- `bj_last_imported_guid`: GUID of last imported check-in
-- `bj_sync_enabled`: Whether sync is enabled
-- `bj_sync_frequency`: Manual frequency override (optional)
+- `jb_rss_feed_url`: RSS feed URL
+- `jb_last_checkin_date`: Date of last imported check-in
+- `jb_last_imported_guid`: GUID of last imported check-in
+- `jb_sync_enabled`: Whether sync is enabled
+- `jb_sync_frequency`: Manual frequency override (optional)
 
 ## Performance Considerations
 

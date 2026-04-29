@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Beer Journal is a WordPress plugin that synchronizes Untappd beer check-ins to a WordPress site. Since Untappd doesn't provide an official API, the plugin uses a combination of RSS feeds and HTML scraping to import check-in data.
+Jardin Beer is a WordPress plugin that synchronizes Untappd beer check-ins to a WordPress site. Since Untappd doesn't provide an official API, the plugin uses a combination of RSS feeds and HTML scraping to import check-in data.
 
 ## System Architecture
 
@@ -16,7 +16,7 @@ The plugin follows a modular architecture with clear separation of concerns:
                             ▲
                             │
 ┌─────────────────────────────────────────────────────────────┐
-│                  Beer Journal Plugin                        │
+│                  Jardin Beer Plugin                        │
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐       │
 │  │   RSS Sync   │  │   Scraper   │  │   Importer   │       │
@@ -45,26 +45,26 @@ The plugin follows a modular architecture with clear separation of concerns:
 
 ## Core Components
 
-### 1. RSS Synchronization (`BJ_RSS_Parser`)
+### 1. RSS Synchronization (`JB_RSS_Parser`)
 - Fetches Untappd RSS feed (25 most recent check-ins)
 - Parses XML to extract basic information
 - Implements adaptive polling (6h/daily/weekly based on activity)
 - Optimizes by comparing GUIDs before scraping
 
-### 2. HTML Scraper (`BJ_Scraper`)
+### 2. HTML Scraper (`JB_Scraper`)
 - Scrapes individual Untappd check-in pages
 - Extracts complete metadata (rating, ABV, style, etc.)
 - Uses Symfony DomCrawler for HTML parsing
 - Implements rate limiting and error handling
 
-### 3. Data Importer (`BJ_Importer`)
+### 3. Data Importer (`JB_Importer`)
 - Processes scraped data
 - Creates WordPress posts (Custom Post Type)
 - Assigns taxonomies (beer styles, breweries, venues)
 - Manages post status (publish/draft based on data completeness)
 - Handles deduplication
 
-### 4. Image Handler (`BJ_Image_Handler`)
+### 4. Image Handler (`JB_Image_Handler`)
 - Downloads images from Untappd
 - Imports to WordPress Media Library
 - Generates thumbnails
@@ -76,13 +76,13 @@ The plugin follows a modular architecture with clear separation of concerns:
 - Customizable mapping rules
 - Customizable labels per rating level
 
-### 6. Admin Interface (`BJ_Admin`)
+### 6. Admin Interface (`JB_Admin`)
 - Settings pages (5 tabs)
 - Import progress tracking
 - Logs viewer
 - Statistics dashboard
 
-### 7. Frontend Templates (`BJ_Public`)
+### 7. Frontend Templates (`JB_Public`)
 - Archive templates (grid/table views)
 - Single check-in templates
 - Taxonomy templates
@@ -135,10 +135,10 @@ The complete data flow from Untappd to WordPress:
 ### SEO & Markup
 - **Schema.org JSON-LD**: Type Review/Product injecté dans `wp_head` (activé par défaut)
 - **Microformats**: `h-entry`/`e-content` dans les templates (activé par défaut)
-- **Options**: `bj_schema_enabled`, `bj_microformats_enabled` pour activer/désactiver
+- **Options**: `jb_schema_enabled`, `jb_microformats_enabled` pour activer/désactiver
 
 ### Caching Strategy
-- **Transients**: `bj_*` comme préfixe, TTL recommandés (scraping 3h, stats 1h, requêtes 30min)
+- **Transients**: `jb_*` comme préfixe, TTL recommandés (scraping 3h, stats 1h, requêtes 30min)
 - **Invalidation**: Au moment des imports/syncs pour conserver la fraîcheur
 - **Version initiale (1.0.0)**: Option A (automatique)
 

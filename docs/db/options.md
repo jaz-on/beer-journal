@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal stores configuration and state in WordPress `wp_options` table. All option names are prefixed with `bj_` to avoid conflicts.
+Jardin Beer stores configuration and state in WordPress `wp_options` table. All option names are prefixed with `jb_` to avoid conflicts.
 
 ## Option Categories
 
@@ -12,15 +12,15 @@ RSS sync configuration and state.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_rss_feed_url` | string | Untappd RSS feed URL | Maintainer default RSS URL from `bj_get_default_rss_feed_url()` until saved |
-| `bj_sync_enabled` | bool | Whether automatic sync is enabled | `true` |
-| `bj_sync_frequency` | string | Manual frequency override (optional) | `""` |
-| `bj_last_checkin_date` | datetime | Date of last imported check-in | `""` |
-| `bj_last_imported_guid` | string | GUID of last imported check-in | `""` |
+| `jb_rss_feed_url` | string | Untappd RSS feed URL | Maintainer default RSS URL from `jb_get_default_rss_feed_url()` until saved |
+| `jb_sync_enabled` | bool | Whether automatic sync is enabled | `true` |
+| `jb_sync_frequency` | string | Manual frequency override (optional) | `""` |
+| `jb_last_checkin_date` | datetime | Date of last imported check-in | `""` |
+| `jb_last_imported_guid` | string | GUID of last imported check-in | `""` |
 
 **Usage**: 
-- `bj_last_checkin_date`: Used for adaptive polling calculation
-- `bj_last_imported_guid`: Used for GUID comparison optimization
+- `jb_last_checkin_date`: Used for adaptive polling calculation
+- `jb_last_imported_guid`: Used for GUID comparison optimization
 
 ---
 
@@ -30,13 +30,13 @@ Integration-specific options (optionnelles selon méthode utilisée).
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_untappd_username` | string | Untappd username | `""` |
-| `bj_untappd_rss_key` | string | RSS/API key if required (optional) | `""` |
-| `bj_excluded_checkins` | array | List of check-in IDs to exclude from sync | `[]` |
+| `jb_untappd_username` | string | Untappd username | `""` |
+| `jb_untappd_rss_key` | string | RSS/API key if required (optional) | `""` |
+| `jb_excluded_checkins` | array | List of check-in IDs to exclude from sync | `[]` |
 
 Notes:
-- `bj_excluded_checkins` complète la méta `_bj_exclude_sync` au niveau post (protection fine).
-- Pour l’import d’images, utiliser l’option existante `bj_import_images`.
+- `jb_excluded_checkins` complète la méta `_jb_exclude_sync` au niveau post (protection fine).
+- Pour l’import d’images, utiliser l’option existante `jb_import_images`.
 
 ---
 
@@ -46,25 +46,25 @@ Rating mapping and label configuration.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_rating_rules` | array | Custom rating mapping rules | `bj_get_default_rating_rules()` |
-| `bj_rating_labels` | array | Custom labels for each rating level | `bj_get_default_rating_labels()` |
-| `bj_rating_rounding_enabled` | bool | Enable rating rounding | `true` |
-| `bj_rating_show_raw_tooltip` | bool | Show original rating in tooltip | `true` |
-| `bj_rating_display_single` | bool | Display labels on single pages | `true` |
-| `bj_rating_display_archive` | bool | Display labels in archive | `false` |
-| `bj_rating_display_list` | bool | Display labels in list view | `false` |
+| `jb_rating_rules` | array | Custom rating mapping rules | `jb_get_default_rating_rules()` |
+| `jb_rating_labels` | array | Custom labels for each rating level | `jb_get_default_rating_labels()` |
+| `jb_rating_rounding_enabled` | bool | Enable rating rounding | `true` |
+| `jb_rating_show_raw_tooltip` | bool | Show original rating in tooltip | `true` |
+| `jb_rating_display_single` | bool | Display labels on single pages | `true` |
+| `jb_rating_display_archive` | bool | Display labels in archive | `false` |
+| `jb_rating_display_list` | bool | Display labels in list view | `false` |
 
 **Structure**:
 ```php
 // Rating rules
-$bj_rating_rules = [
+$jb_rating_rules = [
     ['min' => 0.0, 'max' => 0.9, 'round' => 0],
     ['min' => 1.0, 'max' => 1.9, 'round' => 1],
     // ... etc
 ];
 
 // Rating labels
-$bj_rating_labels = [
+$jb_rating_labels = [
     0 => 'Undrinkable - Not even beer',
     1 => 'Terrible - Only if there\'s no alternative',
     // ... etc
@@ -79,14 +79,14 @@ Historical import configuration and state.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_import_checkpoint` | array | Import progress checkpoint | `[]` |
-| `bj_import_batch_size` | int | Number of check-ins per batch | `25` |
-| `bj_import_delay` | int | Delay between requests (seconds) | `3` |
-| `bj_import_mode` | string | Import mode: 'manual' or 'background' | `"manual"` |
+| `jb_import_checkpoint` | array | Import progress checkpoint | `[]` |
+| `jb_import_batch_size` | int | Number of check-ins per batch | `25` |
+| `jb_import_delay` | int | Delay between requests (seconds) | `3` |
+| `jb_import_mode` | string | Import mode: 'manual' or 'background' | `"manual"` |
 
 **Checkpoint Structure**:
 ```php
-$bj_import_checkpoint = [
+$jb_import_checkpoint = [
     'current_page' => 3,
     'total_imported' => 75,
     'last_checkin_id' => '123456',
@@ -102,12 +102,12 @@ Image import configuration.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_import_images` | bool | Import images to Media Library | `true` |
-| `bj_image_max_width` | int | Maximum image width (px) | `1200` |
-| `bj_image_max_height` | int | Maximum image height (px) | `1200` |
-| `bj_generate_thumbnails` | bool | Generate WordPress thumbnails | `true` |
-| `bj_compress_images` | bool | Compress images (requires plugin) | `false` |
-| `bj_placeholder_image_id` | int | Default placeholder image ID | `0` |
+| `jb_import_images` | bool | Import images to Media Library | `true` |
+| `jb_image_max_width` | int | Maximum image width (px) | `1200` |
+| `jb_image_max_height` | int | Maximum image height (px) | `1200` |
+| `jb_generate_thumbnails` | bool | Generate WordPress thumbnails | `true` |
+| `jb_compress_images` | bool | Compress images (requires plugin) | `false` |
+| `jb_placeholder_image_id` | int | Default placeholder image ID | `0` |
 
 ---
 
@@ -117,11 +117,11 @@ General plugin configuration.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_scraping_delay` | int | Delay between scraping requests (seconds) | `3` |
-| `bj_import_social_data` | bool | Import social data (toasts, comments) | `true` |
-| `bj_import_venues` | bool | Import venue data | `true` |
-| `bj_import_badges` | bool | Import badges (Phase 3) | `false` |
-| `bj_deduplication_method` | string | Deduplication method: 'checkin_id' or 'name_date' | `"checkin_id"` |
+| `jb_scraping_delay` | int | Delay between scraping requests (seconds) | `3` |
+| `jb_import_social_data` | bool | Import social data (toasts, comments) | `true` |
+| `jb_import_venues` | bool | Import venue data | `true` |
+| `jb_import_badges` | bool | Import badges (Phase 3) | `false` |
+| `jb_deduplication_method` | string | Deduplication method: 'checkin_id' or 'name_date' | `"checkin_id"` |
 
 ---
 
@@ -131,8 +131,8 @@ Structured data and microformats configuration.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_schema_enabled` | bool | Enable Schema.org JSON-LD (Review/Product) | `true` |
-| `bj_microformats_enabled` | bool | Enable microformats in templates (`h-entry`, `e-content`) | `true` |
+| `jb_schema_enabled` | bool | Enable Schema.org JSON-LD (Review/Product) | `true` |
+| `jb_microformats_enabled` | bool | Enable microformats in templates (`h-entry`, `e-content`) | `true` |
 
 Notes:
 - These options are enabled by default. They can be disabled in Settings > Advanced.
@@ -146,14 +146,14 @@ Admin notification settings.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_notify_on_sync` | bool | Email notification after sync | `false` |
-| `bj_notify_on_error` | bool | Email notification on errors | `true` |
-| `bj_notification_email` | string | Email address for notifications | `get_option('admin_email')` |
-| `bj_new_terms_created` | array | Log of newly created taxonomy terms | `[]` |
+| `jb_notify_on_sync` | bool | Email notification after sync | `false` |
+| `jb_notify_on_error` | bool | Email notification on errors | `true` |
+| `jb_notification_email` | string | Email address for notifications | `get_option('admin_email')` |
+| `jb_new_terms_created` | array | Log of newly created taxonomy terms | `[]` |
 
 **New Terms Structure**:
 ```php
-$bj_new_terms_created = [
+$jb_new_terms_created = [
     [
         'taxonomy' => 'beer_style',
         'term' => 'IPA',
@@ -173,9 +173,9 @@ Debugging and logging configuration.
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_debug_mode` | bool | Enable detailed logging | `false` |
-| `bj_log_http_requests` | bool | Log HTTP requests | `false` |
-| `bj_log_retention_days` | int | Days to keep logs | `30` |
+| `jb_debug_mode` | bool | Enable detailed logging | `false` |
+| `jb_log_http_requests` | bool | Log HTTP requests | `false` |
+| `jb_log_retention_days` | int | Days to keep logs | `30` |
 
 ---
 
@@ -185,9 +185,9 @@ Temporary data stored in transients (not in `wp_options`, but related).
 
 | Transient Name | Type | Description | Expiration |
 |----------------|------|-------------|------------|
-| `bj_new_terms_notice` | int | Count of new terms (for admin notice) | 1 week |
-| `bj_global_stats` | array | Cached global statistics | 1 hour |
-| `bj_top_breweries` | array | Cached top breweries list | 1 day |
+| `jb_new_terms_notice` | int | Count of new terms (for admin notice) | 1 week |
+| `jb_global_stats` | array | Cached global statistics | 1 hour |
+| `jb_top_breweries` | array | Cached top breweries list | 1 day |
 
 **Usage**: Transients are automatically expired and don't need manual cleanup.
 
@@ -199,8 +199,8 @@ Temporary data stored in transients (not in `wp_options`, but related).
 
 | Option Name | Type | Description | Default |
 |-------------|------|-------------|---------|
-| `bj_cache_enabled` | bool | Enable/disable application-level caching | `true` |
-| `bj_cache_hours` | int | Cache duration in hours (applies to scraping/stats/queries) | `3` |
+| `jb_cache_enabled` | bool | Enable/disable application-level caching | `true` |
+| `jb_cache_hours` | int | Cache duration in hours (applies to scraping/stats/queries) | `3` |
 
 Notes:
 - MVP uses Option A (automatic, no UI).
@@ -214,16 +214,16 @@ Notes:
 
 ```php
 // Get option
-$rss_url = get_option('bj_rss_feed_url', '');
+$rss_url = get_option('jb_rss_feed_url', '');
 
 // Update option
-update_option('bj_rss_feed_url', 'https://untappd.com/rss/user/username');
+update_option('jb_rss_feed_url', 'https://untappd.com/rss/user/username');
 
 // Delete option
-delete_option('bj_rss_feed_url');
+delete_option('jb_rss_feed_url');
 
 // Get option with default
-$delay = get_option('bj_scraping_delay', 3);
+$delay = get_option('jb_scraping_delay', 3);
 ```
 
 ### Array Options
@@ -232,10 +232,10 @@ For array options, WordPress automatically serializes/unserializes:
 
 ```php
 // Get array option
-$rules = get_option('bj_rating_rules', []);
+$rules = get_option('jb_rating_rules', []);
 
 // Update array option
-update_option('bj_rating_rules', [
+update_option('jb_rating_rules', [
     ['min' => 0.0, 'max' => 0.9, 'round' => 0],
     // ... etc
 ]);
@@ -246,7 +246,7 @@ update_option('bj_rating_rules', [
 ### Default Rating Rules
 
 ```php
-function bj_get_default_rating_rules() {
+function jb_get_default_rating_rules() {
     return [
         ['min' => 0.0, 'max' => 0.9, 'round' => 0],
         ['min' => 1.0, 'max' => 1.9, 'round' => 1],
@@ -261,14 +261,14 @@ function bj_get_default_rating_rules() {
 ### Default Rating Labels
 
 ```php
-function bj_get_default_rating_labels() {
+function jb_get_default_rating_labels() {
     return [
-        0 => __('Undrinkable - Not even beer', 'beer-journal'),
-        1 => __('Terrible - Only if there\'s no alternative', 'beer-journal'),
-        2 => __('Mediocre - Meh, it\'s okay I guess', 'beer-journal'),
-        3 => __('Decent - A solid thirst quencher', 'beer-journal'),
-        4 => __('Great - Now we\'re talking! A real pleasure', 'beer-journal'),
-        5 => __('Exceptional - Buy it with your eyes closed. Masterpiece!', 'beer-journal'),
+        0 => __('Undrinkable - Not even beer', 'jardin-beer'),
+        1 => __('Terrible - Only if there\'s no alternative', 'jardin-beer'),
+        2 => __('Mediocre - Meh, it\'s okay I guess', 'jardin-beer'),
+        3 => __('Decent - A solid thirst quencher', 'jardin-beer'),
+        4 => __('Great - Now we\'re talking! A real pleasure', 'jardin-beer'),
+        5 => __('Exceptional - Buy it with your eyes closed. Masterpiece!', 'jardin-beer'),
     ];
 }
 ```
@@ -284,17 +284,17 @@ Options are preserved on deactivation (user may reactivate).
 Options should be deleted on uninstall:
 
 ```php
-register_uninstall_hook(__FILE__, 'bj_uninstall');
+register_uninstall_hook(__FILE__, 'jb_uninstall');
 
-function bj_uninstall() {
+function jb_uninstall() {
     // Delete all options
-    delete_option('bj_rss_feed_url');
-    delete_option('bj_sync_enabled');
+    delete_option('jb_rss_feed_url');
+    delete_option('jb_sync_enabled');
     // ... etc
     
     // Or use a loop
     global $wpdb;
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'bj_%'");
+    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'jb_%'");
 }
 ```
 
@@ -303,12 +303,12 @@ function bj_uninstall() {
 Most options should **not** be autoloaded (set `autoload = 'no'`) to reduce database load:
 
 ```php
-update_option('bj_rating_rules', $rules, 'no'); // Don't autoload
+update_option('jb_rating_rules', $rules, 'no'); // Don't autoload
 ```
 
 **Exceptions** (should autoload):
-- `bj_sync_enabled`: Frequently checked
-- `bj_rating_rounding_enabled`: Frequently checked
+- `jb_sync_enabled`: Frequently checked
+- `jb_rating_rounding_enabled`: Frequently checked
 
 ## Related Documentation
 

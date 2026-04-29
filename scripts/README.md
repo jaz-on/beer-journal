@@ -16,7 +16,7 @@ Script de validation de la documentation.
 **Fonctionnalités** :
 - Vérifie les liens markdown
 - Valide la syntaxe Mermaid
-- Vérifie la cohérence des préfixes (bj_, BJ_, _bj_)
+- Vérifie la cohérence des préfixes (jb_, JB_, _jb_)
 - Génère un rapport dans `docs-validation-report.txt`
 
 **Sortie** :
@@ -124,7 +124,7 @@ php --version
 
 S'assurer d'être dans la racine du projet :
 ```bash
-cd /path/to/beer-journal
+cd /path/to/jardin-beer
 ```
 
 ## Contribution

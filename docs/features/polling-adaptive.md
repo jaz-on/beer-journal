@@ -29,7 +29,7 @@ Adaptive polling adjusts frequency based on user activity:
 
 **Last Check-in Date**:
 ```php
-$last_checkin_date = get_option('bj_last_checkin_date');
+$last_checkin_date = get_option('jb_last_checkin_date');
 ```
 
 **Days Since Last Check-in**:
@@ -63,8 +63,8 @@ $days_since_last = (time() - strtotime($last_checkin_date)) / DAY_IN_SECONDS;
 ### Schedule Determination
 
 ```php
-function bj_determine_sync_schedule() {
-    $last_checkin_date = get_option('bj_last_checkin_date');
+function jb_determine_sync_schedule() {
+    $last_checkin_date = get_option('jb_last_checkin_date');
     
     if (empty($last_checkin_date)) {
         // First sync: check daily
@@ -92,17 +92,17 @@ function bj_determine_sync_schedule() {
 
 **After Each Sync**:
 ```php
-function bj_update_sync_schedule() {
-    $schedule = bj_determine_sync_schedule();
+function jb_update_sync_schedule() {
+    $schedule = jb_determine_sync_schedule();
     
     // Clear existing schedule
-    wp_clear_scheduled_hook('bj_rss_sync');
+    wp_clear_scheduled_hook('jb_rss_sync');
     
     // Set new schedule
-    wp_schedule_event(time(), $schedule, 'bj_rss_sync');
+    wp_schedule_event(time(), $schedule, 'jb_rss_sync');
     
     // Log schedule change
-    error_log("Beer Journal: Sync schedule updated to {$schedule}");
+    error_log("Jardin Beer: Sync schedule updated to {$schedule}");
 }
 ```
 
@@ -115,12 +115,12 @@ function bj_update_sync_schedule() {
 **WordPress doesn't have `sixhourly` by default**:
 
 ```php
-add_filter('cron_schedules', 'bj_add_cron_schedules');
+add_filter('cron_schedules', 'jb_add_cron_schedules');
 
-function bj_add_cron_schedules($schedules) {
+function jb_add_cron_schedules($schedules) {
     $schedules['sixhourly'] = [
         'interval' => 6 * HOUR_IN_SECONDS,
-        'display' => __('Every 6 Hours', 'beer-journal'),
+        'display' => __('Every 6 Hours', 'jardin-beer'),
     ];
     return $schedules;
 }
@@ -171,14 +171,14 @@ function bj_add_cron_schedules($schedules) {
 
 **Implementation**:
 ```php
-$manual_frequency = get_option('bj_sync_frequency_override');
+$manual_frequency = get_option('jb_sync_frequency_override');
 
 if (!empty($manual_frequency)) {
     // Use manual override
     $schedule = $manual_frequency;
 } else {
     // Use adaptive schedule
-    $schedule = bj_determine_sync_schedule();
+    $schedule = jb_determine_sync_schedule();
 }
 ```
 
@@ -222,8 +222,8 @@ if (!empty($manual_frequency)) {
 
 ```php
 // Use check-in date, not current date
-$checkin_date = get_post_meta($post_id, '_bj_checkin_date', true);
-update_option('bj_last_checkin_date', $checkin_date);
+$checkin_date = get_post_meta($post_id, '_jb_checkin_date', true);
+update_option('jb_last_checkin_date', $checkin_date);
 ```
 
 ---
@@ -242,7 +242,7 @@ foreach ($new_checkins as $checkin) {
         $latest_date = $date;
     }
 }
-update_option('bj_last_checkin_date', $latest_date);
+update_option('jb_last_checkin_date', $latest_date);
 ```
 
 ---

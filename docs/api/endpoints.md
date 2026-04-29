@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal n'expose pas d'endpoints REST personnalisés dans la version initiale (1.0.0). Le plugin utilise l'API REST native de WordPress pour le Custom Post Type `beer_checkin` et les taxonomies.
+Jardin Beer n'expose pas d'endpoints REST personnalisés dans la version initiale (1.0.0). Le plugin utilise l'API REST native de WordPress pour le Custom Post Type `beer_checkin` et les taxonomies.
 
 ## Current Status
 
@@ -47,11 +47,11 @@ Ces endpoints utilisent la structure standard de l'API REST WordPress et ne néc
     "protected": false
   },
   "meta": {
-    "_bj_checkin_id": "1527514863",
-    "_bj_rating_raw": "4.25",
-    "_bj_rating_rounded": "4",
-    "_bj_beer_name": "Meteor Blonde De Garde",
-    "_bj_brewery_name": "Brasserie Meteor"
+    "_jb_checkin_id": "1527514863",
+    "_jb_rating_raw": "4.25",
+    "_jb_rating_rounded": "4",
+    "_jb_beer_name": "Meteor Blonde De Garde",
+    "_jb_brewery_name": "Brasserie Meteor"
   },
   "beer_style": [5],
   "brewery": [12],

@@ -2,11 +2,11 @@
 
 ## Component Overview
 
-Beer Journal is built with a modular architecture. Each component has a specific responsibility and interacts with other components through well-defined interfaces.
+Jardin Beer is built with a modular architecture. Each component has a specific responsibility and interacts with other components through well-defined interfaces.
 
 ## Core Components
 
-### 1. RSS Parser (`BJ_RSS_Parser`)
+### 1. RSS Parser (`JB_RSS_Parser`)
 
 **Location**: `includes/class-rss-parser.php`
 
@@ -29,7 +29,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 2. HTML Scraper (`BJ_Scraper`)
+### 2. HTML Scraper (`JB_Scraper`)
 
 **Location**: `includes/class-scraper.php`
 
@@ -53,7 +53,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 3. Data Importer (`BJ_Importer`)
+### 3. Data Importer (`JB_Importer`)
 
 **Location**: `includes/class-importer.php`
 
@@ -78,7 +78,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 4. Image Handler (`BJ_Image_Handler`)
+### 4. Image Handler (`JB_Image_Handler`)
 
 **Location**: `includes/class-image-handler.php`
 
@@ -125,7 +125,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 6. Custom Post Type (`BJ_Post_Type`)
+### 6. Custom Post Type (`JB_Post_Type`)
 
 **Location**: `includes/class-post-type.php`
 
@@ -144,7 +144,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 7. Taxonomies (`BJ_Taxonomies`)
+### 7. Taxonomies (`JB_Taxonomies`)
 
 **Location**: `includes/class-taxonomies.php`
 
@@ -164,7 +164,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 8. Meta Fields (`BJ_Meta_Fields`)
+### 8. Meta Fields (`JB_Meta_Fields`)
 
 **Location**: `includes/class-meta-fields.php`
 
@@ -184,7 +184,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 9. Admin Interface (`BJ_Admin`)
+### 9. Admin Interface (`JB_Admin`)
 
 **Location**: `admin/class-admin.php`
 
@@ -220,7 +220,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 10. Frontend Templates (`BJ_Public`)
+### 10. Frontend Templates (`JB_Public`)
 
 **Location**: `public/class-public.php`
 
@@ -240,7 +240,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 11. Settings Manager (`BJ_Settings`)
+### 11. Settings Manager (`JB_Settings`)
 
 **Location**: `includes/class-settings.php`
 
@@ -260,7 +260,7 @@ Beer Journal is built with a modular architecture. Each component has a specific
 
 ---
 
-### 12. Action Scheduler (`BJ_Action_Scheduler`)
+### 12. Action Scheduler (`JB_Action_Scheduler`)
 
 **Location**: `includes/class-action-scheduler.php`
 
@@ -314,11 +314,11 @@ graph TD
 
 Each component provides hooks for extension:
 
-- **RSS Parser**: `bj_rss_item_parsed` (filter)
-- **Scraper**: `bj_scraped_data` (filter)
-- **Importer**: `bj_before_import`, `bj_after_import` (actions)
-- **Image Handler**: `bj_image_downloaded` (action)
-- **Rating System**: `bj_rating_display` (filter)
+- **RSS Parser**: `jb_rss_item_parsed` (filter)
+- **Scraper**: `jb_scraped_data` (filter)
+- **Importer**: `jb_before_import`, `jb_after_import` (actions)
+- **Image Handler**: `jb_image_downloaded` (action)
+- **Rating System**: `jb_rating_display` (filter)
 - **Templates**: Multiple hooks and filters
 
 ## Related Documentation
@@ -335,14 +335,14 @@ Each component provides hooks for extension:
 
 ## Additional Components (SEO & Performance)
 
-### Caching (`BJ_Cache` ou helper)
+### Caching (`JB_Cache` ou helper)
 
 **Location**: `includes/helper-functions.php` (helper) ou `includes/class-cache.php`
 
 **Responsibility**: Centraliser l’usage des Transients pour les opérations coûteuses (scraping, statistiques, requêtes).
 
 **Conventions**:
-- Clés préfixées `bj_` (ex. `bj_scrape_{checkinId}`, `bj_global_stats`, `bj_query_archive_{hash}`)
+- Clés préfixées `jb_` (ex. `jb_scrape_{checkinId}`, `jb_global_stats`, `jb_query_archive_{hash}`)
 - TTL recommandés: scraping 3h, stats 1h, requêtes d’archive 30min
 - Invalidation après import/sync (clear ciblé des clés pertinentes)
 
@@ -350,15 +350,15 @@ Each component provides hooks for extension:
 
 ---
 
-### Schema Generator (`BJ_Schema`)
+### Schema Generator (`JB_Schema`)
 
 **Location**: `includes/class-schema.php`
 
 **Responsibility**: Générer et injecter le JSON-LD (Schema.org Review/Product) et activer les microformats (templates).
 
 **Options (activées par défaut)**:
-- `bj_schema_enabled` ('1'/'0')
-- `bj_microformats_enabled` ('1'/'0')
+- `jb_schema_enabled` ('1'/'0')
+- `jb_microformats_enabled` ('1'/'0')
 
 **Related**: [Schema Documentation](../development/schema.md)
 
@@ -366,7 +366,7 @@ Each component provides hooks for extension:
 
 ## Untappd Integration Components
 
-### 13. Untappd Sync Orchestrator (`BJ_Untappd_Sync`)
+### 13. Untappd Sync Orchestrator (`JB_Untappd_Sync`)
 
 **Location**: `includes/class-untappd-sync.php`
 
@@ -379,16 +379,16 @@ Each component provides hooks for extension:
 - Provides unified interface for admin and WP-CLI
 
 **Dependencies**:
-- `BJ_Untappd_RSS_Importer`
-- `BJ_Untappd_HTML_Parser`
-- `BJ_Untappd_CSV_Importer`
-- `BJ_Beer_Processor`
+- `JB_Untappd_RSS_Importer`
+- `JB_Untappd_HTML_Parser`
+- `JB_Untappd_CSV_Importer`
+- `JB_Beer_Processor`
 
 **Related**: [Untappd Integration Documentation](../features/untappd-integration.md)
 
 ---
 
-### 14. Untappd RSS Importer (`BJ_Untappd_RSS_Importer`)
+### 14. Untappd RSS Importer (`JB_Untappd_RSS_Importer`)
 
 **Location**: `includes/class-untappd-rss-importer.php`
 
@@ -404,7 +404,7 @@ Each component provides hooks for extension:
 **Dependencies**:
 - WordPress SimplePie (built-in)
 - WordPress HTTP API
-- `BJ_Beer_Processor`
+- `JB_Beer_Processor`
 
 **Output**: Array of minimal `BeerData` objects
 
@@ -412,7 +412,7 @@ Each component provides hooks for extension:
 
 ---
 
-### 15. Untappd HTML Parser (`BJ_Untappd_HTML_Parser`)
+### 15. Untappd HTML Parser (`JB_Untappd_HTML_Parser`)
 
 **Location**: `includes/class-untappd-html-parser.php`
 
@@ -436,7 +436,7 @@ Each component provides hooks for extension:
 
 ---
 
-### 16. Untappd CSV Importer (`BJ_Untappd_CSV_Importer`)
+### 16. Untappd CSV Importer (`JB_Untappd_CSV_Importer`)
 
 **Location**: `includes/class-untappd-csv-importer.php`
 
@@ -447,11 +447,11 @@ Each component provides hooks for extension:
 - Validates required fields (checkin_id, beer_name, brewery_name, checkin_date, untappd_url)
 - Validates date format (YYYY-MM-DD)
 - Constructs enriched `BeerData` objects
-- Delegates to `BJ_Beer_Processor` for WordPress insertion
+- Delegates to `JB_Beer_Processor` for WordPress insertion
 
 **Dependencies**:
 - PHP CSV functions or library
-- `BJ_Beer_Processor`
+- `JB_Beer_Processor`
 
 **Output**: Import statistics (saved, skipped, errors)
 
@@ -459,7 +459,7 @@ Each component provides hooks for extension:
 
 ---
 
-### 17. Beer Processor (`BJ_Beer_Processor`)
+### 17. Beer Processor (`JB_Beer_Processor`)
 
 **Location**: `includes/class-beer-processor.php`
 
@@ -467,19 +467,19 @@ Each component provides hooks for extension:
 
 **Key Features**:
 - Validates `BeerData` structure (required fields)
-- Checks for duplicates (by `checkinId` via meta `_bj_checkin_id`)
-- Checks exclusion list (`bj_excluded_checkins` option)
+- Checks for duplicates (by `checkinId` via meta `_jb_checkin_id`)
+- Checks exclusion list (`jb_excluded_checkins` option)
 - Maps `BeerData` to WordPress:
   - Creates CPT `beer_checkin` post
-  - Sets meta fields `_bj_*`
+  - Sets meta fields `_jb_*`
   - Assigns taxonomies (beer_style, brewery, venue)
   - Downloads and attaches images (if enabled)
 - Applies default values (equivalent to Eleventy template)
 - Sets post status (draft by default, publish if complete)
 
 **Dependencies**:
-- `BJ_Importer` (or shared logic)
-- `BJ_Image_Handler`
+- `JB_Importer` (or shared logic)
+- `JB_Image_Handler`
 - WordPress Post/Taxonomy/Meta APIs
 
 **Input**: `BeerData` object (array or class instance)
@@ -490,7 +490,7 @@ Each component provides hooks for extension:
 
 ---
 
-### 18. Untappd Config (`BJ_Untappd_Config`)
+### 18. Untappd Config (`JB_Untappd_Config`)
 
 **Location**: `includes/class-untappd-config.php`
 
@@ -503,10 +503,10 @@ Each component provides hooks for extension:
 - Validates configuration
 
 **Options**:
-- `bj_untappd_rss_key`: RSS API key
-- `bj_untappd_username`: Untappd username
-- `bj_excluded_checkins`: Array of check-in IDs to exclude
-- `bj_download_images`: Whether to download images (default: true)
+- `jb_untappd_rss_key`: RSS API key
+- `jb_untappd_username`: Untappd username
+- `jb_excluded_checkins`: Array of check-in IDs to exclude
+- `jb_download_images`: Whether to download images (default: true)
 
 **Related**: [Untappd Integration](../features/untappd-integration.md)
 

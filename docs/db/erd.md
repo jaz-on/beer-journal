@@ -2,7 +2,7 @@
 
 ## Overview
 
-This ERD shows the relationships between WordPress core tables and how Beer Journal uses them to store check-in data.
+This ERD shows the relationships between WordPress core tables and how Jardin Beer uses them to store check-in data.
 
 ## ERD Diagram
 
@@ -67,16 +67,16 @@ erDiagram
 ### Posts → Post Meta (One-to-Many)
 - One `beer` post has many meta fields
 - Each meta field is stored as a row in `wp_postmeta`
-- Meta keys are prefixed with `_bj_` (e.g., `_bj_checkin_id`, `_bj_rating_raw`)
+- Meta keys are prefixed with `_jb_` (e.g., `_jb_checkin_id`, `_jb_rating_raw`)
 
 **Example**:
 ```
 Post ID: 123
-├── _bj_checkin_id: "1527514863"
-├── _bj_beer_name: "Meteor Blonde De Garde"
-├── _bj_brewery_name: "Brasserie Meteor"
-├── _bj_rating_raw: "4.25"
-└── _bj_rating_rounded: "4"
+├── _jb_checkin_id: "1527514863"
+├── _jb_beer_name: "Meteor Blonde De Garde"
+├── _jb_brewery_name: "Brasserie Meteor"
+├── _jb_rating_raw: "4.25"
+└── _jb_rating_rounded: "4"
 ```
 
 ### Posts → Taxonomies (Many-to-Many)
@@ -139,38 +139,38 @@ beer (wp_posts)
 │
 ├── Meta Fields (wp_postmeta)
 │   ├── Identifiers
-│   │   ├── _bj_checkin_id: "1527514863"
-│   │   ├── _bj_beer_id: "12345"
-│   │   ├── _bj_brewery_id: "6789"
-│   │   └── _bj_checkin_url: "https://untappd.com/..."
+│   │   ├── _jb_checkin_id: "1527514863"
+│   │   ├── _jb_beer_id: "12345"
+│   │   ├── _jb_brewery_id: "6789"
+│   │   └── _jb_checkin_url: "https://untappd.com/..."
 │   │
 │   ├── Beer Data
-│   │   ├── _bj_beer_name: "Meteor Blonde De Garde"
-│   │   ├── _bj_brewery_name: "Brasserie Meteor"
-│   │   ├── _bj_beer_style: "Blonde Ale"
-│   │   ├── _bj_beer_abv: "5.5"
-│   │   ├── _bj_beer_ibu: "25"
-│   │   └── _bj_beer_description: "Beer description..."
+│   │   ├── _jb_beer_name: "Meteor Blonde De Garde"
+│   │   ├── _jb_brewery_name: "Brasserie Meteor"
+│   │   ├── _jb_beer_style: "Blonde Ale"
+│   │   ├── _jb_beer_abv: "5.5"
+│   │   ├── _jb_beer_ibu: "25"
+│   │   └── _jb_beer_description: "Beer description..."
 │   │
 │   ├── Check-in Data
-│   │   ├── _bj_rating_raw: "4.25"
-│   │   ├── _bj_rating_rounded: "4"
-│   │   ├── _bj_serving_type: "Draft"
-│   │   └── _bj_checkin_date: "2025-11-10T18:13:18Z"
+│   │   ├── _jb_rating_raw: "4.25"
+│   │   ├── _jb_rating_rounded: "4"
+│   │   ├── _jb_serving_type: "Draft"
+│   │   └── _jb_checkin_date: "2025-11-10T18:13:18Z"
 │   │
 │   ├── Venue Data
-│   │   ├── _bj_venue_name: "Home"
-│   │   ├── _bj_venue_city: "Strasbourg"
-│   │   └── _bj_venue_country: "France"
+│   │   ├── _jb_venue_name: "Home"
+│   │   ├── _jb_venue_city: "Strasbourg"
+│   │   └── _jb_venue_country: "France"
 │   │
 │   ├── Social Data
-│   │   ├── _bj_toast_count: "12"
-│   │   └── _bj_comment_count: "3"
+│   │   ├── _jb_toast_count: "12"
+│   │   └── _jb_comment_count: "3"
 │   │
 │   └── Technical
-│       ├── _bj_source: "rss"
-│       ├── _bj_scraped_at: "2025-11-10 18:15:00"
-│       └── _bj_scraping_attempts: "1"
+│       ├── _jb_source: "rss"
+│       ├── _jb_scraped_at: "2025-11-10 18:15:00"
+│       └── _jb_scraping_attempts: "1"
 │
 ├── Taxonomies (wp_term_relationships)
 │   ├── beer_style: "Blonde Ale" (term_id: 10)
@@ -181,7 +181,7 @@ beer (wp_posts)
     └── Attachment ID: 456
         ├── _wp_attached_file: "2025/11/beer-photo.jpg"
         ├── _wp_attachment_image_alt: "Meteor Blonde De Garde - Brasserie Meteor"
-        └── _bj_image_hash: "md5_hash_of_url"
+        └── _jb_image_hash: "md5_hash_of_url"
 ```
 
 ## Query Examples
@@ -200,7 +200,7 @@ FROM wp_posts p
 LEFT JOIN wp_postmeta pm ON p.ID = pm.post_id
 WHERE p.post_type = 'beer'
 AND p.ID = 123
-AND pm.meta_key LIKE '_bj_%'
+AND pm.meta_key LIKE '_jb_%'
 ```
 
 ### Get Check-ins by Beer Style
@@ -223,7 +223,7 @@ FROM wp_postmeta pm
 INNER JOIN wp_posts p ON pm.post_id = p.ID
 WHERE p.post_type = 'beer'
 AND p.post_status = 'publish'
-AND pm.meta_key = '_bj_rating_raw'
+AND pm.meta_key = '_jb_rating_raw'
 ```
 
 ## Related Documentation

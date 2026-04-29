@@ -1,11 +1,11 @@
 {
-	"name": "beer-journal/beer-journal",
+	"name": "jardin-beer/jardin-beer",
 	"description": "WordPress plugin to sync Untappd beer check-ins",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
-			"name": "Beer Journal Contributors",
+			"name": "Jardin Beer Contributors",
 			"email": "contributors@example.com"
 		}
 	],
@@ -36,7 +36,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"BJ\\Tests\\": "tests/"
+			"JB\\Tests\\": "tests/"
 		}
 	},
 	"scripts": {

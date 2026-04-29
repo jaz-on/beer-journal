@@ -2,7 +2,7 @@
 /**
  * Untappd RSS feed parsing.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,18 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_RSS_Parser
+ * Class JB_RSS_Parser
  */
-class BJ_RSS_Parser {
+class JB_RSS_Parser {
 
 	/**
 	 * Fetch feed and import new check-ins (and drain persisted queue first).
 	 *
-	 * @param BJ_Importer          $importer Importer instance.
+	 * @param JB_Importer          $importer Importer instance.
 	 * @param array<string, mixed> $args     Optional. `manual` bool for admin sync (higher per-run cap).
 	 * @return true|WP_Error
 	 */
-	public function sync_new_items( BJ_Importer $importer, array $args = array() ) {
+	public function sync_new_items( JB_Importer $importer, array $args = array() ) {
 		$manual = ! empty( $args['manual'] );
 		$queue_only = ! empty( $args['queue_only'] );
 
@@ -29,9 +29,9 @@ class BJ_RSS_Parser {
 			return $this->run_queue_pass( $importer, $manual, false );
 		}
 
-		$url = bj_get_rss_feed_url();
+		$url = jb_get_rss_feed_url();
 		if ( ! is_string( $url ) || '' === trim( $url ) ) {
-			return new WP_Error( 'no_feed', __( 'RSS feed URL is not configured.', 'beer-journal' ) );
+			return new WP_Error( 'no_feed', __( 'RSS feed URL is not configured.', 'jardin-beer' ) );
 		}
 
 		if ( ! function_exists( 'fetch_feed' ) ) {
@@ -45,12 +45,12 @@ class BJ_RSS_Parser {
 
 		$items = $feed->get_items( 0, 50 );
 		if ( empty( $items ) ) {
-			BJ_Logger::info( 'RSS sync: no items in feed.' );
+			JB_Logger::info( 'RSS sync: no items in feed.' );
 			$pass = $this->run_queue_pass( $importer, $manual, true );
 			if ( is_wp_error( $pass ) ) {
 				return $pass;
 			}
-			bj_touch_last_rss_sync_time();
+			jb_touch_last_rss_sync_time();
 			return true;
 		}
 
@@ -63,12 +63,12 @@ class BJ_RSS_Parser {
 			if ( ! is_string( $link ) || '' === $link ) {
 				continue;
 			}
-			$checkin_id = bj_parse_checkin_id_from_url( $link );
+			$checkin_id = jb_parse_checkin_id_from_url( $link );
 			if ( ! $checkin_id ) {
 				continue;
 			}
 			$checkin_ids[] = $checkin_id;
-			$parsed        = bj_parse_rss_item_title( $item->get_title() );
+			$parsed        = jb_parse_rss_item_title( $item->get_title() );
 			$date          = $item->get_date( 'c' );
 			$desc          = $item->get_description();
 			$img           = $this->extract_image_from_description( $desc );
@@ -84,7 +84,7 @@ class BJ_RSS_Parser {
 			);
 		}
 
-		$existing_map = bj_get_post_ids_by_checkin_ids( $checkin_ids );
+		$existing_map = jb_get_post_ids_by_checkin_ids( $checkin_ids );
 		$to_import    = array();
 		foreach ( $candidates as $row ) {
 			$cid = (string) $row['checkin_id'];
@@ -95,13 +95,13 @@ class BJ_RSS_Parser {
 		}
 
 		if ( empty( $to_import ) ) {
-			update_option( 'bj_last_imported_guid', $latest_guid, false );
-			BJ_Logger::info( 'RSS sync: all feed items already imported.' );
+			update_option( 'jb_last_imported_guid', $latest_guid, false );
+			JB_Logger::info( 'RSS sync: all feed items already imported.' );
 			$pass = $this->run_queue_pass( $importer, $manual, true );
 			if ( is_wp_error( $pass ) ) {
 				return $pass;
 			}
-			bj_touch_last_rss_sync_time();
+			jb_touch_last_rss_sync_time();
 			return true;
 		}
 
@@ -115,31 +115,31 @@ class BJ_RSS_Parser {
 			}
 		}
 
-		$queue = bj_get_rss_sync_queue();
-		$max   = bj_get_rss_sync_max_per_run( $manual );
+		$queue = jb_get_rss_sync_queue();
+		$max   = jb_get_rss_sync_max_per_run( $manual );
 
 		list( $imported, $queue ) = $this->import_until_budget( $importer, $queue, $to_import, $max );
 
-		bj_save_rss_sync_queue( $queue );
+		jb_save_rss_sync_queue( $queue );
 
-		update_option( 'bj_last_imported_guid', $latest_guid, false );
+		update_option( 'jb_last_imported_guid', $latest_guid, false );
 		if ( '' !== $last_checkin_date ) {
-			update_option( 'bj_last_checkin_date', $last_checkin_date, false );
+			update_option( 'jb_last_checkin_date', $last_checkin_date, false );
 		}
 
-		$depth_after = count( bj_get_rss_sync_queue() );
-		BJ_Logger::info(
+		$depth_after = count( jb_get_rss_sync_queue() );
+		JB_Logger::info(
 			sprintf(
 				'RSS sync: imported %1$d this run; queue depth %2$d (markup v%3$d).',
 				$imported,
 				$depth_after,
-				BJ_Scraper_Config::MARKUP_VERSION
+				JB_Scraper_Config::MARKUP_VERSION
 			)
 		);
 
-		bj_touch_last_rss_sync_time();
+		jb_touch_last_rss_sync_time();
 
-		bj_maybe_schedule_rss_queue_tick();
+		jb_maybe_schedule_rss_queue_tick();
 
 		$this->maybe_notify_sync( $imported, $manual );
 
@@ -149,31 +149,31 @@ class BJ_RSS_Parser {
 	/**
 	 * Cron: drain queue only (no RSS fetch). Does not call reschedule_adaptive.
 	 *
-	 * @param BJ_Importer $importer Importer.
+	 * @param JB_Importer $importer Importer.
 	 * @return true|WP_Error
 	 */
-	public function drain_queue_tick( BJ_Importer $importer ) {
+	public function drain_queue_tick( JB_Importer $importer ) {
 		return $this->run_queue_pass( $importer, false, true );
 	}
 
 	/**
 	 * Drain persisted queue up to budget, optionally continuing into RSS candidates in one pass.
 	 *
-	 * @param BJ_Importer $importer     Importer.
+	 * @param JB_Importer $importer     Importer.
 	 * @param bool        $manual       Manual sync cap.
 	 * @param bool        $touch_sync_time When true and work ran, update last sync time.
 	 * @return true|WP_Error
 	 */
-	private function run_queue_pass( BJ_Importer $importer, $manual, $touch_sync_time ) {
-		$queue = bj_get_rss_sync_queue();
+	private function run_queue_pass( JB_Importer $importer, $manual, $touch_sync_time ) {
+		$queue = jb_get_rss_sync_queue();
 		if ( empty( $queue ) ) {
 			return true;
 		}
-		$max = bj_get_rss_sync_max_per_run( $manual );
+		$max = jb_get_rss_sync_max_per_run( $manual );
 		list( $imported, $queue ) = $this->import_until_budget( $importer, $queue, array(), $max );
-		bj_save_rss_sync_queue( $queue );
+		jb_save_rss_sync_queue( $queue );
 		$depth = count( $queue );
-		BJ_Logger::info(
+		JB_Logger::info(
 			sprintf(
 				'RSS queue tick: imported %1$d; queue depth %2$d.',
 				$imported,
@@ -181,9 +181,9 @@ class BJ_RSS_Parser {
 			)
 		);
 		if ( $imported > 0 && $touch_sync_time ) {
-			bj_touch_last_rss_sync_time();
+			jb_touch_last_rss_sync_time();
 		}
-		bj_maybe_schedule_rss_queue_tick();
+		jb_maybe_schedule_rss_queue_tick();
 		$this->maybe_notify_sync( $imported, $manual );
 		return true;
 	}
@@ -191,13 +191,13 @@ class BJ_RSS_Parser {
 	/**
 	 * Import from front of queue, then from $rss_rows, until $budget imports attempted.
 	 *
-	 * @param BJ_Importer                        $importer Importer.
+	 * @param JB_Importer                        $importer Importer.
 	 * @param array<int, array<string, mixed>>  $queue    Persisted queue (modified).
 	 * @param array<int, array<string, mixed>>  $rss_rows New rows oldest-first (remaining appended to queue).
 	 * @param int                               $budget   Max import attempts.
 	 * @return array{0: int, 1: array<int, array<string, mixed>>} imported count, updated queue.
 	 */
-	private function import_until_budget( BJ_Importer $importer, array $queue, array $rss_rows, $budget ) {
+	private function import_until_budget( JB_Importer $importer, array $queue, array $rss_rows, $budget ) {
 		$imported = 0;
 		$budget   = max( 0, (int) $budget );
 
@@ -209,7 +209,7 @@ class BJ_RSS_Parser {
 			}
 			$result = $importer->import_from_rss_row( $row );
 			if ( is_wp_error( $result ) ) {
-				BJ_Logger::warning( $result->get_error_message() );
+				JB_Logger::warning( $result->get_error_message() );
 			} else {
 				++$imported;
 			}
@@ -221,14 +221,14 @@ class BJ_RSS_Parser {
 			foreach ( $chunk as $row ) {
 				$result = $importer->import_from_rss_row( $row );
 				if ( is_wp_error( $result ) ) {
-					BJ_Logger::warning( $result->get_error_message() );
+					JB_Logger::warning( $result->get_error_message() );
 				} else {
 					++$imported;
 				}
 			}
 			$budget -= count( $chunk );
 			if ( ! empty( $rss_rows ) ) {
-				$queue = bj_rss_queue_merge_unique( $queue, $rss_rows );
+				$queue = jb_rss_queue_merge_unique( $queue, $rss_rows );
 			}
 		}
 
@@ -243,18 +243,18 @@ class BJ_RSS_Parser {
 	 * @return void
 	 */
 	private function maybe_notify_sync( $imported, $manual ) {
-		if ( $imported <= 0 || ! get_option( 'bj_notify_on_sync', false ) ) {
+		if ( $imported <= 0 || ! get_option( 'jb_notify_on_sync', false ) ) {
 			return;
 		}
-		$queue_empty = empty( bj_get_rss_sync_queue() );
+		$queue_empty = empty( jb_get_rss_sync_queue() );
 		if ( ! $manual && ! $queue_empty ) {
 			return;
 		}
-		bj_send_notification_email(
-			'[Beer Journal] ' . __( 'RSS sync completed', 'beer-journal' ),
+		jb_send_notification_email(
+			'[Jardin Beer] ' . __( 'RSS sync completed', 'jardin-beer' ),
 			sprintf(
 				/* translators: %d: number of check-ins imported */
-				__( 'Imported %d new check-in(s).', 'beer-journal' ),
+				__( 'Imported %d new check-in(s).', 'jardin-beer' ),
 				$imported
 			),
 			'sync'

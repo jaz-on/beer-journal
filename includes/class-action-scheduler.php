@@ -2,7 +2,7 @@
 /**
  * Background jobs: Action Scheduler when available, else WP-Cron.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Action_Scheduler
+ * Class JB_Action_Scheduler
  */
-class BJ_Action_Scheduler {
+class JB_Action_Scheduler {
 
 	/**
 	 * Register hooks.
@@ -21,10 +21,10 @@ class BJ_Action_Scheduler {
 	 */
 	public function register() {
 		add_filter( 'cron_schedules', array( $this, 'add_cron_schedules' ) );
-		add_action( 'bj_rss_sync', array( $this, 'run_rss_sync' ) );
-		add_action( 'bj_rss_queue_tick', array( $this, 'run_rss_queue_tick' ) );
-		add_action( 'bj_background_import_batch', array( $this, 'run_background_import_batch' ) );
-		add_action( 'bj_daily_log_cleanup', array( $this, 'run_log_cleanup' ) );
+		add_action( 'jb_rss_sync', array( $this, 'run_rss_sync' ) );
+		add_action( 'jb_rss_queue_tick', array( $this, 'run_rss_queue_tick' ) );
+		add_action( 'jb_background_import_batch', array( $this, 'run_background_import_batch' ) );
+		add_action( 'jb_daily_log_cleanup', array( $this, 'run_log_cleanup' ) );
 		add_action( 'init', array( $this, 'maybe_schedule_events' ), 30 );
 	}
 
@@ -38,7 +38,7 @@ class BJ_Action_Scheduler {
 		if ( ! isset( $schedules['sixhourly'] ) ) {
 			$schedules['sixhourly'] = array(
 				'interval' => 6 * HOUR_IN_SECONDS,
-				'display'  => __( 'Every 6 hours', 'beer-journal' ),
+				'display'  => __( 'Every 6 hours', 'jardin-beer' ),
 			);
 		}
 		return $schedules;
@@ -68,24 +68,24 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function maybe_schedule_events() {
-		if ( ! get_option( 'bj_sync_enabled', true ) ) {
+		if ( ! get_option( 'jb_sync_enabled', true ) ) {
 			return;
 		}
-		$feed = bj_get_rss_feed_url();
+		$feed = jb_get_rss_feed_url();
 		if ( ! is_string( $feed ) || '' === trim( $feed ) ) {
 			return;
 		}
 
-		if ( bj_using_action_scheduler() ) {
+		if ( jb_using_action_scheduler() ) {
 			$this->maybe_schedule_events_action_scheduler();
 			return;
 		}
 
-		if ( ! wp_next_scheduled( 'bj_rss_sync' ) ) {
+		if ( ! wp_next_scheduled( 'jb_rss_sync' ) ) {
 			$this->reschedule_adaptive_wp_cron();
 		}
-		if ( ! wp_next_scheduled( 'bj_daily_log_cleanup' ) ) {
-			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'bj_daily_log_cleanup' );
+		if ( ! wp_next_scheduled( 'jb_daily_log_cleanup' ) ) {
+			wp_schedule_event( time() + DAY_IN_SECONDS, 'daily', 'jb_daily_log_cleanup' );
 		}
 	}
 
@@ -95,23 +95,23 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	private function maybe_schedule_events_action_scheduler() {
-		$group = bj_action_scheduler_group();
+		$group = jb_action_scheduler_group();
 
 		// One-time migration off WP-Cron.
-		wp_clear_scheduled_hook( 'bj_rss_sync' );
-		wp_clear_scheduled_hook( 'bj_daily_log_cleanup' );
-		wp_clear_scheduled_hook( 'bj_rss_queue_tick' );
-		wp_clear_scheduled_hook( 'bj_background_import_batch' );
+		wp_clear_scheduled_hook( 'jb_rss_sync' );
+		wp_clear_scheduled_hook( 'jb_daily_log_cleanup' );
+		wp_clear_scheduled_hook( 'jb_rss_queue_tick' );
+		wp_clear_scheduled_hook( 'jb_background_import_batch' );
 
-		if ( ! as_next_scheduled_action( 'bj_rss_sync', array(), $group ) ) {
+		if ( ! as_next_scheduled_action( 'jb_rss_sync', array(), $group ) ) {
 			$recurrence = self::get_adaptive_recurrence();
 			$interval   = self::recurrence_interval_seconds( $recurrence );
-			as_schedule_recurring_action( time() + MINUTE_IN_SECONDS, $interval, 'bj_rss_sync', array(), $group );
-			BJ_Logger::info( 'RSS sync scheduled via Action Scheduler, interval seconds: ' . (string) $interval );
+			as_schedule_recurring_action( time() + MINUTE_IN_SECONDS, $interval, 'jb_rss_sync', array(), $group );
+			JB_Logger::info( 'RSS sync scheduled via Action Scheduler, interval seconds: ' . (string) $interval );
 		}
 
-		if ( ! as_next_scheduled_action( 'bj_daily_log_cleanup', array(), $group ) ) {
-			as_schedule_recurring_action( time() + DAY_IN_SECONDS, DAY_IN_SECONDS, 'bj_daily_log_cleanup', array(), $group );
+		if ( ! as_next_scheduled_action( 'jb_daily_log_cleanup', array(), $group ) ) {
+			as_schedule_recurring_action( time() + DAY_IN_SECONDS, DAY_IN_SECONDS, 'jb_daily_log_cleanup', array(), $group );
 		}
 	}
 
@@ -121,7 +121,7 @@ class BJ_Action_Scheduler {
 	 * @return string
 	 */
 	public static function get_adaptive_recurrence() {
-		$last = get_option( 'bj_last_checkin_date', '' );
+		$last = get_option( 'jb_last_checkin_date', '' );
 		if ( ! is_string( $last ) || '' === $last ) {
 			return 'daily';
 		}
@@ -145,10 +145,10 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	private function reschedule_adaptive_wp_cron() {
-		wp_clear_scheduled_hook( 'bj_rss_sync' );
+		wp_clear_scheduled_hook( 'jb_rss_sync' );
 		$recurrence = self::get_adaptive_recurrence();
-		wp_schedule_event( time() + MINUTE_IN_SECONDS, $recurrence, 'bj_rss_sync' );
-		BJ_Logger::info( 'RSS sync scheduled with recurrence: ' . $recurrence );
+		wp_schedule_event( time() + MINUTE_IN_SECONDS, $recurrence, 'jb_rss_sync' );
+		JB_Logger::info( 'RSS sync scheduled with recurrence: ' . $recurrence );
 	}
 
 	/**
@@ -157,13 +157,13 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function reschedule_adaptive() {
-		if ( bj_using_action_scheduler() ) {
-			$group      = bj_action_scheduler_group();
+		if ( jb_using_action_scheduler() ) {
+			$group      = jb_action_scheduler_group();
 			$recurrence = self::get_adaptive_recurrence();
 			$interval   = self::recurrence_interval_seconds( $recurrence );
-			as_unschedule_all_actions( 'bj_rss_sync', array(), $group );
-			as_schedule_recurring_action( time() + MINUTE_IN_SECONDS, $interval, 'bj_rss_sync', array(), $group );
-			BJ_Logger::info( 'RSS sync rescheduled via Action Scheduler, interval seconds: ' . (string) $interval );
+			as_unschedule_all_actions( 'jb_rss_sync', array(), $group );
+			as_schedule_recurring_action( time() + MINUTE_IN_SECONDS, $interval, 'jb_rss_sync', array(), $group );
+			JB_Logger::info( 'RSS sync rescheduled via Action Scheduler, interval seconds: ' . (string) $interval );
 			return;
 		}
 		$this->reschedule_adaptive_wp_cron();
@@ -175,17 +175,17 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function run_rss_sync() {
-		if ( ! get_option( 'bj_sync_enabled', true ) ) {
+		if ( ! get_option( 'jb_sync_enabled', true ) ) {
 			return;
 		}
-		$parser   = new BJ_RSS_Parser();
-		$importer = new BJ_Importer();
+		$parser   = new JB_RSS_Parser();
+		$importer = new JB_Importer();
 		$result   = $parser->sync_new_items( $importer );
 		if ( is_wp_error( $result ) ) {
 			$msg = $result->get_error_message();
-			BJ_Logger::error( 'RSS sync failed: ' . $msg );
-			bj_send_notification_email(
-				'[Beer Journal] ' . __( 'RSS sync failed', 'beer-journal' ),
+			JB_Logger::error( 'RSS sync failed: ' . $msg );
+			jb_send_notification_email(
+				'[Jardin Beer] ' . __( 'RSS sync failed', 'jardin-beer' ),
 				$msg,
 				'error'
 			);
@@ -199,14 +199,14 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function run_rss_queue_tick() {
-		if ( ! get_option( 'bj_sync_enabled', true ) ) {
+		if ( ! get_option( 'jb_sync_enabled', true ) ) {
 			return;
 		}
-		$parser   = new BJ_RSS_Parser();
-		$importer = new BJ_Importer();
+		$parser   = new JB_RSS_Parser();
+		$importer = new JB_Importer();
 		$result   = $parser->drain_queue_tick( $importer );
 		if ( is_wp_error( $result ) ) {
-			BJ_Logger::error( 'RSS queue tick failed: ' . $result->get_error_message() );
+			JB_Logger::error( 'RSS queue tick failed: ' . $result->get_error_message() );
 		}
 	}
 
@@ -216,7 +216,7 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function run_background_import_batch() {
-		$crawler = new BJ_Crawler();
+		$crawler = new JB_Crawler();
 		$crawler->process_next_batch();
 	}
 
@@ -226,16 +226,16 @@ class BJ_Action_Scheduler {
 	 * @return void
 	 */
 	public function run_log_cleanup() {
-		$dir = bj_get_log_directory();
+		$dir = jb_get_log_directory();
 		if ( ! $dir ) {
 			return;
 		}
-		$days = absint( get_option( 'bj_log_retention_days', 30 ) );
+		$days = absint( get_option( 'jb_log_retention_days', 30 ) );
 		if ( 0 === $days ) {
 			return;
 		}
 		$cutoff = time() - ( $days * DAY_IN_SECONDS );
-		$files  = glob( $dir . 'beer-journal-*.log' );
+		$files  = glob( $dir . 'jardin-beer-*.log' );
 		if ( ! is_array( $files ) ) {
 			return;
 		}

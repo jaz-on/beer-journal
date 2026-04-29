@@ -2,7 +2,7 @@
 /**
  * HTML scraping for Untappd check-in pages.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 use Symfony\Component\DomCrawler\Crawler;
@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Scraper
+ * Class JB_Scraper
  */
-class BJ_Scraper {
+class JB_Scraper {
 
 	/**
 	 * Max retries per URL.
@@ -30,10 +30,10 @@ class BJ_Scraper {
 	public function scrape_checkin_url( $url ) {
 		$url = esc_url_raw( $url );
 		if ( ! $url || false === strpos( $url, 'untappd.com' ) ) {
-			return new WP_Error( 'bad_url', __( 'Invalid Untappd check-in URL.', 'beer-journal' ) );
+			return new WP_Error( 'bad_url', __( 'Invalid Untappd check-in URL.', 'jardin-beer' ) );
 		}
 
-		$this->respect_rate_limit( bj_get_scraping_delay_seconds() );
+		$this->respect_rate_limit( jb_get_scraping_delay_seconds() );
 
 		$attempts = 0;
 		$html     = '';
@@ -48,14 +48,14 @@ class BJ_Scraper {
 						'Accept' => 'text/html,application/xhtml+xml',
 					),
 					'user-agent' => apply_filters(
-						'bj_http_user_agent',
-						'Beer Journal/' . BJ_VERSION . '; ' . home_url( '/' )
+						'jb_http_user_agent',
+						'Jardin Beer/' . JB_VERSION . '; ' . home_url( '/' )
 					),
 				)
 			);
 
 			if ( is_wp_error( $response ) ) {
-				BJ_Logger::warning( 'Scrape attempt ' . $attempts . ' failed: ' . $response->get_error_message() );
+				JB_Logger::warning( 'Scrape attempt ' . $attempts . ' failed: ' . $response->get_error_message() );
 				sleep( min( 2 * $attempts, 10 ) );
 				continue;
 			}
@@ -65,12 +65,12 @@ class BJ_Scraper {
 			if ( 200 === $code && is_string( $html ) && strlen( $html ) > 500 ) {
 				break;
 			}
-			BJ_Logger::warning( 'Scrape HTTP ' . $code . ' attempt ' . $attempts );
+			JB_Logger::warning( 'Scrape HTTP ' . $code . ' attempt ' . $attempts );
 			sleep( min( 2 * $attempts, 10 ) );
 		}
 
 		if ( 200 !== $code || ! is_string( $html ) || strlen( $html ) < 500 ) {
-			return new WP_Error( 'fetch_failed', __( 'Could not load check-in page.', 'beer-journal' ) );
+			return new WP_Error( 'fetch_failed', __( 'Could not load check-in page.', 'jardin-beer' ) );
 		}
 
 		return $this->parse_html( $html, $url );
@@ -83,7 +83,7 @@ class BJ_Scraper {
 	 * @return void
 	 */
 	private function respect_rate_limit( $delay ) {
-		$key   = 'bj_last_scrape_ts';
+		$key   = 'jb_last_scrape_ts';
 		$last  = (int) get_transient( $key );
 		$now   = time();
 		$delay = max( 1, $delay );
@@ -102,7 +102,7 @@ class BJ_Scraper {
 	 */
 	private function parse_html( $html, $url ) {
 		$data = array(
-			'checkin_id'    => bj_parse_checkin_id_from_url( $url ),
+			'checkin_id'    => jb_parse_checkin_id_from_url( $url ),
 			'checkin_url'   => $url,
 			'beer_name'     => '',
 			'brewery_name'  => '',
@@ -125,13 +125,13 @@ class BJ_Scraper {
 			$crawler = new Crawler( $html );
 			$this->extract_from_dom( $crawler, $data );
 		} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-			BJ_Logger::debug( 'DomCrawler: ' . $e->getMessage() );
+			JB_Logger::debug( 'DomCrawler: ' . $e->getMessage() );
 		}
 
 		$this->extract_from_regex( $html, $data );
 
 		if ( '' === $data['beer_name'] && '' === $data['brewery_name'] && null === $data['rating_raw'] ) {
-			return new WP_Error( 'parse_empty', __( 'Could not parse check-in data from HTML.', 'beer-journal' ) );
+			return new WP_Error( 'parse_empty', __( 'Could not parse check-in data from HTML.', 'jardin-beer' ) );
 		}
 
 		return $data;
@@ -178,7 +178,7 @@ class BJ_Scraper {
 		}
 		if ( preg_match( '/property=["\']og:title["\'][^>]+content=["\']([^"\']+)["\']/i', $html, $m ) ) {
 			$title = html_entity_decode( $m[1], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-			$parsed = bj_parse_rss_item_title( $title );
+			$parsed = jb_parse_rss_item_title( $title );
 			if ( '' === $data['beer_name'] && '' !== $parsed['beer'] ) {
 				$data['beer_name'] = $parsed['beer'];
 			}
@@ -199,7 +199,7 @@ class BJ_Scraper {
 	 * @return void
 	 */
 	private function extract_from_dom( Crawler $crawler, array &$data ) {
-		$selectors = BJ_Scraper_Config::dom_selectors();
+		$selectors = JB_Scraper_Config::dom_selectors();
 		$defaults  = array(
 			'beer'    => array(),
 			'brewery' => array(),

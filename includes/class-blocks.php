@@ -2,7 +2,7 @@
 /**
  * Register Gutenberg blocks (dynamic, server-rendered).
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Blocks
+ * Class JB_Blocks
  */
-class BJ_Blocks {
+class JB_Blocks {
 
 	/**
 	 * Block slugs relative to blocks/.
@@ -40,7 +40,7 @@ class BJ_Blocks {
 	 */
 	public function register_block_types() {
 		foreach ( self::BLOCKS as $slug ) {
-			$dir = BJ_PLUGIN_DIR . 'blocks/' . $slug;
+			$dir = JB_PLUGIN_DIR . 'blocks/' . $slug;
 			if ( is_readable( $dir . '/block.json' ) ) {
 				register_block_type( $dir );
 			}

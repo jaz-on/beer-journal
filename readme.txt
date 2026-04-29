@@ -1,4 +1,4 @@
-=== Beer Journal for Untappd ===
+=== Jardin Beer for Untappd ===
 Contributors: jaz_on
 Donate link: https://example.com/
 Tags: beer, untappd, checkin, brewery, rating, journal, sync
@@ -15,7 +15,7 @@ Import and display your Untappd beer check-ins on your WordPress site with autom
 
 == Description ==
 
-Beer Journal allows you to automatically sync your Untappd check-ins to your WordPress site, creating a beautiful beer journal with ratings, photos, and detailed information about each beer you've tried.
+Jardin Beer allows you to automatically sync your Untappd check-ins to your WordPress site, creating a beautiful beer journal with ratings, photos, and detailed information about each beer you've tried.
 
 = Key Features =
 
@@ -35,9 +35,9 @@ Beer Journal allows you to automatically sync your Untappd check-ins to your Wor
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/beer-journal/`
+1. Upload the plugin files to `/wp-content/plugins/jardin-beer/`
 2. Activate the plugin through the 'Plugins' screen
-3. Go to **Beer Journal > Settings** to configure your Untappd RSS feed URL
+3. Go to **Jardin Beer > Settings** to configure your Untappd RSS feed URL
 4. Enter your RSS feed URL: `https://untappd.com/rss/user/YOUR_USERNAME`
 5. Configure sync frequency and other options
 6. Click "Save Settings"

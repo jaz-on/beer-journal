@@ -53,7 +53,7 @@ https://untappd.com/rss/user/{username}
 $rss = fetch_feed($rss_url);
 
 if (is_wp_error($rss)) {
-    error_log('Beer Journal: Failed to fetch RSS - ' . $rss->get_error_message());
+    error_log('Jardin Beer: Failed to fetch RSS - ' . $rss->get_error_message());
     return false;
 }
 ```
@@ -131,11 +131,11 @@ Skip expensive scraping if no new check-ins detected.
 $latest_guid = $rss->get_items()[0]->get_id();
 
 // Compare with last imported
-$last_guid = get_option('bj_last_imported_guid');
+$last_guid = get_option('jb_last_imported_guid');
 
 if ($latest_guid === $last_guid) {
     // No new check-ins
-    error_log('Beer Journal: No new check-ins, skipping sync');
+    error_log('Jardin Beer: No new check-ins, skipping sync');
     return;
 }
 
@@ -159,7 +159,7 @@ if ($latest_guid === $last_guid) {
 
 **Logic**:
 ```php
-$last_checkin_date = get_option('bj_last_checkin_date');
+$last_checkin_date = get_option('jb_last_checkin_date');
 $days_since_last = (time() - strtotime($last_checkin_date)) / DAY_IN_SECONDS;
 
 if ($days_since_last < 7) {
@@ -180,12 +180,12 @@ if ($days_since_last < 7) {
 
 **Custom Schedule**:
 ```php
-add_filter('cron_schedules', 'bj_add_cron_schedules');
+add_filter('cron_schedules', 'jb_add_cron_schedules');
 
-function bj_add_cron_schedules($schedules) {
+function jb_add_cron_schedules($schedules) {
     $schedules['sixhourly'] = [
         'interval' => 6 * HOUR_IN_SECONDS,
-        'display' => __('Every 6 Hours', 'beer-journal'),
+        'display' => __('Every 6 Hours', 'jardin-beer'),
     ];
     return $schedules;
 }
@@ -193,8 +193,8 @@ function bj_add_cron_schedules($schedules) {
 
 **Registration**:
 ```php
-wp_clear_scheduled_hook('bj_rss_sync');
-wp_schedule_event(time(), $schedule, 'bj_rss_sync');
+wp_clear_scheduled_hook('jb_rss_sync');
+wp_schedule_event(time(), $schedule, 'jb_rss_sync');
 ```
 
 ---
@@ -269,13 +269,13 @@ Prevent duplicate processing of RSS items by caching processed URLs. This ensure
 ### Cache Structure
 
 **Transient Cache** (Primary):
-- **Key**: `bj_untappd_rss_cache`
+- **Key**: `jb_untappd_rss_cache`
 - **TTL**: 6 hours (aligned with polling frequency)
 - **Format**: Array of check-in URLs (strings)
 - **Purpose**: Fast lookup for recent syncs
 
 **Persistent Cache** (Backup):
-- **Option**: `bj_untappd_rss_cache_persistent`
+- **Option**: `jb_untappd_rss_cache_persistent`
 - **Format**: Array of check-in URLs (strings)
 - **Purpose**: Recovery after server restart or transient expiration
 - **Update**: Saved after each successful sync
@@ -293,8 +293,8 @@ $cache = [
 ];
 
 // Stored as serialized array in WordPress
-set_transient('bj_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
-update_option('bj_untappd_rss_cache_persistent', $cache);
+set_transient('jb_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
+update_option('jb_untappd_rss_cache_persistent', $cache);
 ```
 
 ### Cache Operations
@@ -302,17 +302,17 @@ update_option('bj_untappd_rss_cache_persistent', $cache);
 #### Load Cache
 
 ```php
-function bj_load_rss_cache() {
+function jb_load_rss_cache() {
     // Try transient first (faster)
-    $cache = get_transient('bj_untappd_rss_cache');
+    $cache = get_transient('jb_untappd_rss_cache');
     
     if ($cache === false) {
         // Fallback to persistent option
-        $cache = get_option('bj_untappd_rss_cache_persistent', []);
+        $cache = get_option('jb_untappd_rss_cache_persistent', []);
         
         // Restore transient if persistent exists
         if (!empty($cache)) {
-            set_transient('bj_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
+            set_transient('jb_untappd_rss_cache', $cache, 6 * HOUR_IN_SECONDS);
         }
     }
     
@@ -324,21 +324,21 @@ function bj_load_rss_cache() {
 #### Save Cache
 
 ```php
-function bj_save_rss_cache($processed_urls) {
+function jb_save_rss_cache($processed_urls) {
     $urls_array = array_values($processed_urls); // Convert Set to array
     
     // Update transient (primary)
-    set_transient('bj_untappd_rss_cache', $urls_array, 6 * HOUR_IN_SECONDS);
+    set_transient('jb_untappd_rss_cache', $urls_array, 6 * HOUR_IN_SECONDS);
     
     // Update persistent option (backup)
-    update_option('bj_untappd_rss_cache_persistent', $urls_array);
+    update_option('jb_untappd_rss_cache_persistent', $urls_array);
 }
 ```
 
 #### Check if URL Processed
 
 ```php
-function bj_is_url_processed($url, $cache) {
+function jb_is_url_processed($url, $cache) {
     return isset($cache[$url]);
 }
 ```
@@ -351,13 +351,13 @@ function bj_is_url_processed($url, $cache) {
 
 **Manual**:
 - Admin action: "Clear RSS Cache"
-- Option: `bj_clear_rss_cache` (WP-CLI command)
+- Option: `jb_clear_rss_cache` (WP-CLI command)
 
 **Implementation**:
 ```php
-function bj_clear_rss_cache() {
-    delete_transient('bj_untappd_rss_cache');
-    delete_option('bj_untappd_rss_cache_persistent');
+function jb_clear_rss_cache() {
+    delete_transient('jb_untappd_rss_cache');
+    delete_option('jb_untappd_rss_cache_persistent');
 }
 ```
 
@@ -368,7 +368,7 @@ function bj_clear_rss_cache() {
 **Strategy**: Keep only last N URLs (e.g., 1000)
 
 ```php
-function bj_trim_rss_cache($cache, $max_size = 1000) {
+function jb_trim_rss_cache($cache, $max_size = 1000) {
     if (count($cache) > $max_size) {
         // Keep most recent URLs (assuming chronological order)
         return array_slice($cache, -$max_size, null, true);

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal provides numerous filters for customizing data, templates, and behavior. All filters are prefixed with `bj_`.
+Jardin Beer provides numerous filters for customizing data, templates, and behavior. All filters are prefixed with `jb_`.
 
 Note: Pour éviter les divergences, la source de vérité des filtres frontend est `docs/frontend/hooks-filters.md`. Cette page référence et complète, sans dupliquer toute la matière.
 
@@ -10,7 +10,7 @@ Note: Pour éviter les divergences, la source de vérité des filtres frontend e
 
 ### Check-in Template
 
-**Filter**: `bj_checkin_template`
+**Filter**: `jb_checkin_template`
 
 **Parameters**:
 - `$template` (string): Template path
@@ -18,10 +18,10 @@ Note: Pour éviter les divergences, la source de vérité des filtres frontend e
 
 **Usage**:
 ```php
-add_filter('bj_checkin_template', function($template, $post_id) {
+add_filter('jb_checkin_template', function($template, $post_id) {
     // Use custom template for high-rated check-ins
-    if (bj_get_rating($post_id, false) >= 4) {
-        return locate_template('beer-journal/single-featured.php');
+    if (jb_get_rating($post_id, false) >= 4) {
+        return locate_template('jardin-beer/single-featured.php');
     }
     return $template;
 }, 10, 2);
@@ -31,7 +31,7 @@ add_filter('bj_checkin_template', function($template, $post_id) {
 
 ### Check-in CSS Classes
 
-**Filter**: `bj_checkin_classes`
+**Filter**: `jb_checkin_classes`
 
 **Parameters**:
 - `$classes` (array): Array of CSS classes
@@ -39,10 +39,10 @@ add_filter('bj_checkin_template', function($template, $post_id) {
 
 **Usage**:
 ```php
-add_filter('bj_checkin_classes', function($classes, $post_id) {
+add_filter('jb_checkin_classes', function($classes, $post_id) {
     // Add custom class for high-rated check-ins
-    if (bj_get_rating($post_id, false) >= 4) {
-        $classes[] = 'bj-featured';
+    if (jb_get_rating($post_id, false) >= 4) {
+        $classes[] = 'jb-featured';
     }
     return $classes;
 }, 10, 2);
@@ -52,7 +52,7 @@ add_filter('bj_checkin_classes', function($classes, $post_id) {
 
 ### Check-in Data
 
-**Filter**: `bj_checkin_data`
+**Filter**: `jb_checkin_data`
 
 **Parameters**:
 - `$data` (array): Check-in data
@@ -60,7 +60,7 @@ add_filter('bj_checkin_classes', function($classes, $post_id) {
 
 **Usage**:
 ```php
-add_filter('bj_checkin_data', function($data, $post_id) {
+add_filter('jb_checkin_data', function($data, $post_id) {
     // Modify beer name
     $data['beer_name'] = strtoupper($data['beer_name']);
     return $data;
@@ -73,7 +73,7 @@ add_filter('bj_checkin_data', function($data, $post_id) {
 
 ### Rating Display
 
-**Filter**: `bj_rating_display`
+**Filter**: `jb_rating_display`
 
 **Parameters**:
 - `$output` (string): HTML output
@@ -83,7 +83,7 @@ add_filter('bj_checkin_data', function($data, $post_id) {
 
 **Usage**:
 ```php
-add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
+add_filter('jb_rating_display', function($output, $post_id, $raw, $rounded) {
     // Replace stars with custom icons
     $stars = str_repeat('🍺', $rounded);
     return '<div class="custom-rating">' . $stars . '</div>';
@@ -94,7 +94,7 @@ add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
 
 ### Rating Mapping
 
-**Filter**: `bj_rating_mapped`
+**Filter**: `jb_rating_mapped`
 
 **Parameters**:
 - `$rounded` (int): Rounded rating
@@ -102,7 +102,7 @@ add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
 
 **Usage**:
 ```php
-add_filter('bj_rating_mapped', function($rounded, $raw_rating) {
+add_filter('jb_rating_mapped', function($rounded, $raw_rating) {
     // Custom mapping: round up instead of down
     return ceil($raw_rating);
 }, 10, 2);
@@ -114,14 +114,14 @@ add_filter('bj_rating_mapped', function($rounded, $raw_rating) {
 
 ### Default RSS feed URL
 
-**Filter**: `bj_default_rss_feed_url`
+**Filter**: `jb_default_rss_feed_url`
 
 **Parameters**:
-- `$url` (string): Default Untappd RSS URL used when `bj_rss_feed_url` has never been saved, or when overriding via `BJ_RSS_FEED_URL` in `wp-config.php`.
+- `$url` (string): Default Untappd RSS URL used when `jb_rss_feed_url` has never been saved, or when overriding via `JB_RSS_FEED_URL` in `wp-config.php`.
 
 **Usage**:
 ```php
-add_filter( 'bj_default_rss_feed_url', function ( $url ) {
+add_filter( 'jb_default_rss_feed_url', function ( $url ) {
 	return 'https://untappd.com/rss/user/yourname';
 } );
 ```
@@ -130,14 +130,14 @@ add_filter( 'bj_default_rss_feed_url', function ( $url ) {
 
 ### RSS Item Parsed
 
-**Filter**: `bj_rss_item_parsed`
+**Filter**: `jb_rss_item_parsed`
 
 **Parameters**:
 - `$item` (array): Parsed RSS item data
 
 **Usage**:
 ```php
-add_filter('bj_rss_item_parsed', function($item) {
+add_filter('jb_rss_item_parsed', function($item) {
     // Modify parsed RSS item
     $item['custom_field'] = 'value';
     return $item;
@@ -148,14 +148,14 @@ add_filter('bj_rss_item_parsed', function($item) {
 
 ### Scraped Data
 
-**Filter**: `bj_scraped_data`
+**Filter**: `jb_scraped_data`
 
 **Parameters**:
 - `$data` (array): Scraped data
 
 **Usage**:
 ```php
-add_filter('bj_scraped_data', function($data) {
+add_filter('jb_scraped_data', function($data) {
     // Add custom field to scraped data
     $data['custom_field'] = 'value';
     return $data;
@@ -166,7 +166,7 @@ add_filter('bj_scraped_data', function($data) {
 
 ### Beer Name
 
-**Filter**: `bj_beer_name`
+**Filter**: `jb_beer_name`
 
 **Parameters**:
 - `$beer_name` (string): Beer name
@@ -174,7 +174,7 @@ add_filter('bj_scraped_data', function($data) {
 
 **Usage**:
 ```php
-add_filter('bj_beer_name', function($beer_name, $post_id) {
+add_filter('jb_beer_name', function($beer_name, $post_id) {
     // Modify beer name
     return strtoupper($beer_name);
 }, 10, 2);
@@ -184,7 +184,7 @@ add_filter('bj_beer_name', function($beer_name, $post_id) {
 
 ### Brewery Name
 
-**Filter**: `bj_brewery_name`
+**Filter**: `jb_brewery_name`
 
 **Parameters**:
 - `$brewery_name` (string): Brewery name
@@ -192,7 +192,7 @@ add_filter('bj_beer_name', function($beer_name, $post_id) {
 
 **Usage**:
 ```php
-add_filter('bj_brewery_name', function($brewery_name, $post_id) {
+add_filter('jb_brewery_name', function($brewery_name, $post_id) {
     // Modify brewery name
     return $brewery_name;
 }, 10, 2);
@@ -204,17 +204,17 @@ add_filter('bj_brewery_name', function($brewery_name, $post_id) {
 
 ### Archive Query Args
 
-**Filter**: `bj_archive_query_args`
+**Filter**: `jb_archive_query_args`
 
 **Parameters**:
 - `$args` (array): WP_Query arguments
 
 **Usage**:
 ```php
-add_filter('bj_archive_query_args', function($args) {
+add_filter('jb_archive_query_args', function($args) {
     // Only show check-ins with 3+ stars
     $args['meta_query'][] = [
-        'key' => '_bj_rating_rounded',
+        'key' => '_jb_rating_rounded',
         'value' => 3,
         'compare' => '>=',
     ];
@@ -226,14 +226,14 @@ add_filter('bj_archive_query_args', function($args) {
 
 ### Single Query Args
 
-**Filter**: `bj_single_query_args`
+**Filter**: `jb_single_query_args`
 
 **Parameters**:
 - `$args` (array): WP_Query arguments
 
 **Usage**:
 ```php
-add_filter('bj_single_query_args', function($args) {
+add_filter('jb_single_query_args', function($args) {
     // Modify single check-in query
     return $args;
 });
@@ -245,14 +245,14 @@ add_filter('bj_single_query_args', function($args) {
 
 ### Image URL
 
-**Filter**: `bj_image_url`
+**Filter**: `jb_image_url`
 
 **Parameters**:
 - `$url` (string): Image URL
 
 **Usage**:
 ```php
-add_filter('bj_image_url', function($url) {
+add_filter('jb_image_url', function($url) {
     // Modify image URL before download
     return $url;
 });
@@ -262,7 +262,7 @@ add_filter('bj_image_url', function($url) {
 
 ### Image Alt Text
 
-**Filter**: `bj_image_alt_text`
+**Filter**: `jb_image_alt_text`
 
 **Parameters**:
 - `$alt_text` (string): Alt text
@@ -270,9 +270,9 @@ add_filter('bj_image_url', function($url) {
 
 **Usage**:
 ```php
-add_filter('bj_image_alt_text', function($alt_text, $post_id) {
+add_filter('jb_image_alt_text', function($alt_text, $post_id) {
     // Customize alt text
-    return $alt_text . ' - Beer Journal';
+    return $alt_text . ' - Jardin Beer';
 }, 10, 2);
 ```
 
@@ -282,14 +282,14 @@ add_filter('bj_image_alt_text', function($alt_text, $post_id) {
 
 ### Settings Defaults
 
-**Filter**: `bj_settings_defaults`
+**Filter**: `jb_settings_defaults`
 
 **Parameters**:
 - `$defaults` (array): Default settings
 
 **Usage**:
 ```php
-add_filter('bj_settings_defaults', function($defaults) {
+add_filter('jb_settings_defaults', function($defaults) {
     // Modify default settings
     $defaults['sync_frequency'] = 'daily';
     return $defaults;
@@ -300,7 +300,7 @@ add_filter('bj_settings_defaults', function($defaults) {
 
 ### Settings Validation
 
-**Filter**: `bj_settings_validation`
+**Filter**: `jb_settings_validation`
 
 **Parameters**:
 - `$settings` (array): Settings to validate
@@ -308,7 +308,7 @@ add_filter('bj_settings_defaults', function($defaults) {
 
 **Usage**:
 ```php
-add_filter('bj_settings_validation', function($settings, $old_settings) {
+add_filter('jb_settings_validation', function($settings, $old_settings) {
     // Validate settings
     if (empty($settings['rss_feed_url'])) {
         return new WP_Error('invalid_settings', 'RSS feed URL required');
@@ -322,31 +322,31 @@ add_filter('bj_settings_validation', function($settings, $old_settings) {
 ## Complete Filter List
 
 ### Template Filters
-- `bj_checkin_template` - Template path
-- `bj_checkin_classes` - CSS classes
-- `bj_checkin_data` - Check-in data
+- `jb_checkin_template` - Template path
+- `jb_checkin_classes` - CSS classes
+- `jb_checkin_data` - Check-in data
 
 ### Rating Filters
-- `bj_rating_display` - Rating output
-- `bj_rating_mapped` - Rating mapping
+- `jb_rating_display` - Rating output
+- `jb_rating_mapped` - Rating mapping
 
 ### Data Filters
-- `bj_rss_item_parsed` - RSS item data
-- `bj_scraped_data` - Scraped data
-- `bj_beer_name` - Beer name
-- `bj_brewery_name` - Brewery name
+- `jb_rss_item_parsed` - RSS item data
+- `jb_scraped_data` - Scraped data
+- `jb_beer_name` - Beer name
+- `jb_brewery_name` - Brewery name
 
 ### Query Filters
-- `bj_archive_query_args` - Archive query
-- `bj_single_query_args` - Single query
+- `jb_archive_query_args` - Archive query
+- `jb_single_query_args` - Single query
 
 ### Image Filters
-- `bj_image_url` - Image URL
-- `bj_image_alt_text` - Alt text
+- `jb_image_url` - Image URL
+- `jb_image_alt_text` - Alt text
 
 ### Settings Filters
-- `bj_settings_defaults` - Default settings
-- `bj_settings_validation` - Settings validation
+- `jb_settings_defaults` - Default settings
+- `jb_settings_validation` - Settings validation
 
 ## Related Documentation
 

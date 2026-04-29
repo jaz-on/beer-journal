@@ -1,9 +1,9 @@
 ### intégration untappd — analyse, comparaison et plan documentaire
 
-Ce document synthétise l’implémentation Untappd issue du projet Eleventy archivé, la compare à Beer Journal (WordPress) et définit un plan documentaire avant toute génération de code.
+Ce document synthétise l’implémentation Untappd issue du projet Eleventy archivé, la compare à Jardin Beer (WordPress) et définit un plan documentaire avant toute génération de code.
 
 #### objectifs
-- Centraliser l’analyse fonctionnelle et technique utile à Beer Journal.
+- Centraliser l’analyse fonctionnelle et technique utile à Jardin Beer.
 - Définir clairement le modèle de données cible (contrat interne) et les pipelines d’ingestion.
 - Planifier les mises à jour de la documentation sans modifier le code.
 
@@ -16,8 +16,8 @@ Ce document synthétise l’implémentation Untappd issue du projet Eleventy arc
 - Tests unitaires sur le mapping, la coersion de types, la détection de doublons, etc.
 
 #### comparaison avec beer journal (wordpress)
-- Persistance : Beer Journal crée un CPT (ex. `beer_checkin`) + taxonomies + métas `_bj_*` (base de données), vs fichiers `.md` en Eleventy.
-- Standards : Beer Journal doit respecter WPCS, i18n (`beer-journal`), nonces/capabilities, sanitization/escaping, WP_Query, transients, pagination.
+- Persistance : Jardin Beer crée un CPT (ex. `beer_checkin`) + taxonomies + métas `_jb_*` (base de données), vs fichiers `.md` en Eleventy.
+- Standards : Jardin Beer doit respecter WPCS, i18n (`jardin-beer`), nonces/capabilities, sanitization/escaping, WP_Query, transients, pagination.
 - Orchestration : tâches WP‑Cron/CLI et pages admin natives (WordPress) vs orchestrateur JS.
 
 #### confirmations structurelles (cohérence avec la doc)
@@ -26,16 +26,16 @@ Ce document synthétise l’implémentation Untappd issue du projet Eleventy arc
   - `beer_style` (hiérarchique) — confirmé.
   - `brewery` (non hiérarchique) — confirmé.
   - `venue` (non hiérarchique, optionnel) — disponible.
-- Remarque : conserver ces noms (« beer_style », « brewery », « venue ») pour éviter les conflits. Ne pas préfixer les taxonomies en `bj_`.
+- Remarque : conserver ces noms (« beer_style », « brewery », « venue ») pour éviter les conflits. Ne pas préfixer les taxonomies en `jb_`.
 
-#### contrat de données interne proposé (Beer Journal)
+#### contrat de données interne proposé (Jardin Beer)
 Variables (inspirées de `BeerData`), avant mapping vers WP :
 - Obligatoires : `checkinId` (string), `title` (string), `brewery` (string), `checkinDate` (`YYYY-MM-DD`), `untappdUrl` (string).
 - Optionnelles : `style` (string), `rating` (float 0–5), `abv` (float), `ibu` (int), `beerUrl` (string), `breweryUrl` (string), `labelUrl` (string | local), `servingType` (string), `price` (string), `location` (string), `batch` (string), `brewDate` (`YYYY-MM-DD`), `bestBefore` (`YYYY-MM-DD`), `temperature` (string), `glassware` (string), `personalNotes` (markdown), `pairingSuggestions` (markdown), `availability` (markdown).
 
 Notes :
 - Normaliser en amont : dates, nombres, URLs absolues.
-- Garantir l’unicité par `checkinId` (clé primaire logique) au moment de l’insertion (méta `_bj_checkin_id`). 
+- Garantir l’unicité par `checkinId` (clé primaire logique) au moment de l’insertion (méta `_jb_checkin_id`). 
 
 #### pipelines d’ingestion (sans code, pour documentation)
 - RSS (quotidien) :
@@ -48,21 +48,21 @@ Notes :
   - Sortie : posts `beer_checkin` créés par lots (batch + pagination).
 
 #### anti‑doublons et exclusions
-- Anti‑doublons : recherche d’un post existant via méta `_bj_checkin_id == checkinId` avant insertion.
-- Exclusions : liste de `checkinId` à ignorer (option WordPress `bj_excluded_checkins` + UI admin).
-- Cache RSS : transient `bj_untappd_rss_cache` (TTL court) + option de sauvegarde durable en cas d’arrêt.
+- Anti‑doublons : recherche d’un post existant via méta `_jb_checkin_id == checkinId` avant insertion.
+- Exclusions : liste de `checkinId` à ignorer (option WordPress `jb_excluded_checkins` + UI admin).
+- Cache RSS : transient `jb_untappd_rss_cache` (TTL court) + option de sauvegarde durable en cas d’arrêt.
 
 #### mapping vers WordPress (cible)
 - CPT : `beer_checkin` (ou équivalent existant dans le projet).
-- Méta `_bj_*` :
-  - Identifiants/URLs : `_bj_checkin_id` (unique), `_bj_checkin_url`, `_bj_beer_id` (opt.), `_bj_brewery_id` (opt.).
-  - Notations : `_bj_rating_raw` (conserver la note Untappd brute), `_bj_rating_rounded` (conversion interne pour affichage/filtrage).
-  - Caractéristiques : `_bj_beer_abv`, `_bj_beer_ibu`, `_bj_beer_style` (redondant avec taxo pour recherche).
-  - Contexte : `_bj_serving_type`, `_bj_price`, `_bj_location`, `_bj_batch`, `_bj_brew_date`, `_bj_best_before`, `_bj_temperature`, `_bj_glassware`.
-  - Texte : `_bj_notes_md`, `_bj_pairing_md`, `_bj_availability_md`.
+- Méta `_jb_*` :
+  - Identifiants/URLs : `_jb_checkin_id` (unique), `_jb_checkin_url`, `_jb_beer_id` (opt.), `_jb_brewery_id` (opt.).
+  - Notations : `_jb_rating_raw` (conserver la note Untappd brute), `_jb_rating_rounded` (conversion interne pour affichage/filtrage).
+  - Caractéristiques : `_jb_beer_abv`, `_jb_beer_ibu`, `_jb_beer_style` (redondant avec taxo pour recherche).
+  - Contexte : `_jb_serving_type`, `_jb_price`, `_jb_location`, `_jb_batch`, `_jb_brew_date`, `_jb_best_before`, `_jb_temperature`, `_jb_glassware`.
+  - Texte : `_jb_notes_md`, `_jb_pairing_md`, `_jb_availability_md`.
 - Taxonomies : `beer_style` (hiérarchique), `brewery` (non hiérarchique), `venue` (optionnel).
 - Images (étiquettes) : par défaut, téléchargement dans la médiathèque (featured image) avec métas sur la pièce jointe :
-  - `_bj_image_hash` (MD5 pour déduplication) et `_bj_image_source_url` (URL source Untappd).
+  - `_jb_image_hash` (MD5 pour déduplication) et `_jb_image_source_url` (URL source Untappd).
   - Alternative configurable : ne pas télécharger et stocker uniquement l’URL distante (fallback).
 
 #### plan documentaire — modifications proposées (sans éditer maintenant)
@@ -76,7 +76,7 @@ Pour éviter les conflits, les mises à jour ci‑dessous sont proposées. Elles
 4) `docs/architecture/data-flow.md`
    - Schéma de bout en bout depuis Untappd → normalisation → `BeerData` → mapping CPT/méta/taxos → templates front.
 5) `docs/features/core-modules.md` et `docs/architecture/components.md`
-   - Lister les classes cibles WordPress : `BJ_Untappd_Sync`, `BJ_Untappd_RSS_Importer`, `BJ_Untappd_HTML_Parser`, `BJ_Untappd_CSV_Importer`, `BJ_Beer_Processor`, `BJ_Image_Handler`.
+   - Lister les classes cibles WordPress : `JB_Untappd_Sync`, `JB_Untappd_RSS_Importer`, `JB_Untappd_HTML_Parser`, `JB_Untappd_CSV_Importer`, `JB_Beer_Processor`, `JB_Image_Handler`.
 6) `docs/wordpress/hooks.md` et `docs/wordpress/filters.md`
    - Déclarer les hooks d’orchestration (WP‑Cron/CLI) et les filtres de mapping/validation.
 7) `docs/development/testing.md`
@@ -84,8 +84,8 @@ Pour éviter les conflits, les mises à jour ci‑dessous sont proposées. Elles
 8) `docs/features/checklist.md`
    - Ajouter une checklist d’intégration Untappd (clés, caches, exclusions, taxos, médias, i18n, sécurité, performances).
 
-#### normes et sécurité à respecter (rappel Beer Journal)
-- WPCS, PHPStan min niveau 5, préfixes `bj_`/`BJ_`/`_bj_`, i18n (`beer-journal`).
+#### normes et sécurité à respecter (rappel Jardin Beer)
+- WPCS, PHPStan min niveau 5, préfixes `jb_`/`JB_`/`_jb_`, i18n (`jardin-beer`).
 - Sanitization : `sanitize_text_field`, `absint`, `floatval`, `sanitize_email`, `esc_url_raw` (stockage).
 - Escaping : `esc_html`, `esc_attr`, `esc_url`, `wp_kses_post` (sortie).
 - Nonces/capabilities : tous formulaires/actions AJAX, `current_user_can()` pour opérations sensibles.
@@ -93,7 +93,7 @@ Pour éviter les conflits, les mises à jour ci‑dessous sont proposées. Elles
 
 #### décisions validées (intégrées à la doc)
 1) CPT/taxos : `beer_checkin`, taxonomies `beer_style`, `brewery`, `venue` (optionnel) — cohérent avec la documentation actuelle.
-2) Rating : conserver `_bj_rating_raw` et calculer `_bj_rating_rounded` pour l’usage interne Beer Journal.
+2) Rating : conserver `_jb_rating_raw` et calculer `_jb_rating_rounded` pour l’usage interne Jardin Beer.
 3) Import historique : parsing HTML autonome côté plugin (préférence : Symfony DomCrawler + CSS Selector, conforme à nos dépendances PHP modernes), CSV optionnel si nécessaire.
 4) Étiquettes (images) : par défaut, téléchargement dans la médiathèque + stockage de l’URL source et hash de déduplication ; option pour ne stocker qu’une URL distante si souhaité.
 5) Publication : statut `draft` par défaut pour tous les imports ; la publication dépendra de la complétude des données et/ou d’une action manuelle.

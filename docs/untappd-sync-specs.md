@@ -1,11 +1,11 @@
-# Plugin WordPress : Beer Journal
+# Plugin WordPress : Jardin Beer
 
 ## Spécifications Techniques Complètes
 
 ### Informations du projet
-- **Nom du plugin :** Beer Journal
-- **Slug WordPress.org :** `beer-journal`
-- **Display name :** Beer Journal for Untappd
+- **Nom du plugin :** Jardin Beer
+- **Slug WordPress.org :** `jardin-beer`
+- **Display name :** Jardin Beer for Untappd
 - **Conformité trademark :** ✅ Respect guidelines WordPress.org
 
 ### Contraintes du projet
@@ -31,7 +31,7 @@
 **Stratégie selon activité :**
 ```php
 // Récupérer le dernier check-in importé
-$last_checkin_date = get_option('bj_last_checkin_date');
+$last_checkin_date = get_option('jb_last_checkin_date');
 $days_since_last = (time() - strtotime($last_checkin_date)) / DAY_IN_SECONDS;
 
 if ($days_since_last < 7) {
@@ -46,8 +46,8 @@ if ($days_since_last < 7) {
 }
 
 // Enregistrer le schedule dynamique
-wp_clear_scheduled_hook('bj_rss_sync');
-wp_schedule_event(time(), $cron_schedule, 'bj_rss_sync');
+wp_clear_scheduled_hook('jb_rss_sync');
+wp_schedule_event(time(), $cron_schedule, 'jb_rss_sync');
 ```
 
 **Optimisation ressources :**
@@ -59,7 +59,7 @@ $rss = fetch_feed($rss_url);
 $latest_guid = $rss->get_items()[0]->get_id();
 
 // Comparer avec le dernier connu
-$last_imported_guid = get_option('bj_last_imported_guid');
+$last_imported_guid = get_option('jb_last_imported_guid');
 
 if ($latest_guid === $last_imported_guid) {
     // Rien de nouveau → SKIP (0 ressources supplémentaires)
@@ -112,7 +112,7 @@ Le flux RSS ne contient **PAS** :
 - Retry automatique en cas d'échec réseau (3 tentatives)
 - Si scraping échoue → check-in en draft + notification
 - Email de notification si échec persistant
-- Logs détaillés dans `wp-content/uploads/beer-journal/logs/`
+- Logs détaillés dans `wp-content/uploads/jardin-beer/logs/`
 
 ### B. Crawler Historique (manuel par batch avec checkpoints)
 
@@ -151,10 +151,10 @@ Le flux RSS ne contient **PAS** :
 // → 1 batch/heure jusqu'à complétion
 // → Notification email quand terminé
 
-wp_schedule_single_event(time() + HOUR_IN_SECONDS, 'bj_background_import_batch');
+wp_schedule_single_event(time() + HOUR_IN_SECONDS, 'jb_background_import_batch');
 
 // Checkpoint WordPress option
-update_option('bj_import_checkpoint', [
+update_option('jb_import_checkpoint', [
     'current_page' => 3,
     'total_imported' => 75,
     'last_checkin_id' => '123456',
@@ -205,7 +205,7 @@ IF (beer_name AND brewery_name AND date AND rating):
     
 ELSE IF (beer_name AND brewery_name AND date) BUT rating is NULL:
     → post_status = 'draft'
-    → add_post_meta('_bj_incomplete_reason', 'missing_rating')
+    → add_post_meta('_jb_incomplete_reason', 'missing_rating')
     → Ajouter à retry queue
     → notification admin
     
@@ -236,7 +236,7 @@ ELSE:
 - Dashboard notice : "X check-ins in draft awaiting review"
 - Email digest quotidien si drafts en attente (désactivable)
 - Link direct vers la liste des drafts filtrés
-- Compteur dans menu admin : "Beer Journal (3)" = 3 drafts
+- Compteur dans menu admin : "Jardin Beer (3)" = 3 drafts
 
 ---
 
@@ -246,8 +246,8 @@ ELSE:
 
 **Stockage double des notes :**
 ```php
-'_bj_rating_raw'      => 4.25,  // Note originale Untappd (float 0-5)
-'_bj_rating_rounded'  => 4,     // Note arrondie selon règles (int 0-5)
+'_jb_rating_raw'      => 4.25,  // Note originale Untappd (float 0-5)
+'_jb_rating_rounded'  => 4,     // Note arrondie selon règles (int 0-5)
 ```
 
 **Règles de mapping par défaut :**
@@ -268,8 +268,8 @@ ELSE:
  * @param float $raw_rating Original Untappd rating (0-5)
  * @return int Rounded rating (0-5)
  */
-function bj_map_rating($raw_rating) {
-    $rules = get_option('bj_rating_rules', [
+function jb_map_rating($raw_rating) {
+    $rules = get_option('jb_rating_rules', [
         ['min' => 0.0, 'max' => 0.9, 'round' => 0],
         ['min' => 1.0, 'max' => 1.9, 'round' => 1],
         ['min' => 2.0, 'max' => 2.9, 'round' => 2],
@@ -303,10 +303,10 @@ $default_labels = [
 ];
 
 // User can customize in admin settings (stored in DB)
-$rating_labels = get_option('bj_rating_labels', $default_labels);
+$rating_labels = get_option('jb_rating_labels', $default_labels);
 
 // Example French customization (user-defined):
-update_option('bj_rating_labels', [
+update_option('jb_rating_labels', [
     0 => 'Dégueulasse, à fuir comme la peste',
     1 => 'Soit je ne pouvais pas refuser, soit j\'étais ivre',
     2 => 'Ça passe quand y\'a pas d\'alternative',
@@ -378,29 +378,29 @@ Customize the description for each rating level (max 500 chars):
  * @param bool $show_label Show custom label
  * @param bool $show_raw Show original rating in tooltip
  */
-function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
-    $raw = get_post_meta($post_id, '_bj_rating_raw', true);
-    $rounded = get_post_meta($post_id, '_bj_rating_rounded', true);
-    $labels = get_option('bj_rating_labels', []);
+function jb_display_rating($post_id, $show_label = true, $show_raw = true) {
+    $raw = get_post_meta($post_id, '_jb_rating_raw', true);
+    $rounded = get_post_meta($post_id, '_jb_rating_rounded', true);
+    $labels = get_option('jb_rating_labels', []);
     
-    $output = '<div class="bj-rating">';
+    $output = '<div class="jb-rating">';
     
     // Stars
     $stars = str_repeat('⭐', $rounded);
     if ($show_raw && $raw != $rounded) {
-        $output .= '<span class="bj-stars" title="Original rating: ' . esc_attr($raw) . '">' . $stars . '</span>';
+        $output .= '<span class="jb-stars" title="Original rating: ' . esc_attr($raw) . '">' . $stars . '</span>';
     } else {
-        $output .= '<span class="bj-stars">' . $stars . '</span>';
+        $output .= '<span class="jb-stars">' . $stars . '</span>';
     }
     
     // Label
     if ($show_label && !empty($labels[$rounded])) {
-        $output .= '<p class="bj-rating-label">' . esc_html($labels[$rounded]) . '</p>';
+        $output .= '<p class="jb-rating-label">' . esc_html($labels[$rounded]) . '</p>';
     }
     
     $output .= '</div>';
     
-    return apply_filters('bj_rating_display', $output, $post_id, $raw, $rounded);
+    return apply_filters('jb_rating_display', $output, $post_id, $raw, $rounded);
 }
 ```
 
@@ -456,7 +456,7 @@ Auto-création immédiate (optionnel dans settings)
 /**
  * Auto-create taxonomy terms with admin notification
  */
-function bj_assign_taxonomy($post_id, $taxonomy, $term_name) {
+function jb_assign_taxonomy($post_id, $taxonomy, $term_name) {
     if (empty($term_name)) {
         return;
     }
@@ -472,12 +472,12 @@ function bj_assign_taxonomy($post_id, $taxonomy, $term_name) {
         $term = wp_insert_term($term_name, $taxonomy);
         
         if (is_wp_error($term)) {
-            error_log("Beer Journal: Failed to create term {$term_name}: " . $term->get_error_message());
+            error_log("Jardin Beer: Failed to create term {$term_name}: " . $term->get_error_message());
             return;
         }
         
         // Log for admin notification
-        $new_terms = get_option('bj_new_terms_created', []);
+        $new_terms = get_option('jb_new_terms_created', []);
         $new_terms[] = [
             'taxonomy' => $taxonomy,
             'term' => $term_name,
@@ -485,10 +485,10 @@ function bj_assign_taxonomy($post_id, $taxonomy, $term_name) {
             'created_at' => current_time('mysql'),
             'source_checkin' => $post_id,
         ];
-        update_option('bj_new_terms_created', $new_terms);
+        update_option('jb_new_terms_created', $new_terms);
         
         // Trigger admin notice (cleared after viewing)
-        set_transient('bj_new_terms_notice', count($new_terms), WEEK_IN_SECONDS);
+        set_transient('jb_new_terms_notice', count($new_terms), WEEK_IN_SECONDS);
     }
     
     // Assign term to post
@@ -498,10 +498,10 @@ function bj_assign_taxonomy($post_id, $taxonomy, $term_name) {
 
 **Admin notice pour review/merge :**
 ```php
-add_action('admin_notices', 'bj_new_terms_admin_notice');
+add_action('admin_notices', 'jb_new_terms_admin_notice');
 
-function bj_new_terms_admin_notice() {
-    $count = get_transient('bj_new_terms_notice');
+function jb_new_terms_admin_notice() {
+    $count = get_transient('jb_new_terms_notice');
     if (!$count) {
         return;
     }
@@ -510,7 +510,7 @@ function bj_new_terms_admin_notice() {
     
     printf(
         '<div class="notice notice-info is-dismissible">
-            <p><strong>Beer Journal:</strong> %d new taxonomy term(s) created during import. 
+            <p><strong>Jardin Beer:</strong> %d new taxonomy term(s) created during import. 
             <a href="%s">Review and merge duplicates if needed</a></p>
         </div>',
         absint($count),
@@ -523,52 +523,52 @@ function bj_new_terms_admin_notice() {
 
 **Identifiants uniques :**
 ```php
-'_bj_checkin_id'         // string - UNIQUE (ex: 1527514863)
-'_bj_beer_id'            // int (Untappd beer ID)
-'_bj_brewery_id'         // int (Untappd brewery ID)
-'_bj_checkin_url'        // URL du check-in original
+'_jb_checkin_id'         // string - UNIQUE (ex: 1527514863)
+'_jb_beer_id'            // int (Untappd beer ID)
+'_jb_brewery_id'         // int (Untappd brewery ID)
+'_jb_checkin_url'        // URL du check-in original
 ```
 
 **Données bière :**
 ```php
-'_bj_beer_name'          // string
-'_bj_brewery_name'       // string
-'_bj_beer_style'         // string (redondant avec taxo, pour recherche)
-'_bj_beer_abv'           // float (ex: 5.5)
-'_bj_beer_ibu'           // int (ex: 45)
-'_bj_beer_description'   // text longue (description officielle)
+'_jb_beer_name'          // string
+'_jb_brewery_name'       // string
+'_jb_beer_style'         // string (redondant avec taxo, pour recherche)
+'_jb_beer_abv'           // float (ex: 5.5)
+'_jb_beer_ibu'           // int (ex: 45)
+'_jb_beer_description'   // text longue (description officielle)
 ```
 
 **Données check-in :**
 ```php
-'_bj_rating'             // float (0-5, ex: 4.25) - OBLIGATOIRE
-'_bj_serving_type'       // string (Draft, Bottle, Can, Cask)
-'_bj_purchase_venue'     // string (si différent du lieu de dégustation)
-'_bj_checkin_date'       // datetime ISO 8601
+'_jb_rating'             // float (0-5, ex: 4.25) - OBLIGATOIRE
+'_jb_serving_type'       // string (Draft, Bottle, Can, Cask)
+'_jb_purchase_venue'     // string (si différent du lieu de dégustation)
+'_jb_checkin_date'       // datetime ISO 8601
 ```
 
 **Lieu de consommation :**
 ```php
-'_bj_venue_name'         // string
-'_bj_venue_city'         // string
-'_bj_venue_country'      // string
-'_bj_venue_lat'          // float (optionnel - pour future map)
-'_bj_venue_lng'          // float (optionnel - pour future map)
+'_jb_venue_name'         // string
+'_jb_venue_city'         // string
+'_jb_venue_country'      // string
+'_jb_venue_lat'          // float (optionnel - pour future map)
+'_jb_venue_lng'          // float (optionnel - pour future map)
 ```
 
 **Données sociales :**
 ```php
-'_bj_toast_count'        // int (nombre de likes)
-'_bj_comment_count'      // int (nombre de commentaires)
-'_bj_badges_earned'      // array (badges débloqués - Phase 3)
+'_jb_toast_count'        // int (nombre de likes)
+'_jb_comment_count'      // int (nombre de commentaires)
+'_jb_badges_earned'      // array (badges débloqués - Phase 3)
 ```
 
 **Métadonnées techniques :**
 ```php
-'_bj_source'             // string ('rss' ou 'crawler')
-'_bj_scraped_at'         // datetime (dernière tentative de scraping)
-'_bj_scraping_attempts'  // int (nombre de tentatives)
-'_bj_incomplete_reason'  // string (pourquoi en draft)
+'_jb_source'             // string ('rss' ou 'crawler')
+'_jb_scraped_at'         // datetime (dernière tentative de scraping)
+'_jb_scraping_attempts'  // int (nombre de tentatives)
+'_jb_incomplete_reason'  // string (pourquoi en draft)
 ```
 
 ---
@@ -576,8 +576,8 @@ function bj_new_terms_admin_notice() {
 ## 3. Structure du Plugin
 
 ```
-beer-journal/
-├── beer-journal.php                   # Main plugin file (WordPress.org ready)
+jardin-beer/
+├── jardin-beer.php                   # Main plugin file (WordPress.org ready)
 ├── readme.txt                         # WordPress.org readme (required)
 ├── LICENSE                            # GPL v2+ (required)
 ├── composer.json                      # PHP Dependencies (Symfony DomCrawler)
@@ -665,9 +665,9 @@ beer-journal/
 │       └── stats-dashboard/
 │
 ├── languages/
-│   ├── beer-journal.pot              # Translation template (generated)
-│   ├── beer-journal-fr_FR.po         # French translation (optional)
-│   └── beer-journal-fr_FR.mo         # Compiled French translation
+│   ├── jardin-beer.pot              # Translation template (generated)
+│   ├── jardin-beer-fr_FR.po         # French translation (optional)
+│   └── jardin-beer-fr_FR.mo         # Compiled French translation
 │
 └── tests/                            # Unit tests (optional but recommended)
     ├── bootstrap.php
@@ -749,7 +749,7 @@ beer-journal/
 
 ## 4. Blocks Gutenberg (optionnels mais recommandés)
 
-### Block 1 : `beer-journal/checkins-list`
+### Block 1 : `jardin-beer/checkins-list`
 
 **Paramètres configurables :**
 - Nombre de check-ins à afficher (défaut: 12)
@@ -767,7 +767,7 @@ beer-journal/
   - Timeline chronologique
   - Masonry (Pinterest-like)
 
-### Block 2 : `beer-journal/checkin-card`
+### Block 2 : `jardin-beer/checkin-card`
 
 **Éléments affichés :**
 - Photo de la bière (avec fallback)
@@ -780,7 +780,7 @@ beer-journal/
 - Lieu (si présent)
 - Lien vers check-in complet
 
-### Block 3 : `beer-journal/stats-dashboard`
+### Block 3 : `jardin-beer/stats-dashboard`
 
 **Statistiques calculées :**
 - Total de check-ins
@@ -970,40 +970,40 @@ Photo | Beer Name | Brewery | Style | Rating | ABV | Date | Venue
 ### Hooks de customisation
 ```php
 // Avant la liste de check-ins
-do_action('bj_before_checkins_list');
+do_action('jb_before_checkins_list');
 
 // Après chaque check-in individuel
-do_action('bj_after_checkin_card', $post_id);
+do_action('jb_after_checkin_card', $post_id);
 
 // Modifier le template chargé
-$template = apply_filters('bj_checkin_template', $template, $post_id);
+$template = apply_filters('jb_checkin_template', $template, $post_id);
 
 // Modifier les classes CSS
-$classes = apply_filters('bj_checkin_classes', $classes, $post_id);
+$classes = apply_filters('jb_checkin_classes', $classes, $post_id);
 
 // Modifier les données affichées
-$checkin_data = apply_filters('bj_checkin_data', $data, $post_id);
+$checkin_data = apply_filters('jb_checkin_data', $data, $post_id);
 ```
 
 ### Template Tags disponibles
 ```php
 // Récupérer toutes les métadonnées
-bj_get_checkin_data($post_id);
+jb_get_checkin_data($post_id);
 
 // Afficher la note en étoiles
-bj_rating_stars($rating, $echo = true);
+jb_rating_stars($rating, $echo = true);
 
 // Afficher le style de bière
-bj_beer_style($post_id, $link = true);
+jb_beer_style($post_id, $link = true);
 
 // Afficher la brasserie
-bj_brewery_link($post_id);
+jb_brewery_link($post_id);
 
 // Afficher le lieu
-bj_venue_info($post_id);
+jb_venue_info($post_id);
 
 // Afficher l'image de la bière
-bj_beer_image($post_id, $size = 'medium');
+jb_beer_image($post_id, $size = 'medium');
 ```
 
 ---
@@ -1041,22 +1041,22 @@ bj_beer_image($post_id, $size = 'medium');
 ### Caching
 ```php
 // Cache des statistiques (1 heure)
-$stats = wp_cache_get('bj_global_stats', 'beer-journal');
+$stats = wp_cache_get('jb_global_stats', 'jardin-beer');
 if (false === $stats) {
     $stats = calculate_stats();
-    wp_cache_set('bj_global_stats', $stats, 'beer-journal', HOUR_IN_SECONDS);
+    wp_cache_set('jb_global_stats', $stats, 'jardin-beer', HOUR_IN_SECONDS);
 }
 
 // Transients pour données lourdes
-set_transient('bj_top_breweries', $data, DAY_IN_SECONDS);
+set_transient('jb_top_breweries', $data, DAY_IN_SECONDS);
 ```
 
 ### Index database
 ```sql
 -- Index unique sur l'ID Untappd check-in
 ALTER TABLE wp_postmeta 
-ADD UNIQUE INDEX bj_checkin_id (meta_key, meta_value(191))
-WHERE meta_key = '_bj_checkin_id';
+ADD UNIQUE INDEX jb_checkin_id (meta_key, meta_value(191))
+WHERE meta_key = '_jb_checkin_id';
 
 -- Index composé pour recherches
 ALTER TABLE wp_posts 
@@ -1232,34 +1232,34 @@ if ($attempts > 3) {
 
 ### Full i18n Implementation
 
-**Text Domain : `beer-journal`**
+**Text Domain : `jardin-beer`**
 
 **All user-facing strings must be translatable :**
 ```php
 // Single string
-__('Beer Check-ins', 'beer-journal')
+__('Beer Check-ins', 'jardin-beer')
 
 // String with output
-_e('Import Historical Check-ins', 'beer-journal')
+_e('Import Historical Check-ins', 'jardin-beer')
 
 // String with context
-_x('Brewery', 'taxonomy singular name', 'beer-journal')
+_x('Brewery', 'taxonomy singular name', 'jardin-beer')
 
 // Plural forms
-_n('%s check-in', '%s check-ins', $count, 'beer-journal')
+_n('%s check-in', '%s check-ins', $count, 'jardin-beer')
 
 // Escaped output
-esc_html__('Rating System', 'beer-journal')
-esc_attr__('Beer photo', 'beer-journal')
+esc_html__('Rating System', 'jardin-beer')
+esc_attr__('Beer photo', 'jardin-beer')
 ```
 
 **Load text domain in main plugin file :**
 ```php
-add_action('plugins_loaded', 'bj_load_textdomain');
+add_action('plugins_loaded', 'jb_load_textdomain');
 
-function bj_load_textdomain() {
+function jb_load_textdomain() {
     load_plugin_textdomain(
-        'beer-journal',
+        'jardin-beer',
         false,
         dirname(plugin_basename(__FILE__)) . '/languages/'
     );
@@ -1269,7 +1269,7 @@ function bj_load_textdomain() {
 **Generate .pot file for translators :**
 ```bash
 # Using WP-CLI
-wp i18n make-pot . languages/beer-journal.pot
+wp i18n make-pot . languages/jardin-beer.pot
 
 # Or manually via Poedit
 ```
@@ -1277,7 +1277,7 @@ wp i18n make-pot . languages/beer-journal.pot
 ### WordPress.org Submission Checklist
 
 **✅ Required Files :**
-- `beer-journal.php` - Main file with standard headers
+- `jardin-beer.php` - Main file with standard headers
 - `readme.txt` - WordPress.org format (see below)
 - `LICENSE` - GPL v2 or later full text
 
@@ -1292,7 +1292,7 @@ wp i18n make-pot . languages/beer-journal.pot
 
 **✅ readme.txt Format :**
 ```
-=== Beer Journal for Untappd ===
+=== Jardin Beer for Untappd ===
 Contributors: jazon
 Donate link: https://example.com/
 Tags: beer, untappd, checkin, brewery, rating
@@ -1307,13 +1307,13 @@ Import and display your Untappd beer check-ins on your WordPress site.
 
 == Description ==
 
-Beer Journal allows you to automatically sync your Untappd check-ins to your WordPress site...
+Jardin Beer allows you to automatically sync your Untappd check-ins to your WordPress site...
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/beer-journal/`
+1. Upload the plugin files to `/wp-content/plugins/jardin-beer/`
 2. Activate the plugin through the 'Plugins' screen
-3. Go to Beer Journal > Settings to configure
+3. Go to Jardin Beer > Settings to configure
 
 == Frequently Asked Questions ==
 
@@ -1360,11 +1360,11 @@ echo esc_attr($beer_style);
 echo esc_url($checkin_url);
 
 // Nonce verification
-check_admin_referer('bj_import_action', 'bj_import_nonce');
+check_admin_referer('jb_import_action', 'jb_import_nonce');
 
 // Capability check
 if (!current_user_can('manage_options')) {
-    wp_die(__('Insufficient permissions', 'beer-journal'));
+    wp_die(__('Insufficient permissions', 'jardin-beer'));
 }
 
 // Use WP HTTP API (not curl)

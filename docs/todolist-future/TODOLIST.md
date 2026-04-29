@@ -16,7 +16,7 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 - [ ] Choisir la stack graphiques (**Chart.js** ou dépendance embarquée légère compatible admin WP).
 - [ ] Écran dédié ou onglet admin « Statistics » avec graphiques interactifs (filtres date, taxonomie).
 - [ ] **Widget tableau de bord** WordPress (résumé + lien vers l’écran complet).
-- [ ] Performance : requêtes agrégées, transients, invalidation cohérente avec `bj_invalidate_stats_cache` / imports.
+- [ ] Performance : requêtes agrégées, transients, invalidation cohérente avec `jb_invalidate_stats_cache` / imports.
 - [ ] Accessibilité : données tabulaires en secours pour les graphiques.
 
 ---
@@ -25,11 +25,11 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 **Objectif** : sauvegarder et réinjecter des données sans passer uniquement par Untappd.
 
-- [ ] **Export CSV** : colonnes check-in (meta `_bj_*`, taxonomies, dates) ; sélection plage de posts.
+- [ ] **Export CSV** : colonnes check-in (meta `_jb_*`, taxonomies, dates) ; sélection plage de posts.
 - [ ] **Export JSON** : schéma versionné (`schema_version`) pour évolutions futures.
 - [ ] **Import générique** : mapping colonnes JSON/CSV ↔ champs plugin ; validation, mode dry-run, rapport d’erreurs.
-- [ ] Corrélation avec `_bj_checkin_id` / dédup ; option mise à jour vs création.
-- [ ] Capabilities dédiées (`export_beer_journal`, `import_beer_journal`) ou réutilisation `manage_options` + filtre.
+- [ ] Corrélation avec `_jb_checkin_id` / dédup ; option mise à jour vs création.
+- [ ] Capabilities dédiées (`export_jardin_beer`, `import_jardin_beer`) ou réutilisation `manage_options` + filtre.
 - [ ] Documentation utilisateur (formats, exemples).
 
 ---
@@ -40,7 +40,7 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 - [ ] **BeerAdvocate** : faisabilité (API / HTML / légal), périmètre MVP d’intégration.
 - [ ] **RateBeer** : idem.
-- [ ] **Import universel** : normalisateur commun (même pipeline que CSV JSON → `BJ_Importer`) ; plugins / filtres `bj_import_row`.
+- [ ] **Import universel** : normalisateur commun (même pipeline que CSV JSON → `JB_Importer`) ; plugins / filtres `jb_import_row`.
 - [ ] Journalisation, rate limits, et positionnement légal (ToS par source).
 
 ---
@@ -60,7 +60,7 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 **Objectif** : filtrer les archives listes (grid/table) sans recharger toute la page si possible.
 
-- [ ] UI filtres (étoiles min/max, ou buckets alignés sur `bj_rating_rules`).
+- [ ] UI filtres (étoiles min/max, ou buckets alignés sur `jb_rating_rules`).
 - [ ] Endpoint AJAX ou requête `WP_Query` + fragment HTML ou JSON.
 - [ ] Compatibilité SEO : URL query args (`?min_rating=3`) vs pur AJAX ; pagination.
 - [ ] Cache / perfs sur grandes listes.
@@ -69,10 +69,10 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 ## 6. Recalcul des notes sur les posts existants
 
-**Objectif** : après changement des règles `bj_rating_rules`, mettre à jour `_bj_rating_rounded` (et affichage) sans ré-importer depuis Untappd.
+**Objectif** : après changement des règles `jb_rating_rules`, mettre à jour `_jb_rating_rounded` (et affichage) sans ré-importer depuis Untappd.
 
 - [ ] Commande WP-CLI ou outil admin « Recalculer » avec batch + progression.
-- [ ] Utiliser `_bj_rating_raw` + règles courantes ; conserver traçabilité (log ou option « dernière regénération »).
+- [ ] Utiliser `_jb_rating_raw` + règles courantes ; conserver traçabilité (log ou option « dernière regénération »).
 - [ ] Gérer les posts sans note brute (brouillons, incomplets).
 
 ---
@@ -81,7 +81,7 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 **Objectif** : exploiter les badges déjà envisagés en méta sérialisée pour un affichage futur.
 
-- [ ] Confirmer / compléter le schéma méta (`_bj_badges_earned` ou équivalent dans `docs/db/meta-fields.md`).
+- [ ] Confirmer / compléter le schéma méta (`_jb_badges_earned` ou équivalent dans `docs/db/meta-fields.md`).
 - [ ] Remplir le champ à l’import / scrape si Untappd expose les badges sur la page check-in.
 - [ ] Rendu front (liste, icônes CDN Untappd si autorisé) + option on/off dans les réglages.
 - [ ] Accessibilité et perf (lazy load).
@@ -92,7 +92,7 @@ Ne pas traiter comme livrable v1 ; prioriser et découper en releases au fil de 
 
 **Objectif** : aligner la doc sur le backlog ci-dessus sans tout refaire `codebase-audit-plan.md`.
 
-- [ ] **Shortcodes** : documenter les signatures prévues (`[beer_journal_*]`), attributs, exemples.
+- [ ] **Shortcodes** : documenter les signatures prévues (`[jardin_beer_*]`), attributs, exemples.
 - [ ] **Gutenberg** : liste des blocs cibles, mapping design/code, guide d’extension.
 - [ ] **Fichiers / pages manquants** : extraire de `docs/codebase-audit-plan.md` les entrées encore pertinentes (chemins `docs/frontend/gutenberg-blocks.md`, etc.) ; créer les stubs ou marquer « obsolète ».
 - [ ] Liens depuis README / roadmap vers ce fichier pour éviter la dérive.

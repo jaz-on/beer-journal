@@ -1,6 +1,6 @@
 # Workflow de documentation
 
-Ce document décrit le workflow de documentation pour le plugin Beer Journal.
+Ce document décrit le workflow de documentation pour le plugin Jardin Beer.
 
 > **Mise à jour 2026-04 :** il n’y a plus de branche Git nommée `docs`. La doc est dans le dossier `docs/` sur **`dev`** puis **`main`**. Voir aussi [DEVELOP_BRANCH.md](DEVELOP_BRANCH.md) et [DEVELOPMENT.md](../../DEVELOPMENT.md).
 
@@ -104,7 +104,7 @@ Valide la structure, les liens et la cohérence :
 Vérifie :
 - Liens markdown valides
 - Syntaxe Mermaid correcte
-- Cohérence des préfixes (bj_, BJ_, _bj_)
+- Cohérence des préfixes (jb_, JB_, _jb_)
 - Présence des fichiers requis
 
 ### Script d'analyse
@@ -116,8 +116,8 @@ php scripts/analyze-docs.php
 ```
 
 Extrait :
-- Composants documentés (classes BJ_*)
-- Fonctions documentées (bj_*)
+- Composants documentés (classes JB_*)
+- Fonctions documentées (jb_*)
 - Hooks WordPress
 - Dépendances
 
@@ -144,7 +144,7 @@ Pour créer un plan de développement standardisé, utiliser le [Template de pla
 
 - [ ] Tous les liens fonctionnent
 - [ ] Diagrammes Mermaid valides
-- [ ] Préfixes cohérents (bj_, BJ_, _bj_)
+- [ ] Préfixes cohérents (jb_, JB_, _jb_)
 - [ ] Références croisées correctes
 - [ ] Script de validation passe
 - [ ] Documentation à jour avec le code

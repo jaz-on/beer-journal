@@ -2,7 +2,7 @@
 /**
  * Taxonomy archive: beer_style.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 get_header();
@@ -13,8 +13,8 @@ get_header();
 			<h1 class="page-title"><?php single_term_title(); ?></h1>
 		</header>
 		<?php
-		$bj_empty_message = __( 'No check-ins found.', 'beer-journal' );
-		include BJ_PLUGIN_DIR . 'public/partials/archive-loop.php';
+		$jb_empty_message = __( 'No check-ins found.', 'jardin-beer' );
+		include JB_PLUGIN_DIR . 'public/partials/archive-loop.php';
 		?>
 	</main>
 </div>

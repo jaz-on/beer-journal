@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal uses WordPress's native database structure with Custom Post Types, Taxonomies, and Post Meta. No custom tables are created - everything leverages WordPress core functionality.
+Jardin Beer uses WordPress's native database structure with Custom Post Types, Taxonomies, and Post Meta. No custom tables are created - everything leverages WordPress core functionality.
 
 ## WordPress Core Tables Used
 
@@ -25,7 +25,7 @@ Stores all custom metadata for check-ins
 **Key Fields**:
 - `meta_id`: Meta ID (primary key)
 - `post_id`: Foreign key to `wp_posts.ID`
-- `meta_key`: Meta field name (prefixed with `_bj_`)
+- `meta_key`: Meta field name (prefixed with `_jb_`)
 - `meta_value`: Meta field value (serialized for arrays)
 
 See [Meta Fields Documentation](meta-fields.md) for complete list.
@@ -62,7 +62,7 @@ Stores plugin settings and configuration
 
 **Key Fields**:
 - `option_id`: Option ID (primary key)
-- `option_name`: Option name (prefixed with `bj_`)
+- `option_name`: Option name (prefixed with `jb_`)
 - `option_value`: Option value (serialized for arrays/objects)
 - `autoload`: Whether to autoload ('yes' or 'no')
 
@@ -75,8 +75,8 @@ Stores image metadata
 - `_wp_attachment_image_alt`: Alt text
 - `_wp_attached_file`: File path
 - `_wp_attachment_metadata`: Serialized array with image sizes
-- `_bj_image_hash`: MD5 hash for duplicate detection
-- `_bj_image_source_url`: Original Untappd URL
+- `_jb_image_hash`: MD5 hash for duplicate detection
+- `_jb_image_source_url`: Original Untappd URL
 
 ## Custom Post Type: `beer_checkin`
 
@@ -146,7 +146,7 @@ Untappd Check-in
 Scraped Data
     ↓
 WordPress Post (beer)
-    ├── Post Meta (all _bj_* fields)
+    ├── Post Meta (all _jb_* fields)
     ├── Taxonomies (beer_style, brewery, venue)
     └── Featured Image (attachment)
 ```

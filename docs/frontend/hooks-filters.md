@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal provides numerous hooks (actions) and filters for customization. All hooks are prefixed with `bj_` to avoid conflicts.
+Jardin Beer provides numerous hooks (actions) and filters for customization. All hooks are prefixed with `jb_` to avoid conflicts.
 
 Note: This page is the source of truth for frontend hooks/filters. Pages in `docs/wordpress/*.md` should reference this document to avoid duplication.
 
@@ -18,12 +18,12 @@ Actions allow you to execute code at specific points in the plugin execution.
  * 
  * @param WP_Query $query The query object
  */
-do_action('bj_before_checkins_list', $query);
+do_action('jb_before_checkins_list', $query);
 ```
 
 **Usage**:
 ```php
-add_action('bj_before_checkins_list', function($query) {
+add_action('jb_before_checkins_list', function($query) {
     // Add custom content before list
     echo '<div class="custom-header">Custom Header</div>';
 });
@@ -39,12 +39,12 @@ add_action('bj_before_checkins_list', function($query) {
  * 
  * @param int $post_id Post ID
  */
-do_action('bj_after_checkin_card', $post_id);
+do_action('jb_after_checkin_card', $post_id);
 ```
 
 **Usage**:
 ```php
-add_action('bj_after_checkin_card', function($post_id) {
+add_action('jb_after_checkin_card', function($post_id) {
     // Add custom content after each card
     echo '<div class="custom-footer">Custom Footer</div>';
 });
@@ -61,12 +61,12 @@ add_action('bj_after_checkin_card', function($post_id) {
  * @param int   $post_id Post ID
  * @param array $data    Imported data
  */
-do_action('bj_after_checkin_imported', $post_id, $data);
+do_action('jb_after_checkin_imported', $post_id, $data);
 ```
 
 **Usage**:
 ```php
-add_action('bj_after_checkin_imported', function($post_id, $data) {
+add_action('jb_after_checkin_imported', function($post_id, $data) {
     // Send notification, update external system, etc.
     wp_mail('admin@example.com', 'New Check-in', 'Check-in imported: ' . $data['beer_name']);
 });
@@ -83,7 +83,7 @@ add_action('bj_after_checkin_imported', function($post_id, $data) {
  * @param int   $count        Number of check-ins imported
  * @param array $imported_ids Array of post IDs
  */
-do_action('bj_after_batch_import', $count, $imported_ids);
+do_action('jb_after_batch_import', $count, $imported_ids);
 ```
 
 ---
@@ -94,7 +94,7 @@ do_action('bj_after_batch_import', $count, $imported_ids);
 /**
  * Fired before RSS sync starts
  */
-do_action('bj_before_rss_sync');
+do_action('jb_before_rss_sync');
 ```
 
 ---
@@ -107,7 +107,7 @@ do_action('bj_before_rss_sync');
  * 
  * @param int $imported_count Number of check-ins imported
  */
-do_action('bj_after_rss_sync', $imported_count);
+do_action('jb_after_rss_sync', $imported_count);
 ```
 
 ---
@@ -123,7 +123,7 @@ do_action('bj_after_rss_sync', $imported_count);
  * @param int    $post_id  Post ID
  * @return string
  */
-apply_filters('bj_checkin_content', $content, $post_id);
+apply_filters('jb_checkin_content', $content, $post_id);
 ```
 
 ---
@@ -140,15 +140,15 @@ Filters allow you to modify data before it's used or displayed.
  * @param int    $post_id  Post ID
  * @return string Modified template path
  */
-apply_filters('bj_checkin_template', $template, $post_id);
+apply_filters('jb_checkin_template', $template, $post_id);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_checkin_template', function($template, $post_id) {
+add_filter('jb_checkin_template', function($template, $post_id) {
     // Use custom template for high-rated check-ins
-    if (bj_get_rating($post_id, false) >= 4) {
-        return locate_template('beer-journal/single-featured.php');
+    if (jb_get_rating($post_id, false) >= 4) {
+        return locate_template('jardin-beer/single-featured.php');
     }
     return $template;
 }, 10, 2);
@@ -166,15 +166,15 @@ add_filter('bj_checkin_template', function($template, $post_id) {
  * @param int   $post_id Post ID
  * @return array Modified classes
  */
-apply_filters('bj_checkin_classes', $classes, $post_id);
+apply_filters('jb_checkin_classes', $classes, $post_id);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_checkin_classes', function($classes, $post_id) {
+add_filter('jb_checkin_classes', function($classes, $post_id) {
     // Add custom class for high-rated check-ins
-    if (bj_get_rating($post_id, false) >= 4) {
-        $classes[] = 'bj-featured';
+    if (jb_get_rating($post_id, false) >= 4) {
+        $classes[] = 'jb-featured';
     }
     return $classes;
 }, 10, 2);
@@ -192,12 +192,12 @@ add_filter('bj_checkin_classes', function($classes, $post_id) {
  * @param int   $post_id Post ID
  * @return array Modified data
  */
-apply_filters('bj_checkin_data', $data, $post_id);
+apply_filters('jb_checkin_data', $data, $post_id);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_checkin_data', function($data, $post_id) {
+add_filter('jb_checkin_data', function($data, $post_id) {
     // Modify beer name
     $data['beer_name'] = strtoupper($data['beer_name']);
     return $data;
@@ -218,12 +218,12 @@ add_filter('bj_checkin_data', function($data, $post_id) {
  * @param int    $rounded Rounded rating
  * @return string Modified output
  */
-apply_filters('bj_rating_display', $output, $post_id, $raw, $rounded);
+apply_filters('jb_rating_display', $output, $post_id, $raw, $rounded);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
+add_filter('jb_rating_display', function($output, $post_id, $raw, $rounded) {
     // Replace stars with custom icons
     $stars = str_repeat('🍺', $rounded);
     return '<div class="custom-rating">' . $stars . '</div>';
@@ -242,12 +242,12 @@ add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
  * @param float $raw_rating Raw rating
  * @return int Modified rounded rating
  */
-apply_filters('bj_rating_mapped', $rounded, $raw_rating);
+apply_filters('jb_rating_mapped', $rounded, $raw_rating);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_rating_mapped', function($rounded, $raw_rating) {
+add_filter('jb_rating_mapped', function($rounded, $raw_rating) {
     // Custom mapping: round up instead of down
     return ceil($raw_rating);
 }, 10, 2);
@@ -264,7 +264,7 @@ add_filter('bj_rating_mapped', function($rounded, $raw_rating) {
  * @param array $item Parsed RSS item data
  * @return array Modified item data
  */
-apply_filters('bj_rss_item_parsed', $item);
+apply_filters('jb_rss_item_parsed', $item);
 ```
 
 ---
@@ -278,12 +278,12 @@ apply_filters('bj_rss_item_parsed', $item);
  * @param array $data Scraped data
  * @return array Modified data
  */
-apply_filters('bj_scraped_data', $data);
+apply_filters('jb_scraped_data', $data);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_scraped_data', function($data) {
+add_filter('jb_scraped_data', function($data) {
     // Add custom field
     $data['custom_field'] = 'custom_value';
     return $data;
@@ -302,7 +302,7 @@ add_filter('bj_scraped_data', function($data) {
  * @param int    $post_id   Post ID
  * @return string Modified beer name
  */
-apply_filters('bj_beer_name', $beer_name, $post_id);
+apply_filters('jb_beer_name', $beer_name, $post_id);
 ```
 
 ---
@@ -317,7 +317,7 @@ apply_filters('bj_beer_name', $beer_name, $post_id);
  * @param int    $post_id      Post ID
  * @return string Modified brewery name
  */
-apply_filters('bj_brewery_name', $brewery_name, $post_id);
+apply_filters('jb_brewery_name', $brewery_name, $post_id);
 ```
 
 ---
@@ -331,15 +331,15 @@ apply_filters('bj_brewery_name', $brewery_name, $post_id);
  * @param array $args WP_Query arguments
  * @return array Modified arguments
  */
-apply_filters('bj_archive_query_args', $args);
+apply_filters('jb_archive_query_args', $args);
 ```
 
 **Usage**:
 ```php
-add_filter('bj_archive_query_args', function($args) {
+add_filter('jb_archive_query_args', function($args) {
     // Only show check-ins with 3+ stars
     $args['meta_query'][] = [
-        'key' => '_bj_rating_rounded',
+        'key' => '_jb_rating_rounded',
         'value' => 3,
         'compare' => '>=',
     ];
@@ -358,7 +358,7 @@ add_filter('bj_archive_query_args', function($args) {
  * @param string $url Image URL
  * @return string Modified URL
  */
-apply_filters('bj_image_url', $url);
+apply_filters('jb_image_url', $url);
 ```
 
 ---
@@ -366,36 +366,36 @@ apply_filters('bj_image_url', $url);
 ## Complete Hook List
 
 ### Actions
-- `bj_before_checkins_list` - Before check-ins list
-- `bj_after_checkin_card` - After each check-in card
-- `bj_after_checkin_imported` - After check-in imported
-- `bj_after_batch_import` - After batch import
-- `bj_before_rss_sync` - Before RSS sync
-- `bj_after_rss_sync` - After RSS sync
-- `bj_before_scraping` - Before scraping
-- `bj_after_scraping` - After scraping
+- `jb_before_checkins_list` - Before check-ins list
+- `jb_after_checkin_card` - After each check-in card
+- `jb_after_checkin_imported` - After check-in imported
+- `jb_after_batch_import` - After batch import
+- `jb_before_rss_sync` - Before RSS sync
+- `jb_after_rss_sync` - After RSS sync
+- `jb_before_scraping` - Before scraping
+- `jb_after_scraping` - After scraping
 
 ### Filters
-- `bj_checkin_template` - Template path
-- `bj_checkin_classes` - CSS classes
-- `bj_checkin_data` - Check-in data
-- `bj_rating_display` - Rating output
-- `bj_rating_mapped` - Rating mapping
-- `bj_rss_item_parsed` - RSS item data
-- `bj_scraped_data` - Scraped data
-- `bj_beer_name` - Beer name
-- `bj_brewery_name` - Brewery name
-- `bj_archive_query_args` - Archive query
-- `bj_image_url` - Image URL
+- `jb_checkin_template` - Template path
+- `jb_checkin_classes` - CSS classes
+- `jb_checkin_data` - Check-in data
+- `jb_rating_display` - Rating output
+- `jb_rating_mapped` - Rating mapping
+- `jb_rss_item_parsed` - RSS item data
+- `jb_scraped_data` - Scraped data
+- `jb_beer_name` - Beer name
+- `jb_brewery_name` - Brewery name
+- `jb_archive_query_args` - Archive query
+- `jb_image_url` - Image URL
 
 ## Usage Examples
 
 ### Custom Archive Header
 
 ```php
-add_action('bj_before_checkins_list', function($query) {
+add_action('jb_before_checkins_list', function($query) {
     $total = $query->found_posts;
-    echo '<div class="bj-archive-header">';
+    echo '<div class="jb-archive-header">';
     echo '<p>Total check-ins: ' . number_format($total) . '</p>';
     echo '</div>';
 });
@@ -404,10 +404,10 @@ add_action('bj_before_checkins_list', function($query) {
 ### Highlight High-Rated Check-ins
 
 ```php
-add_filter('bj_checkin_classes', function($classes, $post_id) {
-    $rating = bj_get_rating($post_id, false);
+add_filter('jb_checkin_classes', function($classes, $post_id) {
+    $rating = jb_get_rating($post_id, false);
     if ($rating >= 4) {
-        $classes[] = 'bj-high-rated';
+        $classes[] = 'jb-high-rated';
     }
     return $classes;
 }, 10, 2);
@@ -416,7 +416,7 @@ add_filter('bj_checkin_classes', function($classes, $post_id) {
 ### Custom Rating Display
 
 ```php
-add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
+add_filter('jb_rating_display', function($output, $post_id, $raw, $rounded) {
     // Use custom star icons
     $custom_stars = str_repeat('★', $rounded) . str_repeat('☆', 5 - $rounded);
     return '<div class="custom-rating">' . $custom_stars . '</div>';

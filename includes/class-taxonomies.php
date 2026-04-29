@@ -2,7 +2,7 @@
 /**
  * Registers taxonomies for beer check-ins.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Taxonomies
+ * Class JB_Taxonomies
  */
-class BJ_Taxonomies {
+class JB_Taxonomies {
 
 	public const STYLE = 'beer_style';
 	public const BREWERY = 'brewery';
@@ -45,26 +45,26 @@ class BJ_Taxonomies {
 	 */
 	private function register_beer_style() {
 		$labels = array(
-			'name'          => __( 'Beer styles', 'beer-journal' ),
-			'singular_name' => __( 'Beer style', 'beer-journal' ),
-			'search_items'  => __( 'Search styles', 'beer-journal' ),
-			'all_items'     => __( 'All styles', 'beer-journal' ),
-			'edit_item'     => __( 'Edit style', 'beer-journal' ),
-			'update_item'   => __( 'Update style', 'beer-journal' ),
-			'add_new_item'  => __( 'Add new style', 'beer-journal' ),
-			'new_item_name' => __( 'New style name', 'beer-journal' ),
-			'menu_name'     => __( 'Styles', 'beer-journal' ),
+			'name'          => __( 'Beer styles', 'jardin-beer' ),
+			'singular_name' => __( 'Beer style', 'jardin-beer' ),
+			'search_items'  => __( 'Search styles', 'jardin-beer' ),
+			'all_items'     => __( 'All styles', 'jardin-beer' ),
+			'edit_item'     => __( 'Edit style', 'jardin-beer' ),
+			'update_item'   => __( 'Update style', 'jardin-beer' ),
+			'add_new_item'  => __( 'Add new style', 'jardin-beer' ),
+			'new_item_name' => __( 'New style name', 'jardin-beer' ),
+			'menu_name'     => __( 'Styles', 'jardin-beer' ),
 		);
 
 		register_taxonomy(
 			self::STYLE,
-			BJ_Post_Type::POST_TYPE,
+			JB_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => true,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => BJ_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
@@ -80,26 +80,26 @@ class BJ_Taxonomies {
 	 */
 	private function register_brewery() {
 		$labels = array(
-			'name'          => __( 'Breweries', 'beer-journal' ),
-			'singular_name' => __( 'Brewery', 'beer-journal' ),
-			'search_items'  => __( 'Search breweries', 'beer-journal' ),
-			'all_items'     => __( 'All breweries', 'beer-journal' ),
-			'edit_item'     => __( 'Edit brewery', 'beer-journal' ),
-			'update_item'   => __( 'Update brewery', 'beer-journal' ),
-			'add_new_item'  => __( 'Add new brewery', 'beer-journal' ),
-			'new_item_name' => __( 'New brewery name', 'beer-journal' ),
-			'menu_name'     => __( 'Breweries', 'beer-journal' ),
+			'name'          => __( 'Breweries', 'jardin-beer' ),
+			'singular_name' => __( 'Brewery', 'jardin-beer' ),
+			'search_items'  => __( 'Search breweries', 'jardin-beer' ),
+			'all_items'     => __( 'All breweries', 'jardin-beer' ),
+			'edit_item'     => __( 'Edit brewery', 'jardin-beer' ),
+			'update_item'   => __( 'Update brewery', 'jardin-beer' ),
+			'add_new_item'  => __( 'Add new brewery', 'jardin-beer' ),
+			'new_item_name' => __( 'New brewery name', 'jardin-beer' ),
+			'menu_name'     => __( 'Breweries', 'jardin-beer' ),
 		);
 
 		register_taxonomy(
 			self::BREWERY,
-			BJ_Post_Type::POST_TYPE,
+			JB_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => false,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => BJ_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
@@ -115,26 +115,26 @@ class BJ_Taxonomies {
 	 */
 	private function register_venue() {
 		$labels = array(
-			'name'          => __( 'Venues', 'beer-journal' ),
-			'singular_name' => __( 'Venue', 'beer-journal' ),
-			'search_items'  => __( 'Search venues', 'beer-journal' ),
-			'all_items'     => __( 'All venues', 'beer-journal' ),
-			'edit_item'     => __( 'Edit venue', 'beer-journal' ),
-			'update_item'   => __( 'Update venue', 'beer-journal' ),
-			'add_new_item'  => __( 'Add new venue', 'beer-journal' ),
-			'new_item_name' => __( 'New venue name', 'beer-journal' ),
-			'menu_name'     => __( 'Venues', 'beer-journal' ),
+			'name'          => __( 'Venues', 'jardin-beer' ),
+			'singular_name' => __( 'Venue', 'jardin-beer' ),
+			'search_items'  => __( 'Search venues', 'jardin-beer' ),
+			'all_items'     => __( 'All venues', 'jardin-beer' ),
+			'edit_item'     => __( 'Edit venue', 'jardin-beer' ),
+			'update_item'   => __( 'Update venue', 'jardin-beer' ),
+			'add_new_item'  => __( 'Add new venue', 'jardin-beer' ),
+			'new_item_name' => __( 'New venue name', 'jardin-beer' ),
+			'menu_name'     => __( 'Venues', 'jardin-beer' ),
 		);
 
 		register_taxonomy(
 			self::VENUE,
-			BJ_Post_Type::POST_TYPE,
+			JB_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => false,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => BJ_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,

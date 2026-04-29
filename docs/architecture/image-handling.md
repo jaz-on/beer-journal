@@ -45,10 +45,10 @@ flowchart TD
 ### Download Image
 
 ```php
-function bj_download_image($url) {
+function jb_download_image($url) {
     // Validate URL
     if (!filter_var($url, FILTER_VALIDATE_URL)) {
-        return new WP_Error('invalid_url', __('Invalid image URL', 'beer-journal'));
+        return new WP_Error('invalid_url', __('Invalid image URL', 'jardin-beer'));
     }
     
     // Download with timeout
@@ -66,7 +66,7 @@ function bj_download_image($url) {
     
     // Validate content type
     if (strpos($content_type, 'image/') === false) {
-        return new WP_Error('invalid_type', __('Not an image', 'beer-journal'));
+        return new WP_Error('invalid_type', __('Not an image', 'jardin-beer'));
     }
     
     return [
@@ -80,7 +80,7 @@ function bj_download_image($url) {
 ### Check for Duplicates
 
 ```php
-function bj_image_exists($image_url) {
+function jb_image_exists($image_url) {
     // Generate MD5 hash of URL
     $hash = md5($image_url);
     
@@ -90,7 +90,7 @@ function bj_image_exists($image_url) {
         'post_mime_type' => 'image',
         'meta_query' => [
             [
-                'key' => '_bj_image_hash',
+                'key' => '_jb_image_hash',
                 'value' => $hash,
                 'compare' => '=',
             ],
@@ -112,17 +112,17 @@ function bj_image_exists($image_url) {
 ### Import to Media Library
 
 ```php
-function bj_import_image($image_url, $post_id, $args = []) {
+function jb_import_image($image_url, $post_id, $args = []) {
     // Check if already exists
-    $existing = bj_image_exists($image_url);
+    $existing = jb_image_exists($image_url);
     if ($existing) {
         return $existing;
     }
     
     // Download image
-    $image_data = bj_download_image($image_url);
+    $image_data = jb_download_image($image_url);
     if (is_wp_error($image_data)) {
-        error_log('Beer Journal: Failed to download image - ' . $image_data->get_error_message());
+        error_log('Jardin Beer: Failed to download image - ' . $image_data->get_error_message());
         return false;
     }
     
@@ -149,7 +149,7 @@ function bj_import_image($image_url, $post_id, $args = []) {
     $attachment_id = wp_insert_attachment($attachment_data, $file_path, $post_id);
     
     if (is_wp_error($attachment_id)) {
-        error_log('Beer Journal: Failed to create attachment - ' . $attachment_id->get_error_message());
+        error_log('Jardin Beer: Failed to create attachment - ' . $attachment_id->get_error_message());
         return false;
     }
     
@@ -174,8 +174,8 @@ function bj_import_image($image_url, $post_id, $args = []) {
     }
     
     // Store hash for duplicate detection
-    update_post_meta($attachment_id, '_bj_image_hash', md5($image_url));
-    update_post_meta($attachment_id, '_bj_image_source_url', esc_url_raw($image_url));
+    update_post_meta($attachment_id, '_jb_image_hash', md5($image_url));
+    update_post_meta($attachment_id, '_jb_image_source_url', esc_url_raw($image_url));
     
     return $attachment_id;
 }
@@ -186,7 +186,7 @@ function bj_import_image($image_url, $post_id, $args = []) {
 ### Resize Large Images
 
 ```php
-function bj_resize_image($file_path, $max_width = 1200, $max_height = 1200) {
+function jb_resize_image($file_path, $max_width = 1200, $max_height = 1200) {
     $image = wp_get_image_editor($file_path);
     
     if (is_wp_error($image)) {
@@ -228,7 +228,7 @@ $max_attempts = 3;
 $attempt = 0;
 
 while ($attempt < $max_attempts) {
-    $image_data = bj_download_image($url);
+    $image_data = jb_download_image($url);
     
     if (!is_wp_error($image_data)) {
         break;
@@ -242,7 +242,7 @@ while ($attempt < $max_attempts) {
 
 if (is_wp_error($image_data)) {
     // Use placeholder
-    return bj_get_placeholder_image($post_id);
+    return jb_get_placeholder_image($post_id);
 }
 ```
 
@@ -252,14 +252,14 @@ if (is_wp_error($image_data)) {
 // Validate file type
 $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 if (!in_array($content_type, $allowed_types)) {
-    error_log('Beer Journal: Invalid image type - ' . $content_type);
+    error_log('Jardin Beer: Invalid image type - ' . $content_type);
     return false;
 }
 
 // Validate file size
 $max_size = 5 * 1024 * 1024; // 5MB
 if (strlen($body) > $max_size) {
-    error_log('Beer Journal: Image too large');
+    error_log('Jardin Beer: Image too large');
     return false;
 }
 ```
@@ -267,12 +267,12 @@ if (strlen($body) > $max_size) {
 ### Placeholder Images
 
 ```php
-function bj_get_placeholder_image($post_id) {
+function jb_get_placeholder_image($post_id) {
     // Use default placeholder
     $placeholder_url = plugin_dir_url(__FILE__) . 'assets/images/beer-placeholder.svg';
     
     // Or use WordPress default
-    $placeholder_id = get_option('bj_placeholder_image_id');
+    $placeholder_id = get_option('jb_placeholder_image_id');
     
     if ($placeholder_id) {
         return $placeholder_id;
@@ -299,7 +299,7 @@ update_post_meta($attachment_id, '_wp_attachment_image_alt', sanitize_text_field
 
 ```php
 $caption = sprintf(
-    __('Check-in from %s', 'beer-journal'),
+    __('Check-in from %s', 'jardin-beer'),
     $checkin_date
 );
 wp_update_post([
@@ -314,17 +314,17 @@ wp_update_post([
 
 ```php
 // Import images to Media Library
-$import_images = get_option('bj_import_images', true);
+$import_images = get_option('jb_import_images', true);
 
 // Maximum image dimensions
-$max_width = get_option('bj_image_max_width', 1200);
-$max_height = get_option('bj_image_max_height', 1200);
+$max_width = get_option('jb_image_max_width', 1200);
+$max_height = get_option('jb_image_max_height', 1200);
 
 // Generate thumbnails
-$generate_thumbnails = get_option('bj_generate_thumbnails', true);
+$generate_thumbnails = get_option('jb_generate_thumbnails', true);
 
 // Compress images (requires plugin)
-$compress_images = get_option('bj_compress_images', false);
+$compress_images = get_option('jb_compress_images', false);
 ```
 
 ## Performance Considerations

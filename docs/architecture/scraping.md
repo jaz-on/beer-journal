@@ -156,7 +156,7 @@ flowchart TD
 ```php
 $response = wp_remote_get($checkin_url, [
     'timeout' => 10,
-    'user-agent' => 'Beer Journal WordPress Plugin',
+    'user-agent' => 'Jardin Beer WordPress Plugin',
     'headers' => [
         'Accept' => 'text/html,application/xhtml+xml',
     ],
@@ -197,16 +197,16 @@ $crawler = new Crawler($html);
 ### Implementation
 ```php
 // Delay between requests
-$delay = get_option('bj_scraping_delay', 3); // Default 3 seconds
+$delay = get_option('jb_scraping_delay', 3); // Default 3 seconds
 sleep($delay);
 
 // Or use WordPress transients for rate limiting
-$last_request = get_transient('bj_last_scrape_request');
+$last_request = get_transient('jb_last_scrape_request');
 if ($last_request && (time() - $last_request) < $delay) {
     $wait = $delay - (time() - $last_request);
     sleep($wait);
 }
-set_transient('bj_last_scrape_request', time(), 60);
+set_transient('jb_last_scrape_request', time(), 60);
 ```
 
 ### Recommended Delays
@@ -232,7 +232,7 @@ $max_attempts = 3;
 $attempt = 0;
 
 while ($attempt < $max_attempts) {
-    $data = bj_scrape_checkin($url);
+    $data = jb_scrape_checkin($url);
     
     if (!is_wp_error($data)) {
         return $data;
@@ -300,7 +300,7 @@ if (empty($rating)) {
 
 // If still empty, log warning
 if (empty($rating)) {
-    error_log('Beer Journal: Could not extract rating from ' . $url);
+    error_log('Jardin Beer: Could not extract rating from ' . $url);
     // Save as draft with reason
 }
 ```
@@ -323,7 +323,7 @@ if (empty($rating)) {
 
 ### User-Agent
 - **Identify**: Use descriptive user-agent
-- **Example**: "Beer Journal WordPress Plugin/1.0.0"
+- **Example**: "Jardin Beer WordPress Plugin/1.0.0"
 
 ### Headers
 - **Accept**: Specify HTML content type

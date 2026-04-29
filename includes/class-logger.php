@@ -1,8 +1,8 @@
 <?php
 /**
- * File-based logging for Beer Journal.
+ * File-based logging for Jardin Beer.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Logger
+ * Class JB_Logger
  */
-class BJ_Logger {
+class JB_Logger {
 
 	public const LEVEL_ERROR   = 'ERROR';
 	public const LEVEL_WARNING = 'WARNING';
@@ -27,15 +27,15 @@ class BJ_Logger {
 	 * @return void
 	 */
 	public static function log( $level, $message ) {
-		$dir = bj_get_log_directory();
+		$dir = jb_get_log_directory();
 		if ( ! $dir ) {
 			return;
 		}
-		$debug = (bool) get_option( 'bj_debug_mode', false );
+		$debug = (bool) get_option( 'jb_debug_mode', false );
 		if ( self::LEVEL_DEBUG === $level && ! $debug ) {
 			return;
 		}
-		$file  = $dir . 'beer-journal-' . gmdate( 'Y-m-d' ) . '.log';
+		$file  = $dir . 'jardin-beer-' . gmdate( 'Y-m-d' ) . '.log';
 		$line  = sprintf( "[%s] %s: %s\n", gmdate( 'Y-m-d H:i:s' ), $level, $message );
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		file_put_contents( $file, $line, FILE_APPEND | LOCK_EX );
@@ -88,11 +88,11 @@ class BJ_Logger {
 	 * @return string
 	 */
 	public static function tail_today( $lines = 200 ) {
-		$dir = bj_get_log_directory();
+		$dir = jb_get_log_directory();
 		if ( ! $dir ) {
 			return '';
 		}
-		$file = $dir . 'beer-journal-' . gmdate( 'Y-m-d' ) . '.log';
+		$file = $dir . 'jardin-beer-' . gmdate( 'Y-m-d' ) . '.log';
 		if ( ! is_readable( $file ) ) {
 			return '';
 		}

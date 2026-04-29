@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal follows WordPress Coding Standards (WPCS) with additional project-specific guidelines.
+Jardin Beer follows WordPress Coding Standards (WPCS) with additional project-specific guidelines.
 
 ## WordPress Coding Standards
 
@@ -44,45 +44,45 @@ composer require --dev wp-coding-standards/wpcs
 
 ### Functions
 
-**Prefix**: `bj_` for public functions
+**Prefix**: `jb_` for public functions
 
 **Format**: lowercase with underscores
 
 **Examples**:
 ```php
-bj_get_checkin_data($post_id)
-bj_display_rating($post_id)
-bj_rating_stars($rating)
+jb_get_checkin_data($post_id)
+jb_display_rating($post_id)
+jb_rating_stars($rating)
 ```
 
 ---
 
 ### Classes
 
-**Prefix**: `BJ_` for all classes
+**Prefix**: `JB_` for all classes
 
 **Format**: PascalCase
 
 **Examples**:
 ```php
-class BJ_Importer {}
-class BJ_RSS_Parser {}
-class BJ_Scraper {}
+class JB_Importer {}
+class JB_RSS_Parser {}
+class JB_Scraper {}
 ```
 
 ---
 
 ### Constants
 
-**Prefix**: `BJ_`
+**Prefix**: `JB_`
 
 **Format**: UPPERCASE with underscores
 
 **Examples**:
 ```php
-BJ_VERSION
-BJ_PLUGIN_DIR
-BJ_PLUGIN_URL
+JB_VERSION
+JB_PLUGIN_DIR
+JB_PLUGIN_URL
 ```
 
 ---
@@ -138,7 +138,7 @@ if (!defined('ABSPATH')) {
  * @param bool $show_raw   Show original rating in tooltip
  * @return string HTML output
  */
-function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
+function jb_display_rating($post_id, $show_label = true, $show_raw = true) {
     // Implementation
 }
 ```
@@ -195,13 +195,13 @@ echo '<script>var data = ' . wp_json_encode($data) . ';</script>';
 
 ```php
 // Forms
-wp_nonce_field('bj_action', 'bj_nonce');
+wp_nonce_field('jb_action', 'jb_nonce');
 
 // AJAX
-check_ajax_referer('bj_action', 'nonce');
+check_ajax_referer('jb_action', 'nonce');
 
 // Admin
-check_admin_referer('bj_action', 'bj_nonce');
+check_admin_referer('jb_action', 'jb_nonce');
 ```
 
 ---
@@ -212,7 +212,7 @@ check_admin_referer('bj_action', 'bj_nonce');
 
 ```php
 if (!current_user_can('manage_options')) {
-    wp_die(__('Insufficient permissions', 'beer-journal'));
+    wp_die(__('Insufficient permissions', 'jardin-beer'));
 }
 ```
 
@@ -226,19 +226,19 @@ if (!current_user_can('manage_options')) {
 
 ```php
 // Simple
-__('Beer Check-ins', 'beer-journal')
+__('Beer Check-ins', 'jardin-beer')
 
 // Echo
-_e('Settings', 'beer-journal')
+_e('Settings', 'jardin-beer')
 
 // Escaped
-esc_html__('Rating System', 'beer-journal')
+esc_html__('Rating System', 'jardin-beer')
 
 // Plural
-_n('%s check-in', '%s check-ins', $count, 'beer-journal')
+_n('%s check-in', '%s check-ins', $count, 'jardin-beer')
 
 // Context
-_x('Brewery', 'taxonomy name', 'beer-journal')
+_x('Brewery', 'taxonomy name', 'jardin-beer')
 ```
 
 ---
@@ -283,7 +283,7 @@ $wpdb->prepare(
 **Preferred**:
 ```php
 if ($error) {
-    return new WP_Error('error_code', __('Error message', 'beer-journal'));
+    return new WP_Error('error_code', __('Error message', 'jardin-beer'));
 }
 ```
 
@@ -293,7 +293,7 @@ if ($error) {
 
 **Use WordPress Functions**:
 ```php
-error_log('Beer Journal: Error message');
+error_log('Jardin Beer: Error message');
 ```
 
 ---
@@ -304,10 +304,10 @@ error_log('Beer Journal: Error message');
 
 **Use Transients**:
 ```php
-$data = get_transient('bj_cache_key');
+$data = get_transient('jb_cache_key');
 if (false === $data) {
     $data = expensive_operation();
-    set_transient('bj_cache_key', $data, HOUR_IN_SECONDS);
+    set_transient('jb_cache_key', $data, HOUR_IN_SECONDS);
 }
 ```
 

@@ -1,7 +1,7 @@
 ---
 alwaysApply: true
 ---
-# Beer Journal - Architecture Rules
+# Jardin Beer - Architecture Rules
 
 ## Conventions WordPress
 
@@ -15,48 +15,48 @@ alwaysApply: true
 ### Naming Conventions
 
 #### Functions
-- **Prefix**: `bj_` for public functions (e.g., `bj_display_rating()`)
-- **Private functions**: `_bj_` prefix (e.g., `_bj_parse_rss_item()`)
+- **Prefix**: `jb_` for public functions (e.g., `jb_display_rating()`)
+- **Private functions**: `_jb_` prefix (e.g., `_jb_parse_rss_item()`)
 - **Naming**: lowercase with underscores, descriptive names
 - **Examples**:
-  - `bj_get_checkin_data($post_id)`
-  - `bj_rating_stars($rating, $echo = true)`
-  - `bj_beer_image($post_id, $size = 'medium')`
+  - `jb_get_checkin_data($post_id)`
+  - `jb_rating_stars($rating, $echo = true)`
+  - `jb_beer_image($post_id, $size = 'medium')`
 
 #### Classes
-- **Prefix**: `BJ_` for all classes (e.g., `BJ_Importer`, `BJ_Scraper`)
+- **Prefix**: `JB_` for all classes (e.g., `JB_Importer`, `JB_Scraper`)
 - **Naming**: PascalCase
 - **File naming**: `class-{name-lowercase}.php` (e.g., `class-importer.php`)
 - **Examples**:
-  - `BJ_RSS_Parser` → `includes/class-rss-parser.php`
-  - `BJ_Scraper` → `includes/class-scraper.php`
-  - `BJ_Image_Handler` → `includes/class-image-handler.php`
+  - `JB_RSS_Parser` → `includes/class-rss-parser.php`
+  - `JB_Scraper` → `includes/class-scraper.php`
+  - `JB_Image_Handler` → `includes/class-image-handler.php`
 
 #### Constants
-- **Prefix**: `BJ_` (e.g., `BJ_VERSION`, `BJ_PLUGIN_DIR`)
+- **Prefix**: `JB_` (e.g., `JB_VERSION`, `JB_PLUGIN_DIR`)
 - **Naming**: UPPERCASE with underscores
 
 #### Options (WordPress)
-- **Prefix**: `bj_` (e.g., `bj_last_checkin_date`, `bj_rating_rules`)
+- **Prefix**: `jb_` (e.g., `jb_last_checkin_date`, `jb_rating_rules`)
 - **Naming**: lowercase with underscores
 
 #### Meta Keys
-- **Prefix**: `_bj_` (e.g., `_bj_checkin_id`, `_bj_rating_raw`)
+- **Prefix**: `_jb_` (e.g., `_jb_checkin_id`, `_jb_rating_raw`)
 - **Naming**: lowercase with underscores
 - **Note**: Leading underscore makes meta keys "hidden" in WordPress admin
 
 #### Transients
-- **Prefix**: `bj_` (e.g., `bj_new_terms_notice`, `bj_global_stats`)
+- **Prefix**: `jb_` (e.g., `jb_new_terms_notice`, `jb_global_stats`)
 
 ### Text Domain
-- **Text domain**: `beer-journal` (with hyphen)
+- **Text domain**: `jardin-beer` (with hyphen)
 - **Usage**: All user-facing strings must be translatable
 - **Examples**:
   ```php
-  __('Beer Check-ins', 'beer-journal')
-  _e('Import Historical Check-ins', 'beer-journal')
-  _n('%s check-in', '%s check-ins', $count, 'beer-journal')
-  esc_html__('Rating System', 'beer-journal')
+  __('Beer Check-ins', 'jardin-beer')
+  _e('Import Historical Check-ins', 'jardin-beer')
+  _n('%s check-in', '%s check-ins', $count, 'jardin-beer')
+  esc_html__('Rating System', 'jardin-beer')
   ```
 
 ## Security Standards
@@ -78,7 +78,7 @@ alwaysApply: true
 - **All forms**: Include nonces with `wp_nonce_field()` or `wp_create_nonce()`
 - **AJAX requests**: Verify with `check_ajax_referer()`
 - **Admin actions**: Verify with `check_admin_referer()`
-- **Naming**: `bj_{action}_nonce` (e.g., `bj_import_nonce`)
+- **Naming**: `jb_{action}_nonce` (e.g., `jb_import_nonce`)
 
 ### Capability Checks
 - **Admin pages**: `current_user_can('manage_options')`
@@ -95,39 +95,39 @@ alwaysApply: true
 
 ### Requirements
 - **All user-facing strings**: Must be translatable
-- **Text domain**: Always use `'beer-journal'`
+- **Text domain**: Always use `'jardin-beer'`
 - **Context**: Use `_x()` when context is needed
 - **Plurals**: Use `_n()` for plural forms
 
 ### Examples
 ```php
 // Simple string
-echo esc_html__('Beer Check-ins', 'beer-journal');
+echo esc_html__('Beer Check-ins', 'jardin-beer');
 
 // String with output
-_e('Import Historical Check-ins', 'beer-journal');
+_e('Import Historical Check-ins', 'jardin-beer');
 
 // String with context
-_x('Brewery', 'taxonomy singular name', 'beer-journal');
+_x('Brewery', 'taxonomy singular name', 'jardin-beer');
 
 // Plural forms
 printf(
-    _n('%s check-in', '%s check-ins', $count, 'beer-journal'),
+    _n('%s check-in', '%s check-ins', $count, 'jardin-beer'),
     number_format_i18n($count)
 );
 
 // Escaped output
-echo esc_html__('Rating System', 'beer-journal');
-echo esc_attr__('Beer photo', 'beer-journal');
+echo esc_html__('Rating System', 'jardin-beer');
+echo esc_attr__('Beer photo', 'jardin-beer');
 ```
 
 ### Loading Text Domain
 ```php
-add_action('plugins_loaded', 'bj_load_textdomain');
+add_action('plugins_loaded', 'jb_load_textdomain');
 
-function bj_load_textdomain() {
+function jb_load_textdomain() {
     load_plugin_textdomain(
-        'beer-journal',
+        'jardin-beer',
         false,
         dirname(plugin_basename(__FILE__)) . '/languages/'
     );
@@ -137,7 +137,7 @@ function bj_load_textdomain() {
 ## File Structure
 
 ### Main Plugin File
-- **Location**: `beer-journal.php` (root)
+- **Location**: `jardin-beer.php` (root)
 - **Headers**: Must include WordPress plugin headers
 - **Activation/Deactivation**: Use separate classes
 
@@ -178,7 +178,7 @@ function bj_load_textdomain() {
 ### Caching
 - **Transients**: For temporary data (stats, etc.)
 - **Object cache**: Use `wp_cache_get()` and `wp_cache_set()`
-- **Cache keys**: Prefix with `bj_` (e.g., `bj_global_stats`)
+- **Cache keys**: Prefix with `jb_` (e.g., `jb_global_stats`)
 
 ## Error Handling
 
@@ -189,18 +189,18 @@ function bj_load_textdomain() {
 
 ### Example
 ```php
-function bj_import_checkin($data) {
+function jb_import_checkin($data) {
     if (empty($data['beer_name'])) {
         return new WP_Error(
             'missing_beer_name',
-            __('Beer name is required', 'beer-journal')
+            __('Beer name is required', 'jardin-beer')
         );
     }
     
     // Process...
     
     if ($error) {
-        error_log('Beer Journal: Import failed - ' . $error_message);
+        error_log('Jardin Beer: Import failed - ' . $error_message);
         return new WP_Error('import_failed', $error_message);
     }
     
@@ -247,7 +247,7 @@ $args = [
  * @param bool $show_raw   Show original rating in tooltip
  * @return string HTML output
  */
-function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
+function jb_display_rating($post_id, $show_label = true, $show_raw = true) {
     // Implementation...
 }
 ```
@@ -287,7 +287,7 @@ function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
 - **Scope**: One logical change per commit
 
 ### Version numbers
-- Do not bump the plugin `Version` header, `BJ_VERSION`, or add a new semver heading in `CHANGELOG.md` unless the maintainer explicitly authorizes it. New work can go under `[Unreleased]` until then.
+- Do not bump the plugin `Version` header, `JB_VERSION`, or add a new semver heading in `CHANGELOG.md` unless the maintainer explicitly authorizes it. New work can go under `[Unreleased]` until then.
 
 ## Testing
 
@@ -298,8 +298,8 @@ function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
 
 ## Summary
 
-- **Prefixes**: `bj_` (functions), `BJ_` (classes), `_bj_` (meta keys)
-- **Text domain**: `beer-journal`
+- **Prefixes**: `jb_` (functions), `JB_` (classes), `_jb_` (meta keys)
+- **Text domain**: `jardin-beer`
 - **Security**: Always sanitize input, escape output, use nonces
 - **i18n**: All user-facing strings translatable
 - **Standards**: WordPress Coding Standards (WPCS)

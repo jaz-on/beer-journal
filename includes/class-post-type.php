@@ -2,7 +2,7 @@
 /**
  * Registers the beer_checkin custom post type.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Post_Type
+ * Class JB_Post_Type
  */
-class BJ_Post_Type {
+class JB_Post_Type {
 
 	/**
 	 * Post type slug.
@@ -41,18 +41,18 @@ class BJ_Post_Type {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'               => __( 'Beer check-ins', 'beer-journal' ),
-			'singular_name'      => __( 'Beer check-in', 'beer-journal' ),
-			'menu_name'          => __( 'Beer Journal', 'beer-journal' ),
-			'all_items'          => __( 'Check-ins', 'beer-journal' ),
-			'add_new'            => __( 'Add check-in', 'beer-journal' ),
-			'add_new_item'       => __( 'Add new check-in', 'beer-journal' ),
-			'edit_item'          => __( 'Edit check-in', 'beer-journal' ),
-			'new_item'           => __( 'New check-in', 'beer-journal' ),
-			'view_item'          => __( 'View check-in', 'beer-journal' ),
-			'search_items'       => __( 'Search check-ins', 'beer-journal' ),
-			'not_found'          => __( 'No check-ins found', 'beer-journal' ),
-			'not_found_in_trash' => __( 'No check-ins in trash', 'beer-journal' ),
+			'name'               => __( 'Beer check-ins', 'jardin-beer' ),
+			'singular_name'      => __( 'Beer check-in', 'jardin-beer' ),
+			'menu_name'          => __( 'Jardin Beer', 'jardin-beer' ),
+			'all_items'          => __( 'Check-ins', 'jardin-beer' ),
+			'add_new'            => __( 'Add check-in', 'jardin-beer' ),
+			'add_new_item'       => __( 'Add new check-in', 'jardin-beer' ),
+			'edit_item'          => __( 'Edit check-in', 'jardin-beer' ),
+			'new_item'           => __( 'New check-in', 'jardin-beer' ),
+			'view_item'          => __( 'View check-in', 'jardin-beer' ),
+			'search_items'       => __( 'Search check-ins', 'jardin-beer' ),
+			'not_found'          => __( 'No check-ins found', 'jardin-beer' ),
+			'not_found_in_trash' => __( 'No check-ins in trash', 'jardin-beer' ),
 		);
 
 		$args = array(

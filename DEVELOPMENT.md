@@ -10,7 +10,7 @@
 
 ## Quick Start
 
-This guide will help you get started developing Beer Journal.
+This guide will help you get started developing Jardin Beer.
 
 ## Prerequisites
 
@@ -53,7 +53,7 @@ Set up a local WordPress installation and activate the plugin.
 ## Project Structure
 
 ```
-beer-journal/
+jardin-beer/
 ├── includes/          # Core plugin classes
 ├── admin/            # Admin interface
 ├── public/            # Frontend templates and assets
@@ -61,7 +61,7 @@ beer-journal/
 ├── languages/         # Translation files
 ├── tests/             # Unit tests
 ├── docs/              # Documentation
-└── beer-journal.php   # Main plugin file
+└── jardin-beer.php   # Main plugin file
 ```
 
 ## Development Order (Phase 1 MVP)
@@ -69,26 +69,26 @@ beer-journal/
 Follow this order when implementing features:
 
 ### 1. Structure de base
-- [x] Main plugin file (`beer-journal.php`) — bootstrap, Composer, lifecycle hooks
-- [x] Activation/deactivation hooks (`BJ_Activator`, `BJ_Deactivator`)
-- [x] Custom Post Type registration (`BJ_Post_Type`)
-- [x] Taxonomies registration (`BJ_Taxonomies`)
-- [x] Meta fields registration (`BJ_Meta_Fields`)
-- [x] Settings API (`BJ_Settings`)
+- [x] Main plugin file (`jardin-beer.php`) — bootstrap, Composer, lifecycle hooks
+- [x] Activation/deactivation hooks (`JB_Activator`, `JB_Deactivator`)
+- [x] Custom Post Type registration (`JB_Post_Type`)
+- [x] Taxonomies registration (`JB_Taxonomies`)
+- [x] Meta fields registration (`JB_Meta_Fields`)
+- [x] Settings API (`JB_Settings`)
 
 ### 2. RSS Sync (Priorité)
-- [x] RSS Parser (`BJ_RSS_Parser`)
-- [x] Adaptive polling scheduler (`BJ_Action_Scheduler`)
+- [x] RSS Parser (`JB_RSS_Parser`)
+- [x] Adaptive polling scheduler (`JB_Action_Scheduler`)
 - [x] GUID comparison logic
 - [x] Integration with importer
 
 ### 3. Scraping
-- [x] HTML Scraper (`BJ_Scraper`)
+- [x] HTML Scraper (`JB_Scraper`)
 - [x] Data extraction logic
 - [x] Error handling and retry
 
 ### 4. Import Process
-- [x] Importer (`BJ_Importer`)
+- [x] Importer (`JB_Importer`)
 - [x] Data validation
 - [x] Post creation
 - [x] Taxonomy assignment
@@ -96,19 +96,19 @@ Follow this order when implementing features:
 - [x] Rating mapping
 
 ### 5. Image Handling
-- [x] Image Handler (`BJ_Image_Handler`)
+- [x] Image Handler (`JB_Image_Handler`)
 - [x] Download from URL
 - [x] Media Library integration
 - [ ] Placeholder fallback (optional / theme-level)
 
 ### 6. Historical Import
-- [x] Crawler (`BJ_Crawler`)
+- [x] Crawler (`JB_Crawler`)
 - [x] Pagination handling (best-effort profile pages)
 - [x] Batch processing (AJAX + optional background hook)
 - [x] Progress tracking (checkpoint option)
 
 ### 7. Admin Interface
-- [x] Settings page (`BJ_Admin`, 5 tabs)
+- [x] Settings page (`JB_Admin`, 5 tabs)
 - [x] Import interface (discover + batch)
 - [x] Progress feedback (AJAX)
 - [x] Logs viewer (Advanced tab)
@@ -120,7 +120,7 @@ Follow this order when implementing features:
 - [x] Template tags (`public/template-tags.php`)
 
 ### 9. Polish & Optimization
-- [x] Caching (`bj_get_cached_data`, stats transient invalidation — see CHANGELOG [Unreleased])
+- [x] Caching (`jb_get_cached_data`, stats transient invalidation — see CHANGELOG [Unreleased])
 - [x] Logging
 - [x] Error handling refinement (core paths)
 - [x] Phase 1 polish (stats UI, email alerts, archive layout, placeholder, optional DB index — see CHANGELOG [Unreleased])
@@ -143,20 +143,20 @@ composer run phpcbf
 
 ### Naming Conventions
 
-- **Functions**: `bj_` prefix (e.g., `bj_get_checkin_data()`)
-- **Classes**: `BJ_` prefix (e.g., `BJ_Importer`)
-- **Constants**: `BJ_` prefix (e.g., `BJ_VERSION`)
-- **Options**: `bj_` prefix (e.g., `bj_last_checkin_date`)
-- **Meta Keys**: `_bj_` prefix (e.g., `_bj_checkin_id`)
+- **Functions**: `jb_` prefix (e.g., `jb_get_checkin_data()`)
+- **Classes**: `JB_` prefix (e.g., `JB_Importer`)
+- **Constants**: `JB_` prefix (e.g., `JB_VERSION`)
+- **Options**: `jb_` prefix (e.g., `jb_last_checkin_date`)
+- **Meta Keys**: `_jb_` prefix (e.g., `_jb_checkin_id`)
 
 ### Text Domain
 
-Always use `'beer-journal'` for all translatable strings:
+Always use `'jardin-beer'` for all translatable strings:
 
 ```php
-__('Beer Check-ins', 'beer-journal')
-_e('Import Historical Check-ins', 'beer-journal')
-esc_html__('Rating System', 'beer-journal')
+__('Beer Check-ins', 'jardin-beer')
+_e('Import Historical Check-ins', 'jardin-beer')
+esc_html__('Rating System', 'jardin-beer')
 ```
 
 ## Testing

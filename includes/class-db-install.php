@@ -2,7 +2,7 @@
 /**
  * Optional database optimizations (indexes) for large sites.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_DB_Install
+ * Class JB_DB_Install
  */
-class BJ_DB_Install {
+class JB_DB_Install {
 
 	/**
 	 * Add composite index on postmeta for check-in ID lookups (best-effort, once).
@@ -20,7 +20,7 @@ class BJ_DB_Install {
 	 * @return void
 	 */
 	public static function maybe_add_indexes() {
-		$state = get_option( 'bj_db_index_checkin_v1', '' );
+		$state = get_option( 'jb_db_index_checkin_v1', '' );
 		if ( in_array( $state, array( 'ok', 'failed' ), true ) ) {
 			return;
 		}
@@ -29,21 +29,21 @@ class BJ_DB_Install {
 		$wpdb->suppress_errors( true );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->query(
-			"ALTER TABLE {$wpdb->postmeta} ADD INDEX bj_checkin_meta (meta_key(20), meta_value(64))"
+			"ALTER TABLE {$wpdb->postmeta} ADD INDEX jb_checkin_meta (meta_key(20), meta_value(64))"
 		);
 		$wpdb->suppress_errors( false );
 
 		$err = $wpdb->last_error;
 		if ( ! $err ) {
-			update_option( 'bj_db_index_checkin_v1', 'ok', true );
+			update_option( 'jb_db_index_checkin_v1', 'ok', true );
 			return;
 		}
 		if ( false !== strpos( $err, 'Duplicate' ) || false !== strpos( $err, 'duplicate' ) ) {
-			update_option( 'bj_db_index_checkin_v1', 'ok', true );
+			update_option( 'jb_db_index_checkin_v1', 'ok', true );
 			return;
 		}
 
-		update_option( 'bj_db_index_checkin_v1', 'failed', true );
-		BJ_Logger::warning( 'DB index bj_checkin_meta not added: ' . $err );
+		update_option( 'jb_db_index_checkin_v1', 'failed', true );
+		JB_Logger::warning( 'DB index jb_checkin_meta not added: ' . $err );
 	}
 }

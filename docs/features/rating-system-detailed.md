@@ -8,13 +8,13 @@ Comprehensive documentation of the rating system: storage, mapping, labels, and 
 
 ### Dual Storage
 
-**Raw Rating** (`_bj_rating_raw`):
+**Raw Rating** (`_jb_rating_raw`):
 - Original Untappd rating
 - Format: Float (0-5 with decimals)
 - Example: `4.25`
 - Purpose: Preserve original data
 
-**Rounded Rating** (`_bj_rating_rounded`):
+**Rounded Rating** (`_jb_rating_rounded`):
 - Mapped star rating
 - Format: Integer (0-5)
 - Example: `4`
@@ -26,8 +26,8 @@ Comprehensive documentation of the rating system: storage, mapping, labels, and 
 
 ```php
 // Store both values
-update_post_meta($post_id, '_bj_rating_raw', 4.25);
-update_post_meta($post_id, '_bj_rating_rounded', 4);
+update_post_meta($post_id, '_jb_rating_raw', 4.25);
+update_post_meta($post_id, '_jb_rating_rounded', 4);
 ```
 
 ---
@@ -50,8 +50,8 @@ update_post_meta($post_id, '_bj_rating_rounded', 4);
 ### Mapping Function
 
 ```php
-function bj_map_rating($raw_rating) {
-    $rules = get_option('bj_rating_rules', bj_get_default_rating_rules());
+function jb_map_rating($raw_rating) {
+    $rules = get_option('jb_rating_rules', jb_get_default_rating_rules());
     
     foreach ($rules as $rule) {
         if ($raw_rating >= $rule['min'] && $raw_rating <= $rule['max']) {
@@ -77,7 +77,7 @@ $custom_rules = [
     ['min' => 3.5, 'max' => 4.4, 'round' => 4],
     ['min' => 4.5, 'max' => 5.0, 'round' => 5],
 ];
-update_option('bj_rating_rules', $custom_rules);
+update_option('jb_rating_rules', $custom_rules);
 ```
 
 ---
@@ -88,12 +88,12 @@ update_option('bj_rating_rules', $custom_rules);
 
 ```php
 $default_labels = [
-    0 => __('Undrinkable - Not even beer', 'beer-journal'),
-    1 => __('Terrible - Only if there\'s no alternative', 'beer-journal'),
-    2 => __('Mediocre - Meh, it\'s okay I guess', 'beer-journal'),
-    3 => __('Decent - A solid thirst quencher', 'beer-journal'),
-    4 => __('Great - Now we\'re talking! A real pleasure', 'beer-journal'),
-    5 => __('Exceptional - Buy it with your eyes closed. Masterpiece!', 'beer-journal'),
+    0 => __('Undrinkable - Not even beer', 'jardin-beer'),
+    1 => __('Terrible - Only if there\'s no alternative', 'jardin-beer'),
+    2 => __('Mediocre - Meh, it\'s okay I guess', 'jardin-beer'),
+    3 => __('Decent - A solid thirst quencher', 'jardin-beer'),
+    4 => __('Great - Now we\'re talking! A real pleasure', 'jardin-beer'),
+    5 => __('Exceptional - Buy it with your eyes closed. Masterpiece!', 'jardin-beer'),
 ];
 ```
 
@@ -111,7 +111,7 @@ $custom_labels = [
     4 => 'Ah bah voilà, ça c\'est de la bière !',
     5 => 'Tu veux te faire plaisir ? Achète les yeux fermés !',
 ];
-update_option('bj_rating_labels', $custom_labels);
+update_option('jb_rating_labels', $custom_labels);
 ```
 
 ---
@@ -121,37 +121,37 @@ update_option('bj_rating_labels', $custom_labels);
 ### Main Display Function
 
 ```php
-function bj_display_rating($post_id, $show_label = true, $show_raw = true) {
-    $raw = get_post_meta($post_id, '_bj_rating_raw', true);
-    $rounded = get_post_meta($post_id, '_bj_rating_rounded', true);
-    $labels = get_option('bj_rating_labels', []);
+function jb_display_rating($post_id, $show_label = true, $show_raw = true) {
+    $raw = get_post_meta($post_id, '_jb_rating_raw', true);
+    $rounded = get_post_meta($post_id, '_jb_rating_rounded', true);
+    $labels = get_option('jb_rating_labels', []);
     
     if (empty($rounded) && $rounded !== '0') {
         return '';
     }
     
-    $output = '<div class="bj-rating">';
+    $output = '<div class="jb-rating">';
     
     // Stars
     $stars = str_repeat('⭐', $rounded);
     if ($show_raw && $raw != $rounded && !empty($raw)) {
         $output .= sprintf(
-            '<span class="bj-stars" title="%s">%s</span>',
-            esc_attr(sprintf(__('Original rating: %s', 'beer-journal'), $raw)),
+            '<span class="jb-stars" title="%s">%s</span>',
+            esc_attr(sprintf(__('Original rating: %s', 'jardin-beer'), $raw)),
             $stars
         );
     } else {
-        $output .= '<span class="bj-stars">' . $stars . '</span>';
+        $output .= '<span class="jb-stars">' . $stars . '</span>';
     }
     
     // Label
     if ($show_label && !empty($labels[$rounded])) {
-        $output .= '<p class="bj-rating-label">' . esc_html($labels[$rounded]) . '</p>';
+        $output .= '<p class="jb-rating-label">' . esc_html($labels[$rounded]) . '</p>';
     }
     
     $output .= '</div>';
     
-    return apply_filters('bj_rating_display', $output, $post_id, $raw, $rounded);
+    return apply_filters('jb_rating_display', $output, $post_id, $raw, $rounded);
 }
 ```
 
@@ -166,7 +166,7 @@ $args = [
     'post_type' => 'beer',
     'meta_query' => [
         [
-            'key' => '_bj_rating_rounded',
+            'key' => '_jb_rating_rounded',
             'value' => 4,
             'compare' => '>=',
         ],
@@ -182,7 +182,7 @@ $checkins = get_posts($args);
 ```php
 $args = [
     'post_type' => 'beer',
-    'meta_key' => '_bj_rating_rounded',
+    'meta_key' => '_jb_rating_rounded',
     'orderby' => 'meta_value_num',
     'order' => 'DESC',
 ];

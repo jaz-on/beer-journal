@@ -1,8 +1,8 @@
-# Vérification de la migration — analyse Eleventy → Beer Journal
+# Vérification de la migration — analyse Eleventy → Jardin Beer
 
 ## Statut de la migration
 
-Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md` ont été migrées et classées dans la documentation Beer Journal.
+Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md` ont été migrées et classées dans la documentation Jardin Beer.
 
 ---
 
@@ -10,12 +10,12 @@ Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md`
 
 ### 1. Analyse principale
 - **Fichier** : `docs/features/untappd-integration.md`
-- **Contenu** : Résumé de l’implémentation Eleventy, comparaison avec Beer Journal, contrat de données, pipelines, mapping WordPress, décisions validées
+- **Contenu** : Résumé de l’implémentation Eleventy, comparaison avec Jardin Beer, contrat de données, pipelines, mapping WordPress, décisions validées
 - **Statut** : ✅ Complet
 
 ### 2. Structure de données
 - **Fichiers** : `docs/db/schema.md`, `docs/db/meta-fields.md`, `docs/db/taxonomy-structure.md`
-- **Contenu** : CPT `beer_checkin`, taxonomies `beer_style`, `brewery`, `venue`, méta `_bj_*`
+- **Contenu** : CPT `beer_checkin`, taxonomies `beer_style`, `brewery`, `venue`, méta `_jb_*`
 - **Statut** : ✅ Cohérent avec l’analyse
 
 ### 3. Processus d’import
@@ -31,7 +31,7 @@ Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md`
 ### 5. Composants
 - **Fichier** : `docs/architecture/components.md`
 - **Contenu** : Liste des composants principaux
-- **Statut** : ⚠️ Manque les composants Untappd spécifiques (BJ_Untappd_Sync, BJ_Untappd_RSS_Importer, BJ_Untappd_HTML_Parser, etc.)
+- **Statut** : ⚠️ Manque les composants Untappd spécifiques (JB_Untappd_Sync, JB_Untappd_RSS_Importer, JB_Untappd_HTML_Parser, etc.)
 
 ---
 
@@ -50,7 +50,7 @@ Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md`
 ### 3. Composants Untappd
 - **Source** : Modules Eleventy analysés
 - **Destination** : `docs/architecture/components.md`
-- **Statut** : ✅ Complété — Section "Untappd Integration Components" ajoutée avec 6 composants (BJ_Untappd_Sync, BJ_Untappd_RSS_Importer, BJ_Untappd_HTML_Parser, BJ_Untappd_CSV_Importer, BJ_Beer_Processor, BJ_Untappd_Config)
+- **Statut** : ✅ Complété — Section "Untappd Integration Components" ajoutée avec 6 composants (JB_Untappd_Sync, JB_Untappd_RSS_Importer, JB_Untappd_HTML_Parser, JB_Untappd_CSV_Importer, JB_Beer_Processor, JB_Untappd_Config)
 
 ---
 
@@ -58,19 +58,19 @@ Ce document vérifie que toutes les données de `UNTAPPD_ANALYSE_COMPARAISON.md`
 
 ### 1. Liste d’exclusion
 - **Source** : `excluded-checkin-ids.json` — gestion des exclusions
-- **Destination actuelle** : Mentionné dans `untappd-integration.md` et `components.md` (BJ_Untappd_Config)
-- **Statut** : ⚠️ Partiellement documenté — Option `bj_excluded_checkins` mentionnée mais pas de doc dédiée
+- **Destination actuelle** : Mentionné dans `untappd-integration.md` et `components.md` (JB_Untappd_Config)
+- **Statut** : ⚠️ Partiellement documenté — Option `jb_excluded_checkins` mentionnée mais pas de doc dédiée
 - **Action** : À créer dans `docs/features/` ou ajouter section dans `untappd-integration.md`
 
 ### 2. Utilitaires de normalisation
 - **Source** : `untappd-utils.js` — `escapeYamlValue()`, `generateSafeFilename()`, `parseFrontMatter()`, `findFilesRecursively()`
 - **Destination actuelle** : Non documenté explicitement
-- **Statut** : ⚠️ À documenter (équivalents PHP pour Beer Journal)
+- **Statut** : ⚠️ À documenter (équivalents PHP pour Jardin Beer)
 - **Action** : À créer dans `docs/development/helper-functions.md` ou compléter le doc existant
 
 ### 3. Template et valeurs par défaut
 - **Source** : `src/beers/_template.md` — structure du template Eleventy
-- **Destination actuelle** : Mentionné dans `untappd-integration.md` et `components.md` (BJ_Untappd_Config)
+- **Destination actuelle** : Mentionné dans `untappd-integration.md` et `components.md` (JB_Untappd_Config)
 - **Statut** : ⚠️ Partiellement documenté — Concept mentionné mais structure détaillée manquante
 - **Action** : À ajouter dans `docs/architecture/import-process.md` ou créer section dans `untappd-integration.md`
 

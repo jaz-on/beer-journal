@@ -2,7 +2,7 @@
 /**
  * Historical import: discover check-in URLs from an Untappd profile.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Crawler
+ * Class JB_Crawler
  */
-class BJ_Crawler {
+class JB_Crawler {
 
 	/**
 	 * Discover check-in IDs from profile pages (up to max_pages).
@@ -24,11 +24,11 @@ class BJ_Crawler {
 	public function discover_checkins( $username, $max_pages = 10 ) {
 		$username = sanitize_user( $username, true );
 		if ( ! $username ) {
-			return new WP_Error( 'no_user', __( 'Invalid Untappd username.', 'beer-journal' ) );
+			return new WP_Error( 'no_user', __( 'Invalid Untappd username.', 'jardin-beer' ) );
 		}
 
 		$seen  = array();
-		$delay = absint( get_option( 'bj_import_delay', 3 ) );
+		$delay = absint( get_option( 'jb_import_delay', 3 ) );
 		$max_pages = max( 1, min( 50, $max_pages ) );
 
 		for ( $page = 1; $page <= $max_pages; $page++ ) {
@@ -37,7 +37,7 @@ class BJ_Crawler {
 			}
 
 			$url = $this->profile_page_url( $username, $page );
-			$url = apply_filters( 'bj_crawler_profile_url', $url, $username, $page );
+			$url = apply_filters( 'jb_crawler_profile_url', $url, $username, $page );
 
 			$response = wp_remote_get(
 				$url,
@@ -48,8 +48,8 @@ class BJ_Crawler {
 						'Accept-Language' => 'en-US,en;q=0.9',
 					),
 					'user-agent' => apply_filters(
-						'bj_http_user_agent',
-						'Beer Journal/' . BJ_VERSION . '; ' . home_url( '/' )
+						'jb_http_user_agent',
+						'Jardin Beer/' . JB_VERSION . '; ' . home_url( '/' )
 					),
 				)
 			);
@@ -68,7 +68,7 @@ class BJ_Crawler {
 						'untappd_empty_response',
 						sprintf(
 							/* translators: 1: HTTP status code, 2: response size in bytes */
-							__( 'Untappd returned almost no HTML (HTTP %1$d, %2$d bytes). The server may block outbound requests from your host, or Untappd may require a browser session.', 'beer-journal' ),
+							__( 'Untappd returned almost no HTML (HTTP %1$d, %2$d bytes). The server may block outbound requests from your host, or Untappd may require a browser session.', 'jardin-beer' ),
 							(int) $code,
 							$len
 						)
@@ -86,7 +86,7 @@ class BJ_Crawler {
 							'untappd_discovery_blocked',
 							sprintf(
 								/* translators: 1: HTTP status code, 2: response size in bytes */
-								__( 'No check-in links found on the first profile page (HTTP %1$d, %2$d bytes). Often this means your web host cannot load Untappd the same way a browser can (bot protection).', 'beer-journal' ),
+								__( 'No check-in links found on the first profile page (HTTP %1$d, %2$d bytes). Often this means your web host cannot load Untappd the same way a browser can (bot protection).', 'jardin-beer' ),
 								(int) $code,
 								$len
 							)
@@ -94,7 +94,7 @@ class BJ_Crawler {
 					}
 					return new WP_Error(
 						'untappd_discovery_markup',
-						__( 'No check-in links matched in the profile HTML. Untappd may have changed their page layout; check for a plugin update or report this to the maintainer.', 'beer-journal' )
+						__( 'No check-in links matched in the profile HTML. Untappd may have changed their page layout; check for a plugin update or report this to the maintainer.', 'jardin-beer' )
 					);
 				}
 				break;
@@ -182,21 +182,21 @@ class BJ_Crawler {
 	 * @return void
 	 */
 	public function process_next_batch() {
-		$cp = get_option( 'bj_import_checkpoint', array() );
+		$cp = get_option( 'jb_import_checkpoint', array() );
 		if ( ! is_array( $cp ) || empty( $cp['queue'] ) || ! is_array( $cp['queue'] ) ) {
 			return;
 		}
 
-		$batch_size = absint( get_option( 'bj_import_batch_size', 25 ) );
+		$batch_size = absint( get_option( 'jb_import_batch_size', 25 ) );
 		$batch_size = max( 1, min( 100, $batch_size ) );
 		$queue      = $cp['queue'];
 		$chunk      = array_splice( $queue, 0, $batch_size );
 
-		$importer = new BJ_Importer();
+		$importer = new JB_Importer();
 		$username = isset( $cp['username'] ) ? (string) $cp['username'] : '';
 
 		foreach ( $chunk as $checkin_id ) {
-			if ( bj_get_post_id_by_checkin_id( (string) $checkin_id ) ) {
+			if ( jb_get_post_id_by_checkin_id( (string) $checkin_id ) ) {
 				continue;
 			}
 			$url  = 'https://untappd.com/user/' . rawurlencode( $username ) . '/checkin/' . $checkin_id;
@@ -206,7 +206,7 @@ class BJ_Crawler {
 				'checkin_date' => gmdate( 'c' ),
 			);
 
-			$scraper = new BJ_Scraper();
+			$scraper = new JB_Scraper();
 			$scraped = $scraper->scrape_checkin_url( $url );
 			if ( ! is_wp_error( $scraped ) ) {
 				$data = array_merge( $data, $scraped );
@@ -215,7 +215,7 @@ class BJ_Crawler {
 			$data['source'] = 'crawler';
 			$res              = $importer->import_checkin_data( $data, 'crawler' );
 			if ( is_wp_error( $res ) ) {
-				BJ_Logger::warning( 'Historical import: ' . $res->get_error_message() );
+				JB_Logger::warning( 'Historical import: ' . $res->get_error_message() );
 			}
 		}
 
@@ -223,14 +223,14 @@ class BJ_Crawler {
 		$cp['last_run']        = time();
 		$cp['total_imported']  = isset( $cp['total_imported'] ) ? absint( $cp['total_imported'] ) + count( $chunk ) : count( $chunk );
 		$cp['status']          = empty( $queue ) ? 'done' : 'running';
-		update_option( 'bj_import_checkpoint', $cp, false );
+		update_option( 'jb_import_checkpoint', $cp, false );
 
-		if ( ! empty( $queue ) && 'background' === get_option( 'bj_import_mode', 'manual' ) ) {
-			$delay = time() + max( 60, absint( get_option( 'bj_import_delay', 3 ) ) * 10 );
+		if ( ! empty( $queue ) && 'background' === get_option( 'jb_import_mode', 'manual' ) ) {
+			$delay = time() + max( 60, absint( get_option( 'jb_import_delay', 3 ) ) * 10 );
 			if ( function_exists( 'as_schedule_single_action' ) ) {
-				as_schedule_single_action( $delay, 'bj_background_import_batch', array(), bj_action_scheduler_group() );
+				as_schedule_single_action( $delay, 'jb_background_import_batch', array(), jb_action_scheduler_group() );
 			} else {
-				wp_schedule_single_event( $delay, 'bj_background_import_batch' );
+				wp_schedule_single_event( $delay, 'jb_background_import_batch' );
 			}
 		}
 	}

@@ -1,8 +1,8 @@
 {
-	"name": "beer-journal",
+	"name": "jardin-beer",
 	"version": "1.0.0",
 	"description": "WordPress plugin to sync Untappd beer check-ins",
-	"author": "Beer Journal Contributors",
+	"author": "Jardin Beer Contributors",
 	"license": "GPL-2.0-or-later",
 	"scripts": {
 		"build": "wp-scripts build",

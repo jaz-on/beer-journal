@@ -2,13 +2,13 @@
 
 ## Overview
 
-Beer Journal uses WordPress actions (hooks) throughout the codebase. This document lists all actions provided by the plugin.
+Jardin Beer uses WordPress actions (hooks) throughout the codebase. This document lists all actions provided by the plugin.
 
 ## Plugin Lifecycle Hooks
 
 ### Activation
 
-**Hook**: `bj_plugin_activated`
+**Hook**: `jb_plugin_activated`
 
 **Fired**: On plugin activation
 
@@ -16,7 +16,7 @@ Beer Journal uses WordPress actions (hooks) throughout the codebase. This docume
 
 **Usage**:
 ```php
-add_action('bj_plugin_activated', function() {
+add_action('jb_plugin_activated', function() {
     // Custom activation logic
 });
 ```
@@ -25,7 +25,7 @@ add_action('bj_plugin_activated', function() {
 
 ### Deactivation
 
-**Hook**: `bj_plugin_deactivated`
+**Hook**: `jb_plugin_deactivated`
 
 **Fired**: On plugin deactivation
 
@@ -33,7 +33,7 @@ add_action('bj_plugin_activated', function() {
 
 **Usage**:
 ```php
-add_action('bj_plugin_deactivated', function() {
+add_action('jb_plugin_deactivated', function() {
     // Custom deactivation logic
 });
 ```
@@ -44,7 +44,7 @@ add_action('bj_plugin_deactivated', function() {
 
 ### Before Check-in Import
 
-**Hook**: `bj_before_checkin_import`
+**Hook**: `jb_before_checkin_import`
 
 **Fired**: Before importing a single check-in
 
@@ -53,7 +53,7 @@ add_action('bj_plugin_deactivated', function() {
 
 **Usage**:
 ```php
-add_action('bj_before_checkin_import', function($data) {
+add_action('jb_before_checkin_import', function($data) {
     // Modify data before import
     $data['custom_field'] = 'value';
 });
@@ -63,7 +63,7 @@ add_action('bj_before_checkin_import', function($data) {
 
 ### After Check-in Imported
 
-**Hook**: `bj_after_checkin_imported`
+**Hook**: `jb_after_checkin_imported`
 
 **Fired**: After a check-in is successfully imported
 
@@ -73,7 +73,7 @@ add_action('bj_before_checkin_import', function($data) {
 
 **Usage**:
 ```php
-add_action('bj_after_checkin_imported', function($post_id, $data) {
+add_action('jb_after_checkin_imported', function($post_id, $data) {
     // Send notification, update external system, etc.
     wp_mail('admin@example.com', 'New Check-in', 'Check-in imported: ' . $data['beer_name']);
 });
@@ -83,7 +83,7 @@ add_action('bj_after_checkin_imported', function($post_id, $data) {
 
 ### After Batch Import
 
-**Hook**: `bj_after_batch_import`
+**Hook**: `jb_after_batch_import`
 
 **Fired**: After a batch of check-ins is imported
 
@@ -93,7 +93,7 @@ add_action('bj_after_checkin_imported', function($post_id, $data) {
 
 **Usage**:
 ```php
-add_action('bj_after_batch_import', function($count, $imported_ids) {
+add_action('jb_after_batch_import', function($count, $imported_ids) {
     // Log batch completion
     error_log("Imported {$count} check-ins");
 });
@@ -105,7 +105,7 @@ add_action('bj_after_batch_import', function($count, $imported_ids) {
 
 ### Before RSS Sync
 
-**Hook**: `bj_before_rss_sync`
+**Hook**: `jb_before_rss_sync`
 
 **Fired**: Before RSS synchronization starts
 
@@ -113,9 +113,9 @@ add_action('bj_after_batch_import', function($count, $imported_ids) {
 
 **Usage**:
 ```php
-add_action('bj_before_rss_sync', function() {
+add_action('jb_before_rss_sync', function() {
     // Prepare for sync
-    update_option('bj_sync_in_progress', true);
+    update_option('jb_sync_in_progress', true);
 });
 ```
 
@@ -123,7 +123,7 @@ add_action('bj_before_rss_sync', function() {
 
 ### After RSS Sync
 
-**Hook**: `bj_after_rss_sync`
+**Hook**: `jb_after_rss_sync`
 
 **Fired**: After RSS synchronization completes
 
@@ -132,9 +132,9 @@ add_action('bj_before_rss_sync', function() {
 
 **Usage**:
 ```php
-add_action('bj_after_rss_sync', function($imported_count) {
+add_action('jb_after_rss_sync', function($imported_count) {
     // Cleanup, notifications, etc.
-    update_option('bj_sync_in_progress', false);
+    update_option('jb_sync_in_progress', false);
 });
 ```
 
@@ -144,7 +144,7 @@ add_action('bj_after_rss_sync', function($imported_count) {
 
 ### Before Scraping
 
-**Hook**: `bj_before_scraping`
+**Hook**: `jb_before_scraping`
 
 **Fired**: Before scraping a check-in page
 
@@ -153,7 +153,7 @@ add_action('bj_after_rss_sync', function($imported_count) {
 
 **Usage**:
 ```php
-add_action('bj_before_scraping', function($url) {
+add_action('jb_before_scraping', function($url) {
     // Log scraping attempt
     error_log("Scraping: {$url}");
 });
@@ -163,7 +163,7 @@ add_action('bj_before_scraping', function($url) {
 
 ### After Scraping
 
-**Hook**: `bj_after_scraping`
+**Hook**: `jb_after_scraping`
 
 **Fired**: After scraping completes (success or failure)
 
@@ -173,7 +173,7 @@ add_action('bj_before_scraping', function($url) {
 
 **Usage**:
 ```php
-add_action('bj_after_scraping', function($url, $data) {
+add_action('jb_after_scraping', function($url, $data) {
     if (is_wp_error($data)) {
         error_log("Scraping failed: {$url}");
     }
@@ -186,7 +186,7 @@ add_action('bj_after_scraping', function($url, $data) {
 
 ### Before Check-ins List
 
-**Hook**: `bj_before_checkins_list`
+**Hook**: `jb_before_checkins_list`
 
 **Fired**: Before the check-ins list is displayed
 
@@ -195,7 +195,7 @@ add_action('bj_after_scraping', function($url, $data) {
 
 **Usage**:
 ```php
-add_action('bj_before_checkins_list', function($query) {
+add_action('jb_before_checkins_list', function($query) {
     // Add custom header
     echo '<div class="custom-header">Total: ' . $query->found_posts . '</div>';
 });
@@ -205,7 +205,7 @@ add_action('bj_before_checkins_list', function($query) {
 
 ### After Check-in Card
 
-**Hook**: `bj_after_checkin_card`
+**Hook**: `jb_after_checkin_card`
 
 **Fired**: After each check-in card is displayed
 
@@ -214,7 +214,7 @@ add_action('bj_before_checkins_list', function($query) {
 
 **Usage**:
 ```php
-add_action('bj_after_checkin_card', function($post_id) {
+add_action('jb_after_checkin_card', function($post_id) {
     // Add custom content after each card
     echo '<div class="custom-footer">Custom Footer</div>';
 });
@@ -224,7 +224,7 @@ add_action('bj_after_checkin_card', function($post_id) {
 
 ### Before Single Check-in
 
-**Hook**: `bj_before_single_checkin`
+**Hook**: `jb_before_single_checkin`
 
 **Fired**: Before single check-in template loads
 
@@ -233,7 +233,7 @@ add_action('bj_after_checkin_card', function($post_id) {
 
 **Usage**:
 ```php
-add_action('bj_before_single_checkin', function($post_id) {
+add_action('jb_before_single_checkin', function($post_id) {
     // Add custom content before single view
 });
 ```
@@ -242,7 +242,7 @@ add_action('bj_before_single_checkin', function($post_id) {
 
 ### After Single Check-in
 
-**Hook**: `bj_after_single_checkin`
+**Hook**: `jb_after_single_checkin`
 
 **Fired**: After single check-in template loads
 
@@ -251,7 +251,7 @@ add_action('bj_before_single_checkin', function($post_id) {
 
 **Usage**:
 ```php
-add_action('bj_after_single_checkin', function($post_id) {
+add_action('jb_after_single_checkin', function($post_id) {
     // Add custom content after single view
 });
 ```
@@ -262,7 +262,7 @@ add_action('bj_after_single_checkin', function($post_id) {
 
 ### Before Image Download
 
-**Hook**: `bj_before_image_download`
+**Hook**: `jb_before_image_download`
 
 **Fired**: Before downloading an image
 
@@ -272,7 +272,7 @@ add_action('bj_after_single_checkin', function($post_id) {
 
 **Usage**:
 ```php
-add_action('bj_before_image_download', function($url, $post_id) {
+add_action('jb_before_image_download', function($url, $post_id) {
     // Log image download
     error_log("Downloading image for post {$post_id}: {$url}");
 });
@@ -282,7 +282,7 @@ add_action('bj_before_image_download', function($url, $post_id) {
 
 ### After Image Downloaded
 
-**Hook**: `bj_after_image_downloaded`
+**Hook**: `jb_after_image_downloaded`
 
 **Fired**: After image is downloaded and imported
 
@@ -293,7 +293,7 @@ add_action('bj_before_image_download', function($url, $post_id) {
 
 **Usage**:
 ```php
-add_action('bj_after_image_downloaded', function($attachment_id, $post_id, $url) {
+add_action('jb_after_image_downloaded', function($attachment_id, $post_id, $url) {
     // Process downloaded image
     update_post_meta($attachment_id, 'custom_meta', 'value');
 });
@@ -305,7 +305,7 @@ add_action('bj_after_image_downloaded', function($attachment_id, $post_id, $url)
 
 ### Before Term Created
 
-**Hook**: `bj_before_term_created`
+**Hook**: `jb_before_term_created`
 
 **Fired**: Before creating a taxonomy term
 
@@ -315,7 +315,7 @@ add_action('bj_after_image_downloaded', function($attachment_id, $post_id, $url)
 
 **Usage**:
 ```php
-add_action('bj_before_term_created', function($term_name, $taxonomy) {
+add_action('jb_before_term_created', function($term_name, $taxonomy) {
     // Normalize term name
     return sanitize_title($term_name);
 });
@@ -325,7 +325,7 @@ add_action('bj_before_term_created', function($term_name, $taxonomy) {
 
 ### After Term Created
 
-**Hook**: `bj_after_term_created`
+**Hook**: `jb_after_term_created`
 
 **Fired**: After a taxonomy term is created
 
@@ -336,7 +336,7 @@ add_action('bj_before_term_created', function($term_name, $taxonomy) {
 
 **Usage**:
 ```php
-add_action('bj_after_term_created', function($term_id, $term_name, $taxonomy) {
+add_action('jb_after_term_created', function($term_id, $term_name, $taxonomy) {
     // Log new term creation
     error_log("Created term: {$term_name} ({$taxonomy})");
 });
@@ -348,7 +348,7 @@ add_action('bj_after_term_created', function($term_id, $term_name, $taxonomy) {
 
 ### Before Settings Save
 
-**Hook**: `bj_before_settings_save`
+**Hook**: `jb_before_settings_save`
 
 **Fired**: Before settings are saved
 
@@ -357,7 +357,7 @@ add_action('bj_after_term_created', function($term_id, $term_name, $taxonomy) {
 
 **Usage**:
 ```php
-add_action('bj_before_settings_save', function($settings) {
+add_action('jb_before_settings_save', function($settings) {
     // Validate settings
     if (empty($settings['rss_feed_url'])) {
         return new WP_Error('missing_url', 'RSS feed URL required');
@@ -369,7 +369,7 @@ add_action('bj_before_settings_save', function($settings) {
 
 ### After Settings Save
 
-**Hook**: `bj_after_settings_save`
+**Hook**: `jb_after_settings_save`
 
 **Fired**: After settings are saved
 
@@ -378,9 +378,9 @@ add_action('bj_before_settings_save', function($settings) {
 
 **Usage**:
 ```php
-add_action('bj_after_settings_save', function($settings) {
+add_action('jb_after_settings_save', function($settings) {
     // Clear cache, update schedules, etc.
-    wp_clear_scheduled_hook('bj_rss_sync');
+    wp_clear_scheduled_hook('jb_rss_sync');
 });
 ```
 
@@ -389,39 +389,39 @@ add_action('bj_after_settings_save', function($settings) {
 ## Complete Action List
 
 ### Import Actions
-- `bj_before_checkin_import` - Before importing check-in
-- `bj_after_checkin_imported` - After check-in imported
-- `bj_after_batch_import` - After batch import
+- `jb_before_checkin_import` - Before importing check-in
+- `jb_after_checkin_imported` - After check-in imported
+- `jb_after_batch_import` - After batch import
 
 ### RSS Sync Actions
-- `bj_before_rss_sync` - Before RSS sync
-- `bj_after_rss_sync` - After RSS sync
+- `jb_before_rss_sync` - Before RSS sync
+- `jb_after_rss_sync` - After RSS sync
 
 ### Scraping Actions
-- `bj_before_scraping` - Before scraping
-- `bj_after_scraping` - After scraping
+- `jb_before_scraping` - Before scraping
+- `jb_after_scraping` - After scraping
 
 ### Frontend Actions
-- `bj_before_checkins_list` - Before check-ins list
-- `bj_after_checkin_card` - After check-in card
-- `bj_before_single_checkin` - Before single check-in
-- `bj_after_single_checkin` - After single check-in
+- `jb_before_checkins_list` - Before check-ins list
+- `jb_after_checkin_card` - After check-in card
+- `jb_before_single_checkin` - Before single check-in
+- `jb_after_single_checkin` - After single check-in
 
 ### Image Actions
-- `bj_before_image_download` - Before image download
-- `bj_after_image_downloaded` - After image downloaded
+- `jb_before_image_download` - Before image download
+- `jb_after_image_downloaded` - After image downloaded
 
 ### Taxonomy Actions
-- `bj_before_term_created` - Before term created
-- `bj_after_term_created` - After term created
+- `jb_before_term_created` - Before term created
+- `jb_after_term_created` - After term created
 
 ### Settings Actions
-- `bj_before_settings_save` - Before settings save
-- `bj_after_settings_save` - After settings save
+- `jb_before_settings_save` - Before settings save
+- `jb_after_settings_save` - After settings save
 
 ### Plugin Lifecycle Actions
-- `bj_plugin_activated` - Plugin activated
-- `bj_plugin_deactivated` - Plugin deactivated
+- `jb_plugin_activated` - Plugin activated
+- `jb_plugin_deactivated` - Plugin deactivated
 
 ## Related Documentation
 

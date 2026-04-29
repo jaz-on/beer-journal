@@ -127,7 +127,7 @@ $rating = floatval(trim($rating_text));
 
 // Validate
 if ($rating < 0 || $rating > 5) {
-    error_log('Beer Journal: Invalid rating - ' . $rating);
+    error_log('Jardin Beer: Invalid rating - ' . $rating);
     return new WP_Error('invalid_rating', 'Rating must be 0-5');
 }
 ```
@@ -189,7 +189,7 @@ try {
     
     if (empty($rating)) {
         // Log warning
-        error_log('Beer Journal: Could not extract rating from ' . $url);
+        error_log('Jardin Beer: Could not extract rating from ' . $url);
         // Save as draft
         return new WP_Error('rating_not_found', 'Rating not found');
     }
@@ -234,18 +234,18 @@ if (empty($beer_style)) {
 
 **Delay Between Requests**:
 ```php
-$delay = get_option('bj_scraping_delay', 3); // Default 3 seconds
+$delay = get_option('jb_scraping_delay', 3); // Default 3 seconds
 
 // Wait before next request
 sleep($delay);
 
 // Or use transients for more precise timing
-$last_request = get_transient('bj_last_scrape_request');
+$last_request = get_transient('jb_last_scrape_request');
 if ($last_request && (time() - $last_request) < $delay) {
     $wait = $delay - (time() - $last_request);
     sleep($wait);
 }
-set_transient('bj_last_scrape_request', time(), 60);
+set_transient('jb_last_scrape_request', time(), 60);
 ```
 
 ---
@@ -294,9 +294,9 @@ if (empty($rating)) {
 
 // If still empty, log and save as draft
 if (empty($rating)) {
-    error_log('Beer Journal: Could not extract rating from ' . $url);
+    error_log('Jardin Beer: Could not extract rating from ' . $url);
     // Save as draft with reason
-    update_post_meta($post_id, '_bj_incomplete_reason', 'missing_rating');
+    update_post_meta($post_id, '_jb_incomplete_reason', 'missing_rating');
     return;
 }
 ```

@@ -2,7 +2,7 @@
 /**
  * Front-end: templates, assets, schema.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Public
+ * Class JB_Public
  */
-class BJ_Public {
+class JB_Public {
 
 	/**
 	 * Register hooks.
@@ -20,7 +20,7 @@ class BJ_Public {
 	 * @return void
 	 */
 	public function register() {
-		require_once BJ_PLUGIN_DIR . 'public/template-tags.php';
+		require_once JB_PLUGIN_DIR . 'public/template-tags.php';
 
 		add_filter( 'template_include', array( $this, 'template_include' ), 99 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
@@ -35,9 +35,9 @@ class BJ_Public {
 	 * @return array<int, string>
 	 */
 	public function body_class_layout( $classes ) {
-		if ( is_post_type_archive( BJ_Post_Type::POST_TYPE )
-			|| is_tax( array( BJ_Taxonomies::STYLE, BJ_Taxonomies::BREWERY, BJ_Taxonomies::VENUE ) ) ) {
-			$classes[] = 'bj-archive-layout-' . bj_get_archive_layout();
+		if ( is_post_type_archive( JB_Post_Type::POST_TYPE )
+			|| is_tax( array( JB_Taxonomies::STYLE, JB_Taxonomies::BREWERY, JB_Taxonomies::VENUE ) ) ) {
+			$classes[] = 'jb-archive-layout-' . jb_get_archive_layout();
 		}
 		return $classes;
 	}
@@ -53,32 +53,32 @@ class BJ_Public {
 			return $template;
 		}
 
-		if ( is_post_type_archive( BJ_Post_Type::POST_TYPE ) ) {
-			$theme = locate_template( array( 'beer-journal/archive-beer_checkin.php' ) );
+		if ( is_post_type_archive( JB_Post_Type::POST_TYPE ) ) {
+			$theme = locate_template( array( 'jardin-beer/archive-beer_checkin.php' ) );
 			if ( $theme ) {
 				return $theme;
 			}
-			$path = BJ_PLUGIN_DIR . 'public/templates/archive-beer_checkin.php';
+			$path = JB_PLUGIN_DIR . 'public/templates/archive-beer_checkin.php';
 			return file_exists( $path ) ? $path : $template;
 		}
 
-		if ( is_singular( BJ_Post_Type::POST_TYPE ) ) {
-			$theme = locate_template( array( 'beer-journal/single-beer_checkin.php' ) );
+		if ( is_singular( JB_Post_Type::POST_TYPE ) ) {
+			$theme = locate_template( array( 'jardin-beer/single-beer_checkin.php' ) );
 			if ( $theme ) {
 				return $theme;
 			}
-			$path = BJ_PLUGIN_DIR . 'public/templates/single-beer_checkin.php';
+			$path = JB_PLUGIN_DIR . 'public/templates/single-beer_checkin.php';
 			return file_exists( $path ) ? $path : $template;
 		}
 
-		if ( is_tax( BJ_Taxonomies::STYLE ) || is_tax( BJ_Taxonomies::BREWERY ) || is_tax( BJ_Taxonomies::VENUE ) ) {
+		if ( is_tax( JB_Taxonomies::STYLE ) || is_tax( JB_Taxonomies::BREWERY ) || is_tax( JB_Taxonomies::VENUE ) ) {
 			$tax = get_queried_object();
 			if ( $tax && isset( $tax->taxonomy ) ) {
-				$theme = locate_template( array( 'beer-journal/taxonomy-' . $tax->taxonomy . '.php' ) );
+				$theme = locate_template( array( 'jardin-beer/taxonomy-' . $tax->taxonomy . '.php' ) );
 				if ( $theme ) {
 					return $theme;
 				}
-				$path = BJ_PLUGIN_DIR . 'public/templates/taxonomy-' . $tax->taxonomy . '.php';
+				$path = JB_PLUGIN_DIR . 'public/templates/taxonomy-' . $tax->taxonomy . '.php';
 				if ( file_exists( $path ) ) {
 					return $path;
 				}
@@ -94,17 +94,17 @@ class BJ_Public {
 	 * @return void
 	 */
 	public function enqueue_assets() {
-		if ( ! is_post_type_archive( BJ_Post_Type::POST_TYPE )
-			&& ! is_singular( BJ_Post_Type::POST_TYPE )
-			&& ! is_tax( array( BJ_Taxonomies::STYLE, BJ_Taxonomies::BREWERY, BJ_Taxonomies::VENUE ) ) ) {
+		if ( ! is_post_type_archive( JB_Post_Type::POST_TYPE )
+			&& ! is_singular( JB_Post_Type::POST_TYPE )
+			&& ! is_tax( array( JB_Taxonomies::STYLE, JB_Taxonomies::BREWERY, JB_Taxonomies::VENUE ) ) ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'beer-journal-public',
-			BJ_PLUGIN_URL . 'public/assets/css/public.css',
+			'jardin-beer-public',
+			JB_PLUGIN_URL . 'public/assets/css/public.css',
 			array(),
-			BJ_VERSION
+			JB_VERSION
 		);
 	}
 
@@ -114,16 +114,16 @@ class BJ_Public {
 	 * @return void
 	 */
 	public function output_json_ld() {
-		if ( ! is_singular( BJ_Post_Type::POST_TYPE ) ) {
+		if ( ! is_singular( JB_Post_Type::POST_TYPE ) ) {
 			return;
 		}
-		if ( ! get_option( 'bj_schema_enabled', true ) ) {
+		if ( ! get_option( 'jb_schema_enabled', true ) ) {
 			return;
 		}
 
 		$post_id = get_queried_object_id();
-		$rating    = bj_get_checkin_rating_raw( $post_id );
-		$beer_name = get_post_meta( $post_id, '_bj_beer_name', true );
+		$rating    = jb_get_checkin_rating_raw( $post_id );
+		$beer_name = get_post_meta( $post_id, '_jb_beer_name', true );
 		if ( ! is_string( $beer_name ) || '' === $beer_name ) {
 			$beer_name = get_the_title( $post_id );
 		}
@@ -148,7 +148,7 @@ class BJ_Public {
 			);
 		}
 
-		$data = apply_filters( 'bj_schema_review_data', $data, $post_id );
+		$data = apply_filters( 'jb_schema_review_data', $data, $post_id );
 
 		echo '<script type="application/ld+json">' . wp_json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}

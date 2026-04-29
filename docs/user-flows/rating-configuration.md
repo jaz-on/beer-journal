@@ -34,11 +34,11 @@ flowchart TD
 
 ### Navigation
 
-**Path**: `Beer Journal > Settings > Rating System`
+**Path**: `Jardin Beer > Settings > Rating System`
 
 **Access**:
 1. Go to WordPress admin
-2. Click "Beer Journal" in menu
+2. Click "Jardin Beer" in menu
 3. Click "Settings"
 4. Click "Rating System" tab
 
@@ -150,9 +150,9 @@ flowchart TD
 
 **Actions**:
 1. Save to `wp_options`:
-   - `bj_rating_rules`
-   - `bj_rating_labels`
-   - `bj_rating_display_*` options
+   - `jb_rating_rules`
+   - `jb_rating_labels`
+   - `jb_rating_display_*` options
 2. Clear cache:
    - Clear rating-related transients
    - Clear post meta cache
@@ -202,7 +202,7 @@ Tooltip: Original rating: 4.25
 ### Existing Check-ins
 
 **Rating Mapping**:
-- Existing `_bj_rating_rounded` values are NOT updated
+- Existing `_jb_rating_rounded` values are NOT updated
 - Only new imports use new mapping rules
 - Option to recalculate existing ratings (future feature)
 

@@ -2,17 +2,17 @@
 
 ## Overview
 
-Beer Journal provides numerous helper functions for common operations. These functions are used throughout the plugin and can be used by theme developers.
+Jardin Beer provides numerous helper functions for common operations. These functions are used throughout the plugin and can be used by theme developers.
 
 ## Taxonomy Functions
 
-### `bj_get_or_create_term()`
+### `jb_get_or_create_term()`
 
 Get an existing taxonomy term or create it if it doesn't exist.
 
 **Signature**:
 ```php
-function bj_get_or_create_term($taxonomy, $term_name, $args = [])
+function jb_get_or_create_term($taxonomy, $term_name, $args = [])
 ```
 
 **Parameters**:
@@ -28,7 +28,7 @@ function bj_get_or_create_term($taxonomy, $term_name, $args = [])
 **Example**:
 ```php
 // Get or create a beer style
-$term = bj_get_or_create_term('beer_style', 'IPA - New England / Hazy', [
+$term = jb_get_or_create_term('beer_style', 'IPA - New England / Hazy', [
     'parent' => $parent_term_id,
 ]);
 
@@ -43,20 +43,20 @@ if (!is_wp_error($term)) {
 
 ## Draft Management Functions
 
-### `bj_get_draft_count()`
+### `jb_get_draft_count()`
 
 Get the total number of draft check-ins.
 
 **Signature**:
 ```php
-function bj_get_draft_count()
+function jb_get_draft_count()
 ```
 
 **Returns**: `int` - Number of draft check-ins
 
 **Example**:
 ```php
-$draft_count = bj_get_draft_count();
+$draft_count = jb_get_draft_count();
 if ($draft_count > 0) {
     echo "You have {$draft_count} draft check-ins awaiting review.";
 }
@@ -66,13 +66,13 @@ if ($draft_count > 0) {
 
 ---
 
-### `bj_get_draft_breakdown()`
+### `jb_get_draft_breakdown()`
 
 Get a breakdown of draft check-ins by reason.
 
 **Signature**:
 ```php
-function bj_get_draft_breakdown()
+function jb_get_draft_breakdown()
 ```
 
 **Returns**: `array` - Associative array with reason as key and count as value
@@ -86,7 +86,7 @@ function bj_get_draft_breakdown()
 
 **Example**:
 ```php
-$breakdown = bj_get_draft_breakdown();
+$breakdown = jb_get_draft_breakdown();
 foreach ($breakdown as $reason => $count) {
     echo "{$reason}: {$count}\n";
 }
@@ -96,13 +96,13 @@ foreach ($breakdown as $reason => $count) {
 
 ---
 
-### `bj_get_draft_reason_label()`
+### `jb_get_draft_reason_label()`
 
 Get a human-readable label for a draft reason.
 
 **Signature**:
 ```php
-function bj_get_draft_reason_label($reason)
+function jb_get_draft_reason_label($reason)
 ```
 
 **Parameters**:
@@ -112,7 +112,7 @@ function bj_get_draft_reason_label($reason)
 
 **Example**:
 ```php
-$label = bj_get_draft_reason_label('missing_rating');
+$label = jb_get_draft_reason_label('missing_rating');
 // Returns: "Missing Rating" (or translated equivalent)
 ```
 
@@ -122,13 +122,13 @@ $label = bj_get_draft_reason_label('missing_rating');
 
 ## Import Functions
 
-### `bj_scrape_and_import_checkin()`
+### `jb_scrape_and_import_checkin()`
 
 Scrape a check-in URL and import it into WordPress.
 
 **Signature**:
 ```php
-function bj_scrape_and_import_checkin($checkin_url, $existing_post_id = null)
+function jb_scrape_and_import_checkin($checkin_url, $existing_post_id = null)
 ```
 
 **Parameters**:
@@ -140,7 +140,7 @@ function bj_scrape_and_import_checkin($checkin_url, $existing_post_id = null)
 **Example**:
 ```php
 $url = 'https://untappd.com/user/jaz_on/checkin/1527514863';
-$result = bj_scrape_and_import_checkin($url);
+$result = jb_scrape_and_import_checkin($url);
 
 if (is_wp_error($result)) {
     error_log('Import failed: ' . $result->get_error_message());
@@ -155,17 +155,17 @@ if (is_wp_error($result)) {
 
 ## Cache Helper (Guidelines)
 
-### `bj_get_cached_data()` (contrat recommandé)
+### `jb_get_cached_data()` (contrat recommandé)
 
 Centralise l’accès aux transients avec une clé normalisée et un TTL par défaut.
 
 **Signature (contrat)**:
 ```php
-function bj_get_cached_data($key, callable $producer, int $ttlSeconds = null)
+function jb_get_cached_data($key, callable $producer, int $ttlSeconds = null)
 ```
 
 **Paramètres**:
-- `$key` (string): Suffixe de clé sans préfixe (`'bj_'` sera ajouté en interne)
+- `$key` (string): Suffixe de clé sans préfixe (`'jb_'` sera ajouté en interne)
 - `$producer` (callable): Fonction productrice appelée en cas de cache manquant
 - `$ttlSeconds` (int|null): TTL en secondes, défaut 3 heures si `null`
 
@@ -173,15 +173,15 @@ function bj_get_cached_data($key, callable $producer, int $ttlSeconds = null)
 
 **Exemple**:
 ```php
-$stats = bj_get_cached_data('global_stats', function () {
+$stats = jb_get_cached_data('global_stats', function () {
     // compute stats...
     return ['total' => 200, 'unique' => 150];
 }, HOUR_IN_SECONDS);
 ```
 
 **Conventions de clés**:
-- Préfixe `bj_` ajouté automatiquement
-- Noms courts et déterministes: `bj_global_stats`, `bj_scrape_{id}`, `bj_query_archive_{hash}`
+- Préfixe `jb_` ajouté automatiquement
+- Noms courts et déterministes: `jb_global_stats`, `jb_scrape_{id}`, `jb_query_archive_{hash}`
 
 **Notes**:
 - Voir la page [Caching](../development/caching.md) pour TTL recommandés et invalidation.
@@ -190,24 +190,24 @@ $stats = bj_get_cached_data('global_stats', function () {
 
 ## Logging Functions
 
-### `bj_get_log_directory()`
+### `jb_get_log_directory()`
 
 Get the absolute path to the log directory.
 
 **Signature**:
 ```php
-function bj_get_log_directory()
+function jb_get_log_directory()
 ```
 
 **Returns**: `string` - Absolute path to log directory
 ```php
-'/path/to/wp-content/uploads/beer-journal/logs/'
+'/path/to/wp-content/uploads/jardin-beer/logs/'
 ```
 
 **Example**:
 ```php
-$log_dir = bj_get_log_directory();
-$log_file = $log_dir . 'beer-journal-' . date('Y-m-d') . '.log';
+$log_dir = jb_get_log_directory();
+$log_file = $log_dir . 'jardin-beer-' . date('Y-m-d') . '.log';
 ```
 
 **Location**: `includes/functions-logging.php`

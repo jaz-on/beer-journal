@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Beer Journal">
-	<description>WordPress Coding Standards for Beer Journal</description>
+<ruleset name="Jardin Beer">
+	<description>WordPress Coding Standards for Jardin Beer</description>
 
 	<!-- Include WordPress Coding Standards -->
 	<rule ref="WordPress"/>

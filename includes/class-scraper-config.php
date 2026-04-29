@@ -2,7 +2,7 @@
 /**
  * Scraper DOM configuration and markup version (bump when Untappd HTML strategy changes).
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Scraper_Config
+ * Class JB_Scraper_Config
  */
-class BJ_Scraper_Config {
+class JB_Scraper_Config {
 
 	/**
 	 * Increment when check-in page parsing strategy changes materially (for logs / support).
@@ -34,7 +34,7 @@ class BJ_Scraper_Config {
 			'venue'   => array( '.venue-name', '.top-location' ),
 			'photo'   => array( '.photo img', '.label img' ),
 		);
-		$filtered = apply_filters( 'bj_scraper_dom_selectors', $selectors );
+		$filtered = apply_filters( 'jb_scraper_dom_selectors', $selectors );
 		return is_array( $filtered ) ? $filtered : $selectors;
 	}
 }

@@ -40,7 +40,7 @@ flowchart TD
 ### Step 1: Sync Trigger
 
 **Automatic**:
-- WordPress cron event: `bj_rss_sync`
+- WordPress cron event: `jb_rss_sync`
 - Frequency: Adaptive (6h/daily/weekly based on activity)
 - Scheduled based on last check-in date
 
@@ -53,7 +53,7 @@ flowchart TD
 ### Step 2: Check Sync Enabled
 
 **Validation**:
-- Check `bj_sync_enabled` option
+- Check `jb_sync_enabled` option
 - If disabled, skip sync
 
 ---
@@ -93,7 +93,7 @@ flowchart TD
 
 **Actions**:
 1. Extract GUID from first item (latest)
-2. Compare with `bj_last_imported_guid` option
+2. Compare with `jb_last_imported_guid` option
 3. If same: Skip to completion (no new check-ins)
 4. If different: Continue to import process
 
@@ -110,7 +110,7 @@ flowchart TD
 
 **Actions**:
 1. Extract check-in ID from GUID
-2. Check if already imported (query by `_bj_checkin_id`)
+2. Check if already imported (query by `_jb_checkin_id`)
 3. If exists: Skip to next item
 4. If new: Continue to scraping
 
@@ -162,7 +162,7 @@ flowchart TD
 1. Create WordPress post (Custom Post Type)
 2. Download and import image (if present)
 3. Assign taxonomies (beer style, brewery, venue)
-4. Set meta fields (all `_bj_*` fields)
+4. Set meta fields (all `_jb_*` fields)
 5. Map rating (raw → rounded)
 6. Set post status (publish or draft)
 
@@ -173,8 +173,8 @@ flowchart TD
 ### Step 10: Update Last GUID
 
 **Actions**:
-1. Update `bj_last_imported_guid` option
-2. Update `bj_last_checkin_date` option
+1. Update `jb_last_imported_guid` option
+2. Update `jb_last_checkin_date` option
 3. Clear cache
 
 ---
@@ -245,7 +245,7 @@ After each sync, polling frequency is recalculated based on activity.
 
 **Actions**:
 - Save as draft with reason
-- Store in `_bj_incomplete_reason` meta field
+- Store in `_jb_incomplete_reason` meta field
 - Add to retry queue
 - Notify admin
 

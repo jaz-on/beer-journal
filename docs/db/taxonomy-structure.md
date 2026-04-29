@@ -38,7 +38,7 @@ The `beer_style` taxonomy is hierarchical, allowing for parent-child relationshi
 
 **Parsing Logic**:
 ```php
-function bj_parse_beer_style($style_string) {
+function jb_parse_beer_style($style_string) {
     // Example: "IPA - New England / Hazy"
     // Split by " - " to get parent and child
     $parts = explode(' - ', $style_string, 2);
@@ -48,19 +48,19 @@ function bj_parse_beer_style($style_string) {
         $child_name = trim($parts[1]);    // "New England / Hazy"
         
         // Get or create parent term
-        $parent_term = bj_get_or_create_term('beer_style', $parent_name, [
+        $parent_term = jb_get_or_create_term('beer_style', $parent_name, [
             'parent' => 0,
         ]);
         
         // Get or create child term
-        $child_term = bj_get_or_create_term('beer_style', $child_name, [
+        $child_term = jb_get_or_create_term('beer_style', $child_name, [
             'parent' => $parent_term->term_id,
         ]);
         
         return $child_term;
     } else {
         // No hierarchy, create flat term
-        return bj_get_or_create_term('beer_style', $style_string, [
+        return jb_get_or_create_term('beer_style', $style_string, [
             'parent' => 0,
         ]);
     }

@@ -34,7 +34,7 @@ flowchart TD
 - FTP upload
 
 **Actions**:
-1. Upload plugin files to `/wp-content/plugins/beer-journal/`
+1. Upload plugin files to `/wp-content/plugins/jardin-beer/`
 2. WordPress detects plugin
 
 ---
@@ -43,7 +43,7 @@ flowchart TD
 
 **Actions**:
 1. Go to Plugins page
-2. Click "Activate" on Beer Journal
+2. Click "Activate" on Jardin Beer
 3. Plugin activation hook runs:
    - Create database indexes (if needed)
    - Set default options
@@ -60,7 +60,7 @@ flowchart TD
 ### Step 3: Welcome and Initial Setup
 
 **Actions**:
-1. Admin notice displayed: "Beer Journal activated! Configure your RSS feed to start syncing."
+1. Admin notice displayed: "Jardin Beer activated! Configure your RSS feed to start syncing."
 2. Link to settings page
 3. User clicks "Go to Settings"
 
@@ -68,7 +68,7 @@ flowchart TD
 
 ### Step 4: Settings Configuration
 
-**Settings Page**: `Beer Journal > Settings > Synchronization`
+**Settings Page**: `Jardin Beer > Settings > Synchronization`
 
 **Required Configuration**:
 1. **RSS Feed URL**: 
@@ -159,7 +159,7 @@ flowchart TD
 
 ### System Requirements Not Met
 
-**Error**: "Beer Journal requires PHP 8.2+ and WordPress 6.0+"
+**Error**: "Jardin Beer requires PHP 8.2+ and WordPress 6.0+"
 
 **Resolution**: 
 - Update PHP version

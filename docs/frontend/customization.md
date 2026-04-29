@@ -2,7 +2,7 @@
 
 ## Overview
 
-Complete guide to customizing Beer Journal templates and functionality.
+Complete guide to customizing Jardin Beer templates and functionality.
 
 ## Template Override
 
@@ -13,7 +13,7 @@ Complete guide to customizing Beer Journal templates and functionality.
 **Structure**:
 ```
 /wp-content/themes/{theme}/
-├── beer-journal/
+├── jardin-beer/
 │   ├── archive-beer.php
 │   ├── single-beer.php
 │   └── partials/
@@ -30,14 +30,14 @@ Complete guide to customizing Beer Journal templates and functionality.
 
 **Before Check-ins List**:
 ```php
-add_action('bj_before_checkins_list', function($query) {
+add_action('jb_before_checkins_list', function($query) {
     // Add custom content
 });
 ```
 
 **After Check-in Card**:
 ```php
-add_action('bj_after_checkin_card', function($post_id) {
+add_action('jb_after_checkin_card', function($post_id) {
     // Add custom content
 });
 ```
@@ -48,7 +48,7 @@ add_action('bj_after_checkin_card', function($post_id) {
 
 **Template Path**:
 ```php
-add_filter('bj_checkin_template', function($template, $post_id) {
+add_filter('jb_checkin_template', function($template, $post_id) {
     // Use custom template
     return $template;
 }, 10, 2);
@@ -56,7 +56,7 @@ add_filter('bj_checkin_template', function($template, $post_id) {
 
 **Check-in Data**:
 ```php
-add_filter('bj_checkin_data', function($data, $post_id) {
+add_filter('jb_checkin_data', function($data, $post_id) {
     // Modify data
     return $data;
 }, 10, 2);
@@ -71,7 +71,7 @@ add_filter('bj_checkin_data', function($data, $post_id) {
 **Add to Theme**:
 ```css
 /* Override plugin styles */
-.bj-checkin-card {
+.jb-checkin-card {
     border: 2px solid #your-color;
 }
 ```
@@ -82,9 +82,9 @@ add_filter('bj_checkin_data', function($data, $post_id) {
 
 **Use Plugin Variables**:
 ```css
-.bj-custom {
-    color: var(--bj-primary-color);
-    border-color: var(--bj-border-color);
+.jb-custom {
+    color: var(--jb-primary-color);
+    border-color: var(--jb-border-color);
 }
 ```
 

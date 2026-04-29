@@ -1,10 +1,10 @@
 /**
- * Beer Journal — admin styles specific to this plugin (stats, import, rating, logs, media).
+ * Jardin Beer — admin styles specific to this plugin (stats, import, rating, logs, media).
  * Shared layout: jardin-admin-shell.css (keep in sync across Jardin plugins).
  */
 
 /* Stats strip */
-.bj-stats-strip {
+.jb-stats-strip {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1rem;
@@ -16,24 +16,24 @@
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.bj-admin-wrap .bj-stats-strip {
+.jb-admin-wrap .jb-stats-strip {
 	/* Use shell variables when shell is loaded */
 	background: var(--jd-admin-surface);
 	border-color: var(--jd-admin-border);
 }
 
-.bj-stats-strip__item {
+.jb-stats-strip__item {
 	min-width: 100px;
 	padding: 0.35rem 0.75rem;
 	border-radius: 4px;
 	background: var(--jd-admin-accent-dim, color-mix(in srgb, var(--wp-admin-theme-color, #2271b1) 12%, transparent));
 }
 
-.bj-stats-strip__item--wide {
+.jb-stats-strip__item--wide {
 	flex: 1 1 180px;
 }
 
-.bj-stats-strip__value {
+.jb-stats-strip__value {
 	display: block;
 	font-size: 1.35rem;
 	font-weight: 600;
@@ -42,11 +42,11 @@
 	font-variant-numeric: tabular-nums;
 }
 
-.bj-stats-strip__value--small {
+.jb-stats-strip__value--small {
 	font-size: 1rem;
 }
 
-.bj-stats-strip__label {
+.jb-stats-strip__label {
 	display: block;
 	font-size: 11px;
 	font-weight: 600;
@@ -57,7 +57,7 @@
 }
 
 /* AJAX status */
-.bj-admin-wrap .bj-ajax-status {
+.jb-admin-wrap .jb-ajax-status {
 	margin-left: 0;
 	font-size: 13px;
 	font-style: normal;
@@ -65,70 +65,70 @@
 }
 
 /* Rating editor */
-.bj-rating-edit {
+.jb-rating-edit {
 	margin-top: 1rem;
 	padding-top: 1rem;
 	border-top: 1px solid var(--jd-admin-border, #dcdcde);
 }
 
-.bj-rating-edit > h3 {
+.jb-rating-edit > h3 {
 	margin: 1.25rem 0 0.35rem;
 	font-size: 13px;
 	font-weight: 600;
 }
 
-.bj-rating-edit > h3:first-child {
+.jb-rating-edit > h3:first-child {
 	margin-top: 0;
 }
 
-.bj-rating-edit-table input.small-text {
+.jb-rating-edit-table input.small-text {
 	width: 5.75em;
 }
 
-.bj-rating-edit-table select {
+.jb-rating-edit-table select {
 	vertical-align: middle;
 }
 
-.bj-rating-edit-table__n {
+.jb-rating-edit-table__n {
 	width: 2.25rem;
 	text-align: center;
 	color: var(--jd-admin-muted, #646970);
 	font-variant-numeric: tabular-nums;
 }
 
-.bj-rating-edit-table--labels th {
+.jb-rating-edit-table--labels th {
 	width: 8rem;
 	font-weight: 600;
 }
 
-.bj-mini-table th,
-.bj-mini-table td {
+.jb-mini-table th,
+.jb-mini-table td {
 	font-size: 0.85rem;
 }
 
 /* Log */
-.bj-log-tail {
+.jb-log-tail {
 	font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
 	font-size: 12px;
 	line-height: 1.45;
 }
 
-.bj-field-row {
+.jb-field-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.5rem 0.75rem;
 }
 
-.bj-placeholder-picker {
+.jb-placeholder-picker {
 	margin-top: 0.75rem;
 }
 
-.bj-placeholder-picker__preview {
+.jb-placeholder-picker__preview {
 	margin-top: 0.5rem;
 }
 
-.bj-placeholder-picker__preview img {
+.jb-placeholder-picker__preview img {
 	display: block;
 	max-height: 80px;
 	width: auto;
@@ -136,20 +136,20 @@
 	border: 1px solid var(--jd-admin-border, #dcdcde);
 }
 
-.bj-archive-url a {
+.jb-archive-url a {
 	word-break: break-all;
 }
 
-.bj-admin-wrap textarea.code {
+.jb-admin-wrap textarea.code {
 	font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
 	font-size: 12px;
 }
 
-.bj-sync-health-list {
+.jb-sync-health-list {
 	margin: 0.5em 0 0 1.25em;
 	list-style: disc;
 }
 
-.bj-sync-health-list li {
+.jb-sync-health-list li {
 	margin-bottom: 0.35em;
 }

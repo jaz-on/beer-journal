@@ -107,12 +107,12 @@ foreach ($checkin_urls as $url) {
 ### Batch Processing Loop
 
 ```php
-$batch_size = get_option('bj_import_batch_size', 25);
-$delay = get_option('bj_import_delay', 3);
+$batch_size = get_option('jb_import_batch_size', 25);
+$delay = get_option('jb_import_delay', 3);
 
 foreach ($checkin_urls as $index => $url) {
     // Scrape and import
-    bj_import_checkin_from_url($url);
+    jb_import_checkin_from_url($url);
     
     // Delay between requests
     if ($index < count($checkin_urls) - 1) {
@@ -121,7 +121,7 @@ foreach ($checkin_urls as $index => $url) {
     
     // Save checkpoint every batch
     if (($index + 1) % $batch_size === 0) {
-        bj_save_checkpoint($index + 1);
+        jb_save_checkpoint($index + 1);
     }
 }
 ```
@@ -132,7 +132,7 @@ foreach ($checkin_urls as $index => $url) {
 
 ### Checkpoint Data
 
-**Stored in**: `bj_import_checkpoint` option
+**Stored in**: `jb_import_checkpoint` option
 
 **Structure**:
 ```php
@@ -151,8 +151,8 @@ foreach ($checkin_urls as $index => $url) {
 
 **After Each Batch**:
 ```php
-function bj_save_checkpoint($imported_count, $current_page, $remaining_urls) {
-    update_option('bj_import_checkpoint', [
+function jb_save_checkpoint($imported_count, $current_page, $remaining_urls) {
+    update_option('jb_import_checkpoint', [
         'current_page' => $current_page,
         'total_imported' => $imported_count,
         'last_checkin_id' => $last_checkin_id,
@@ -168,8 +168,8 @@ function bj_save_checkpoint($imported_count, $current_page, $remaining_urls) {
 
 **Implementation**:
 ```php
-function bj_resume_import() {
-    $checkpoint = get_option('bj_import_checkpoint');
+function jb_resume_import() {
+    $checkpoint = get_option('jb_import_checkpoint');
     
     if (empty($checkpoint)) {
         return new WP_Error('no_checkpoint', 'No checkpoint found');
@@ -193,7 +193,7 @@ function bj_resume_import() {
 
 ### Real-Time Updates
 
-**AJAX Endpoint**: `bj_get_import_progress`
+**AJAX Endpoint**: `jb_get_import_progress`
 
 **Updates**: Every 5 seconds
 

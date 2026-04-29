@@ -10,7 +10,7 @@
 ## Structure de classe
 
 - **Fichier** : `includes/class-[name].php`
-- **Classe** : `BJ_[Name]`
+- **Classe** : `JB_[Name]`
 - **Méthodes principales** :
   - `method_name()` - Description
   - `another_method()` - Description
@@ -21,7 +21,7 @@
 - [Liste des dépendances WordPress : SimplePie, WP_HTTP, etc.]
 
 ### Classes internes
-- [Liste des classes BJ_* nécessaires]
+- [Liste des classes JB_* nécessaires]
 
 ### Bibliothèques externes
 - [Liste des dépendances Composer : Guzzle, DomCrawler, etc.]
@@ -65,10 +65,10 @@
 - `another_filter` - Description et usage
 
 ### Options WordPress
-- `bj_option_name` - Description et valeur par défaut
+- `jb_option_name` - Description et valeur par défaut
 
 ### Transients
-- `bj_transient_name` - Description et TTL
+- `jb_transient_name` - Description et TTL
 
 ## Tests à prévoir
 

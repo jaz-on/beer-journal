@@ -11,7 +11,7 @@
  */
 
 // Vérifier que le script est exécuté depuis la racine du projet
-if ( ! file_exists( __DIR__ . '/../beer-journal.php' ) ) {
+if ( ! file_exists( __DIR__ . '/../jardin-beer.php' ) ) {
 	echo "Erreur : Ce script doit être exécuté depuis la racine du projet.\n";
 	exit( 1 );
 }
@@ -40,14 +40,14 @@ function parse_markdown_file( $file_path ) {
 		'dependencies' => [],
 	];
 
-	// Extraire les classes BJ_*
-	preg_match_all( '/`BJ_([A-Za-z_]+)`/', $content, $classes );
+	// Extraire les classes JB_*
+	preg_match_all( '/`JB_([A-Za-z_]+)`/', $content, $classes );
 	if ( ! empty( $classes[1] ) ) {
 		$info['classes'] = array_unique( $classes[1] );
 	}
 
-	// Extraire les fonctions bj_*
-	preg_match_all( '/`bj_([a-z_]+)\(\)`/', $content, $functions );
+	// Extraire les fonctions jb_*
+	preg_match_all( '/`jb_([a-z_]+)\(\)`/', $content, $functions );
 	if ( ! empty( $functions[1] ) ) {
 		$info['functions'] = array_unique( $functions[1] );
 	}
@@ -122,7 +122,7 @@ echo "\n=== RAPPORT D'ANALYSE ===\n\n";
 
 echo "Composants documentés (" . count( $report['components'] ) . ") :\n";
 foreach ( $report['components'] as $class => $files ) {
-	echo "  - BJ_$class (documenté dans " . count( $files ) . " fichier(s))\n";
+	echo "  - JB_$class (documenté dans " . count( $files ) . " fichier(s))\n";
 	foreach ( $files as $file ) {
 		echo "    → $file\n";
 	}
@@ -130,7 +130,7 @@ foreach ( $report['components'] as $class => $files ) {
 
 echo "\nFonctions documentées (" . count( $report['functions'] ) . ") :\n";
 foreach ( $report['functions'] as $function => $files ) {
-	echo "  - bj_$function() (documenté dans " . count( $files ) . " fichier(s))\n";
+	echo "  - jb_$function() (documenté dans " . count( $files ) . " fichier(s))\n";
 }
 
 echo "\nHooks documentés (" . count( $report['hooks'] ) . ") :\n";

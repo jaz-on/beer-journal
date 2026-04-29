@@ -2,15 +2,15 @@
 
 ## Overview
 
-Beer Journal fournit des blocks Gutenberg pour afficher les check-ins dans l'éditeur de blocs. Ces blocks font partie de la version initiale (1.0.0).
+Jardin Beer fournit des blocks Gutenberg pour afficher les check-ins dans l'éditeur de blocs. Ces blocks font partie de la version initiale (1.0.0).
 
-Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et filtres (`bj_*`).
+Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et filtres (`jb_*`).
 
 ## Available Blocks
 
 ### 1. Check-ins List Block
 
-**Block Name**: `beer-journal/checkins-list`
+**Block Name**: `jardin-beer/checkins-list`
 
 **Purpose**: Display a list of check-ins with customizable options
 
@@ -35,18 +35,18 @@ Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et fil
 #### Example Usage
 
 ```jsx
-<!-- wp:beer-journal/checkins-list -->
-<div class="wp-block-beer-journal-checkins-list">
+<!-- wp:jardin-beer/checkins-list -->
+<div class="wp-block-jardin-beer-checkins-list">
     <!-- Block content -->
 </div>
-<!-- /wp:beer-journal/checkins-list -->
+<!-- /wp:jardin-beer/checkins-list -->
 ```
 
 ---
 
 ### 2. Check-in Card Block
 
-**Block Name**: `beer-journal/checkin-card`
+**Block Name**: `jardin-beer/checkin-card`
 
 **Purpose**: Display a single check-in card
 
@@ -67,18 +67,18 @@ Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et fil
 #### Example Usage
 
 ```jsx
-<!-- wp:beer-journal/checkin-card {"postId":123} -->
-<div class="wp-block-beer-journal-checkin-card">
+<!-- wp:jardin-beer/checkin-card {"postId":123} -->
+<div class="wp-block-jardin-beer-checkin-card">
     <!-- Block content -->
 </div>
-<!-- /wp:beer-journal/checkin-card -->
+<!-- /wp:jardin-beer/checkin-card -->
 ```
 
 ---
 
 ### 3. Stats Dashboard Block
 
-**Block Name**: `beer-journal/stats-dashboard`
+**Block Name**: `jardin-beer/stats-dashboard`
 
 **Purpose**: Display statistics about check-ins
 
@@ -109,11 +109,11 @@ Policy: pas de shortcodes/widgets. La personnalisation se fait via blocks et fil
 #### Example Usage
 
 ```jsx
-<!-- wp:beer-journal/stats-dashboard -->
-<div class="wp-block-beer-journal-stats-dashboard">
+<!-- wp:jardin-beer/stats-dashboard -->
+<div class="wp-block-jardin-beer-stats-dashboard">
     <!-- Block content -->
 </div>
-<!-- /wp:beer-journal/stats-dashboard -->
+<!-- /wp:jardin-beer/stats-dashboard -->
 ```
 
 ---
@@ -128,13 +128,13 @@ Each block uses `block.json` for configuration:
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
-    "name": "beer-journal/checkins-list",
+    "name": "jardin-beer/checkins-list",
     "title": "Check-ins List",
-    "category": "beer-journal",
+    "category": "jardin-beer",
     "icon": "beer",
     "description": "Display a list of beer check-ins",
     "keywords": ["beer", "checkin", "untappd"],
-    "textdomain": "beer-journal",
+    "textdomain": "jardin-beer",
     "attributes": {
         "postsPerPage": {
             "type": "number",
@@ -210,7 +210,7 @@ Blocks are built using `@wordpress/scripts`:
 ### In Block Editor
 
 1. Click "+" to add block
-2. Search for "Beer Journal" or "Check-ins"
+2. Search for "Jardin Beer" or "Check-ins"
 3. Select desired block
 4. Configure in sidebar
 5. Insert into content
@@ -220,7 +220,7 @@ Blocks are built using `@wordpress/scripts`:
 Blocks can be inserted programmatically:
 
 ```php
-$content = '<!-- wp:beer-journal/checkins-list {"postsPerPage":12} /-->';
+$content = '<!-- wp:jardin-beer/checkins-list {"postsPerPage":12} /-->';
 wp_insert_post([
     'post_content' => $content,
 ]);
@@ -233,8 +233,8 @@ wp_insert_post([
 Blocks have separate editor styles:
 
 ```php
-register_block_type('beer-journal/checkins-list', [
-    'editor_style' => 'beer-journal-blocks-editor',
+register_block_type('jardin-beer/checkins-list', [
+    'editor_style' => 'jardin-beer-blocks-editor',
 ]);
 ```
 
@@ -243,8 +243,8 @@ register_block_type('beer-journal/checkins-list', [
 Blocks share frontend styles with templates:
 
 ```php
-register_block_type('beer-journal/checkins-list', [
-    'style' => 'beer-journal-public',
+register_block_type('jardin-beer/checkins-list', [
+    'style' => 'jardin-beer-public',
 ]);
 ```
 
@@ -255,11 +255,11 @@ register_block_type('beer-journal/checkins-list', [
 For dynamic blocks, use server-side rendering:
 
 ```php
-register_block_type('beer-journal/checkins-list', [
-    'render_callback' => 'bj_render_checkins_list_block',
+register_block_type('jardin-beer/checkins-list', [
+    'render_callback' => 'jb_render_checkins_list_block',
 ]);
 
-function bj_render_checkins_list_block($attributes) {
+function jb_render_checkins_list_block($attributes) {
     $args = [
         'post_type' => 'beer',
         'posts_per_page' => $attributes['postsPerPage'] ?? 12,
@@ -287,7 +287,7 @@ function bj_render_checkins_list_block($attributes) {
 ## Validation des blocks (version initiale 1.0.0)
 
 ### Critères fonctionnels
-- Insertion depuis l’éditeur (palette, recherche “Beer Journal”)
+- Insertion depuis l’éditeur (palette, recherche “Jardin Beer”)
 - Rendu côté front identique/équivalent au rendu éditeur
 - Attributs appliqués correctement (tri, filtres, options d’affichage)
 - Dégradé acceptable sans JavaScript côté front (si applicable)
@@ -299,7 +299,7 @@ function bj_render_checkins_list_block($attributes) {
 - Roles/ARIA pertinents si nécessaire
 
 ### Internationalisation
-- Toutes les chaînes via `__()`, `_x()`, `sprintf()` (`beer-journal`)
+- Toutes les chaînes via `__()`, `_x()`, `sprintf()` (`jardin-beer`)
 - Formats localisés (dates, nombres)
 
 ### Performance

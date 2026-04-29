@@ -16,7 +16,7 @@ When beer images cannot be downloaded or are missing, the plugin needs a fallbac
 
 **Implementation**:
 ```php
-function bj_get_placeholder_image_url() {
+function jb_get_placeholder_image_url() {
     // Generate SVG on-the-fly
     $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
         <rect width="400" height="400" fill="#f0f0f0"/>
@@ -50,7 +50,7 @@ function bj_get_placeholder_image_url() {
 
 **Usage**:
 ```php
-function bj_get_placeholder_image_url() {
+function jb_get_placeholder_image_url() {
     return plugin_dir_url(__FILE__) . 'assets/images/placeholder-beer.png';
 }
 ```
@@ -68,9 +68,9 @@ function bj_get_placeholder_image_url() {
 
 **Implementation**:
 ```php
-function bj_get_placeholder_image_url() {
+function jb_get_placeholder_image_url() {
     // Use WordPress default placeholder
-    return get_option('bj_placeholder_image', 
+    return get_option('jb_placeholder_image', 
         includes_url('images/media/default.png')
     );
 }
@@ -98,33 +98,33 @@ function bj_get_placeholder_image_url() {
 ## Implementation in Import Process
 
 ```php
-function bj_handle_beer_image($image_url, $post_id) {
+function jb_handle_beer_image($image_url, $post_id) {
     if (empty($image_url)) {
         // No image URL, use placeholder
-        return bj_set_placeholder_image($post_id);
+        return jb_set_placeholder_image($post_id);
     }
     
-    $result = bj_download_image($image_url);
+    $result = jb_download_image($image_url);
     
     if (is_wp_error($result)) {
         // Download failed, use placeholder
-        error_log('Beer Journal: Image download failed - ' . $result->get_error_message());
-        return bj_set_placeholder_image($post_id);
+        error_log('Jardin Beer: Image download failed - ' . $result->get_error_message());
+        return jb_set_placeholder_image($post_id);
     }
     
     // Image downloaded successfully
     return $result;
 }
 
-function bj_set_placeholder_image($post_id) {
-    $placeholder_url = bj_get_placeholder_image_url();
+function jb_set_placeholder_image($post_id) {
+    $placeholder_url = jb_get_placeholder_image_url();
     
     // Create attachment from placeholder
-    $attachment_id = bj_create_attachment_from_url($placeholder_url, $post_id);
+    $attachment_id = jb_create_attachment_from_url($placeholder_url, $post_id);
     
     if ($attachment_id) {
         set_post_thumbnail($post_id, $attachment_id);
-        update_post_meta($post_id, '_bj_image_source', 'placeholder');
+        update_post_meta($post_id, '_jb_image_source', 'placeholder');
     }
     
     return $attachment_id;

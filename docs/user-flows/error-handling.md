@@ -62,7 +62,7 @@ flowchart TD
 **Handling**:
 1. Log warning with selector details
 2. Save check-in as draft
-3. Store reason in `_bj_incomplete_reason`
+3. Store reason in `_jb_incomplete_reason`
 4. Schedule retry (3 attempts over 24 hours)
 5. Notify admin
 
@@ -82,7 +82,7 @@ flowchart TD
 
 **Handling**:
 1. Save as draft
-2. Store reason in `_bj_incomplete_reason`
+2. Store reason in `_jb_incomplete_reason`
 3. Log validation errors
 4. Notify admin
 
@@ -148,8 +148,8 @@ flowchart TD
 ### Log File Location
 
 ```
-wp-content/uploads/beer-journal/logs/
-└── beer-journal-2025-11-10.log
+wp-content/uploads/jardin-beer/logs/
+└── jardin-beer-2025-11-10.log
 
 **Note**: All plugin logs (RSS sync, scraping, imports, errors) are written to a unified log file. See [Logging Strategy](../../development/logging-strategy.md) for details.
 ```
@@ -206,7 +206,7 @@ wp-content/uploads/beer-journal/logs/
 
 ### Draft Reasons
 
-Stored in `_bj_incomplete_reason` meta field:
+Stored in `_jb_incomplete_reason` meta field:
 
 - `missing_rating`: Rating not found
 - `missing_beer_name`: Beer name not found
@@ -247,7 +247,7 @@ Stored in `_bj_incomplete_reason` meta field:
 
 #### Bulk Retry Process
 
-1. Navigate to Beer Journal admin page
+1. Navigate to Jardin Beer admin page
 2. Filter by status: "Draft"
 3. Select one or more draft check-ins using checkboxes
 4. Choose "Retry Selected" from bulk actions dropdown

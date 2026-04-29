@@ -5,42 +5,42 @@
 		$( el ).text( msg );
 	}
 
-	$( document ).on( 'click', '#bj-sync-now', function () {
+	$( document ).on( 'click', '#jb-sync-now', function () {
 		var $btn = $( this );
 		$btn.prop( 'disabled', true );
-		setStatus( '#bj-sync-status', bjAdmin.i18n.working );
+		setStatus( '#jb-sync-status', bjAdmin.i18n.working );
 		$.post(
 			bjAdmin.ajaxUrl,
 			{
-				action: 'bj_sync_now',
+				action: 'jb_sync_now',
 				nonce: bjAdmin.nonce,
 			}
 		)
 			.done( function ( res ) {
 				if ( res.success ) {
-					setStatus( '#bj-sync-status', res.data.message || bjAdmin.i18n.done );
+					setStatus( '#jb-sync-status', res.data.message || bjAdmin.i18n.done );
 				} else {
-					setStatus( '#bj-sync-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jb-sync-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#bj-sync-status', 'Request failed.' );
+				setStatus( '#jb-sync-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	$( document ).on( 'click', '#bj-discover', function () {
+	$( document ).on( 'click', '#jb-discover', function () {
 		var $btn = $( this );
-		var username = $( '#bj_untappd_username' ).val();
-		var maxPages = $( '#bj-discover-max-pages' ).val() || 10;
+		var username = $( '#jb_untappd_username' ).val();
+		var maxPages = $( '#jb-discover-max-pages' ).val() || 10;
 		$btn.prop( 'disabled', true );
-		setStatus( '#bj-import-status', bjAdmin.i18n.working );
+		setStatus( '#jb-import-status', bjAdmin.i18n.working );
 		$.post(
 			bjAdmin.ajaxUrl,
 			{
-				action: 'bj_crawl_discover',
+				action: 'jb_crawl_discover',
 				nonce: bjAdmin.nonce,
 				username: username,
 				max_pages: maxPages,
@@ -48,27 +48,27 @@
 		)
 			.done( function ( res ) {
 				if ( res.success ) {
-					setStatus( '#bj-import-status', res.data.message );
+					setStatus( '#jb-import-status', res.data.message );
 				} else {
-					setStatus( '#bj-import-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jb-import-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#bj-import-status', 'Request failed.' );
+				setStatus( '#jb-import-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	$( document ).on( 'click', '#bj-import-batch', function () {
+	$( document ).on( 'click', '#jb-import-batch', function () {
 		var $btn = $( this );
 		$btn.prop( 'disabled', true );
-		setStatus( '#bj-import-status', bjAdmin.i18n.working );
+		setStatus( '#jb-import-status', bjAdmin.i18n.working );
 		$.post(
 			bjAdmin.ajaxUrl,
 			{
-				action: 'bj_crawl_batch',
+				action: 'jb_crawl_batch',
 				nonce: bjAdmin.nonce,
 			}
 		)
@@ -76,7 +76,7 @@
 				if ( res.success ) {
 					var d = res.data;
 					setStatus(
-						'#bj-import-status',
+						'#jb-import-status',
 						'Imported ' +
 							d.imported +
 							'. Remaining: ' +
@@ -85,26 +85,26 @@
 							d.total_imported
 					);
 					if ( d.done ) {
-						setStatus( '#bj-import-status', 'Import complete.' );
+						setStatus( '#jb-import-status', 'Import complete.' );
 					}
 				} else {
-					setStatus( '#bj-import-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jb-import-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#bj-import-status', 'Request failed.' );
+				setStatus( '#jb-import-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	var $phToggle = $( '#bj_use_placeholder_image' );
-	var $phPicker = $( '#bj-placeholder-picker' );
-	var $phId = $( '#bj_placeholder_image_id' );
-	var $phPreview = $( '#bj-placeholder-preview' );
-	var $phSelect = $( '#bj-placeholder-select' );
-	var $phClear = $( '#bj-placeholder-clear' );
+	var $phToggle = $( '#jb_use_placeholder_image' );
+	var $phPicker = $( '#jb-placeholder-picker' );
+	var $phId = $( '#jb_placeholder_image_id' );
+	var $phPreview = $( '#jb-placeholder-preview' );
+	var $phSelect = $( '#jb-placeholder-select' );
+	var $phClear = $( '#jb-placeholder-clear' );
 
 	function bjTogglePlaceholderPicker() {
 		if ( ! $phToggle.length || ! $phPicker.length ) {
@@ -160,10 +160,10 @@
 		$phSelect.text( bjAdmin.i18n.replaceImage );
 	}
 
-	$( '#bj-use-rss-username' ).on( 'click', function ( e ) {
+	$( '#jb-use-rss-username' ).on( 'click', function ( e ) {
 		e.preventDefault();
 		if ( bjAdmin.rssUsername ) {
-			$( '#bj_untappd_username' ).val( bjAdmin.rssUsername );
+			$( '#jb_untappd_username' ).val( bjAdmin.rssUsername );
 		}
 	} );
 }( jQuery ) );

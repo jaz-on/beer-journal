@@ -7,7 +7,7 @@ Mapping of features to core plugin modules and files.
 ## Module Structure
 
 ```
-beer-journal/
+jardin-beer/
 ├── includes/          # Core functionality
 ├── admin/             # Admin interface
 ├── public/            # Frontend
@@ -21,7 +21,7 @@ beer-journal/
 
 **Module**: `includes/class-rss-parser.php`
 
-**Class**: `BJ_RSS_Parser`
+**Class**: `JB_RSS_Parser`
 
 **Features**:
 - RSS feed fetching
@@ -39,7 +39,7 @@ beer-journal/
 
 **Module**: `includes/class-scraper.php`
 
-**Class**: `BJ_Scraper`
+**Class**: `JB_Scraper`
 
 **Features**:
 - HTML page fetching
@@ -58,7 +58,7 @@ beer-journal/
 
 **Module**: `includes/class-importer.php`
 
-**Class**: `BJ_Importer`
+**Class**: `JB_Importer`
 
 **Features**:
 - Data validation
@@ -79,7 +79,7 @@ beer-journal/
 
 **Module**: `includes/class-image-handler.php`
 
-**Class**: `BJ_Image_Handler`
+**Class**: `JB_Image_Handler`
 
 **Features**:
 - Image download
@@ -94,14 +94,14 @@ beer-journal/
 
 **Module**: `includes/class-post-type.php`
 
-**Class**: `BJ_Post_Type`
+**Class**: `JB_Post_Type`
 
 **Features**:
 - CPT registration (`beer_checkin`)
 - REST API support
 - Rewrite rules
 - Capabilities
-- Admin menu: appears as submenu under top-level **Beer Journal** (`show_in_menu` => `beer-journal`)
+- Admin menu: CPT and taxonomies nest under `edit.php?post_type=beer_checkin`; **Jardin Beer** is the CPT `menu_name` label.
 
 ---
 
@@ -109,7 +109,7 @@ beer-journal/
 
 **Module**: `includes/class-taxonomies.php`
 
-**Class**: `BJ_Taxonomies`
+**Class**: `JB_Taxonomies`
 
 **Features**:
 - Taxonomy registration:
@@ -125,7 +125,7 @@ beer-journal/
 
 **Module**: `includes/class-meta-fields.php`
 
-**Class**: `BJ_Meta_Fields`
+**Class**: `JB_Meta_Fields`
 
 **Features**:
 - Meta field registration
@@ -139,7 +139,7 @@ beer-journal/
 
 **Module**: `includes/class-settings.php`
 
-**Class**: `BJ_Settings`
+**Class**: `JB_Settings`
 
 **Features**:
 - Settings registration
@@ -157,7 +157,7 @@ beer-journal/
 
 **Module**: `admin/class-admin.php`
 
-**Class**: `BJ_Admin`
+**Class**: `JB_Admin`
 
 **Features**:
 - Admin menu registration
@@ -183,7 +183,7 @@ beer-journal/
 
 **Module**: `public/class-public.php`
 
-**Class**: `BJ_Public`
+**Class**: `JB_Public`
 
 **Features**:
 - Template registration
@@ -222,7 +222,7 @@ beer-journal/
 
 **Module**: `includes/class-action-scheduler.php`
 
-**Class**: `BJ_Action_Scheduler`
+**Class**: `JB_Action_Scheduler`
 
 **Features**:
 - RSS sync scheduling
@@ -236,7 +236,7 @@ beer-journal/
 
 **Module**: `includes/class-crawler.php`
 
-**Class**: `BJ_Crawler`
+**Class**: `JB_Crawler`
 
 **Features**:
 - Profile page scraping
@@ -256,25 +256,25 @@ beer-journal/
 ### Dependency Graph
 
 ```
-BJ_Admin
-  ├── BJ_Settings
-  ├── BJ_Importer
-  └── BJ_Crawler
+JB_Admin
+  ├── JB_Settings
+  ├── JB_Importer
+  └── JB_Crawler
 
-BJ_RSS_Parser
-  ├── BJ_Scraper
-  └── BJ_Importer
+JB_RSS_Parser
+  ├── JB_Scraper
+  └── JB_Importer
 
-BJ_Importer
-  ├── BJ_Post_Type
-  ├── BJ_Taxonomies
-  ├── BJ_Meta_Fields
-  ├── BJ_Image_Handler
-  └── BJ_Settings
+JB_Importer
+  ├── JB_Post_Type
+  ├── JB_Taxonomies
+  ├── JB_Meta_Fields
+  ├── JB_Image_Handler
+  └── JB_Settings
 
-BJ_Public
-  ├── BJ_Post_Type
-  └── BJ_Taxonomies
+JB_Public
+  ├── JB_Post_Type
+  └── JB_Taxonomies
 ```
 
 ## Module Responsibilities

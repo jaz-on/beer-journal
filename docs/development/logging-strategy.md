@@ -2,15 +2,15 @@
 
 ## Overview
 
-Beer Journal logs important events, errors, and debugging information to help diagnose issues and track import progress.
+Jardin Beer logs important events, errors, and debugging information to help diagnose issues and track import progress.
 
 ## Log Location
 
-**Directory**: `wp-content/uploads/beer-journal/logs/`
+**Directory**: `wp-content/uploads/jardin-beer/logs/`
 
-**File Naming**: `beer-journal-{YYYY-MM-DD}.log`
+**File Naming**: `jardin-beer-{YYYY-MM-DD}.log`
 
-**Example**: `beer-journal-2025-11-10.log`
+**Example**: `jardin-beer-2025-11-10.log`
 
 ## Log Levels
 
@@ -46,7 +46,7 @@ Following WordPress standards:
 
 **Retention Settings**:
 - Default: 30 days
-- Configurable via option: `bj_log_retention_days` (default: 30)
+- Configurable via option: `jb_log_retention_days` (default: 30)
 - Admin can set to 0 to disable auto-cleanup
 
 ### Cleanup Process
@@ -61,19 +61,19 @@ Following WordPress standards:
 
 **Implementation**:
 ```php
-add_action('bj_daily_log_cleanup', 'bj_cleanup_old_logs');
+add_action('jb_daily_log_cleanup', 'jb_cleanup_old_logs');
 
-function bj_cleanup_old_logs() {
-    $retention_days = get_option('bj_log_retention_days', 30);
+function jb_cleanup_old_logs() {
+    $retention_days = get_option('jb_log_retention_days', 30);
     
     if ($retention_days === 0) {
         return; // Cleanup disabled
     }
     
-    $log_dir = bj_get_log_directory();
+    $log_dir = jb_get_log_directory();
     $cutoff_date = strtotime("-{$retention_days} days");
     
-    $files = glob($log_dir . 'beer-journal-*.log');
+    $files = glob($log_dir . 'jardin-beer-*.log');
     $deleted = 0;
     
     foreach ($files as $file) {
@@ -87,7 +87,7 @@ function bj_cleanup_old_logs() {
     }
     
     if ($deleted > 0) {
-        bj_log(sprintf('Cleaned up %d old log file(s)', $deleted), 'INFO');
+        jb_log(sprintf('Cleaned up %d old log file(s)', $deleted), 'INFO');
     }
 }
 ```
@@ -100,24 +100,24 @@ function bj_cleanup_old_logs() {
 
 **Behavior**: When file exceeds limit:
 - Current file is closed
-- New file created with suffix: `beer-journal-{YYYY-MM-DD}-{N}.log`
-- Example: `beer-journal-2025-11-10-2.log`
+- New file created with suffix: `jardin-beer-{YYYY-MM-DD}-{N}.log`
+- Example: `jardin-beer-2025-11-10-2.log`
 
 **Implementation**:
 ```php
-function bj_get_log_file_path() {
-    $log_dir = bj_get_log_directory();
+function jb_get_log_file_path() {
+    $log_dir = jb_get_log_directory();
     $date = date('Y-m-d');
-    $base_file = $log_dir . "beer-journal-{$date}.log";
+    $base_file = $log_dir . "jardin-beer-{$date}.log";
     
     // Check if file exists and is too large
     if (file_exists($base_file) && filesize($base_file) > 10 * 1024 * 1024) {
         // Find next available number
         $counter = 1;
-        while (file_exists("{$log_dir}beer-journal-{$date}-{$counter}.log")) {
+        while (file_exists("{$log_dir}jardin-beer-{$date}-{$counter}.log")) {
             $counter++;
         }
-        return "{$log_dir}beer-journal-{$date}-{$counter}.log";
+        return "{$log_dir}jardin-beer-{$date}-{$counter}.log";
     }
     
     return $base_file;
@@ -129,13 +129,13 @@ function bj_get_log_file_path() {
 ### Core Logging Function
 
 ```php
-function bj_log($message, $level = 'INFO') {
+function jb_log($message, $level = 'INFO') {
     // Skip DEBUG in production
     if ($level === 'DEBUG' && !WP_DEBUG) {
         return;
     }
     
-    $log_file = bj_get_log_file_path();
+    $log_file = jb_get_log_file_path();
     $timestamp = date('Y-m-d H:i:s');
     $log_entry = "[{$timestamp}] {$level}: {$message}\n";
     
@@ -153,20 +153,20 @@ function bj_log($message, $level = 'INFO') {
 ### Convenience Functions
 
 ```php
-function bj_log_error($message) {
-    bj_log($message, 'ERROR');
+function jb_log_error($message) {
+    jb_log($message, 'ERROR');
 }
 
-function bj_log_warning($message) {
-    bj_log($message, 'WARNING');
+function jb_log_warning($message) {
+    jb_log($message, 'WARNING');
 }
 
-function bj_log_info($message) {
-    bj_log($message, 'INFO');
+function jb_log_info($message) {
+    jb_log($message, 'INFO');
 }
 
-function bj_log_debug($message) {
-    bj_log($message, 'DEBUG');
+function jb_log_debug($message) {
+    jb_log($message, 'DEBUG');
 }
 ```
 
@@ -192,7 +192,7 @@ function bj_log_debug($message) {
 
 ### Admin Interface
 
-**Location**: Beer Journal → Logs
+**Location**: Jardin Beer → Logs
 
 **Features**:
 - View current day's log
@@ -205,11 +205,11 @@ function bj_log_debug($message) {
 ```php
 add_submenu_page(
     'edit.php?post_type=beer_checkin',
-    __('Logs', 'beer-journal'),
-    __('Logs', 'beer-journal'),
+    __('Logs', 'jardin-beer'),
+    __('Logs', 'jardin-beer'),
     'manage_options',
-    'beer-journal-logs',
-    'bj_render_logs_page'
+    'jardin-beer-logs',
+    'jb_render_logs_page'
 );
 ```
 

@@ -2,7 +2,7 @@
 /**
  * Plugin deactivation.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class BJ_Deactivator
+ * Class JB_Deactivator
  */
-class BJ_Deactivator {
+class JB_Deactivator {
 
 	/**
 	 * Run on deactivation.
@@ -20,17 +20,22 @@ class BJ_Deactivator {
 	 * @return void
 	 */
 	public static function deactivate() {
-		$group = function_exists( 'bj_action_scheduler_group' ) ? bj_action_scheduler_group() : 'beer-journal';
+		$group        = function_exists( 'jb_action_scheduler_group' ) ? jb_action_scheduler_group() : 'jardin-beer';
+		$legacy_group = 'beer-journal';
+		$hooks        = array( 'jb_rss_sync', 'jb_rss_queue_tick', 'jb_background_import_batch', 'jb_daily_log_cleanup' );
+		$legacy_hooks = array( 'bj_rss_sync', 'bj_rss_queue_tick', 'bj_background_import_batch', 'bj_daily_log_cleanup' );
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-			foreach ( array( 'bj_rss_sync', 'bj_rss_queue_tick', 'bj_background_import_batch', 'bj_daily_log_cleanup' ) as $hook ) {
+			foreach ( $hooks as $hook ) {
 				as_unschedule_all_actions( $hook, array(), $group );
 			}
+			foreach ( $legacy_hooks as $hook ) {
+				as_unschedule_all_actions( $hook, array(), $legacy_group );
+			}
 		}
-		wp_clear_scheduled_hook( 'bj_rss_sync' );
-		wp_clear_scheduled_hook( 'bj_rss_queue_tick' );
-		wp_clear_scheduled_hook( 'bj_background_import_batch' );
-		wp_clear_scheduled_hook( 'bj_daily_log_cleanup' );
+		foreach ( array_merge( $hooks, $legacy_hooks ) as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
 		flush_rewrite_rules();
-		do_action( 'bj_plugin_deactivated' );
+		do_action( 'jb_plugin_deactivated' );
 	}
 }

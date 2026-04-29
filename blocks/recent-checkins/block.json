@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "beer-journal/recent-checkins",
+	"name": "jardin-beer/recent-checkins",
 	"title": "Recent check-ins",
 	"category": "widgets",
 	"icon": "list-view",
 	"description": "List of the latest beer check-ins.",
-	"textdomain": "beer-journal",
+	"textdomain": "jardin-beer",
 	"attributes": {
 		"postsToShow": {
 			"type": "number",

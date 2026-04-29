@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal dependencies: Composer packages, npm packages, and WordPress requirements.
+Jardin Beer dependencies: Composer packages, npm packages, and WordPress requirements.
 
 ## Composer Dependencies
 

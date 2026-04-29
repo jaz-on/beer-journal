@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal provides theme-agnostic templates that can be overridden by your theme. All templates follow WordPress template hierarchy conventions.
+Jardin Beer provides theme-agnostic templates that can be overridden by your theme. All templates follow WordPress template hierarchy conventions.
 
 ## Available Templates
 
@@ -47,7 +47,7 @@ Templates appliquent par défaut des microformats utiles à l’écosystème Ind
 - `e-content` pour le contenu
 - `dt-published` pour la date
 
-Ces microformats peuvent être désactivés via l’option `bj_microformats_enabled`. Voir [Schema Documentation](../development/schema.md).
+Ces microformats peuvent être désactivés via l’option `jb_microformats_enabled`. Voir [Schema Documentation](../development/schema.md).
 
 ---
 
@@ -106,9 +106,9 @@ Le rendu suivra les mêmes principes (grid/table, filtres), exposé via blocks e
 
 WordPress searches for templates in this order:
 
-1. **Theme Override**: `/wp-content/themes/{theme}/beer-journal/archive-beer.php`
+1. **Theme Override**: `/wp-content/themes/{theme}/jardin-beer/archive-beer.php`
 2. **Theme Override**: `/wp-content/themes/{theme}/archive-beer.php`
-3. **Plugin Default**: `/wp-content/plugins/beer-journal/public/templates/archive-beer.php`
+3. **Plugin Default**: `/wp-content/plugins/jardin-beer/public/templates/archive-beer.php`
 
 See [Template Hierarchy Documentation](template-hierarchy.md) for details.
 
@@ -150,23 +150,23 @@ The templates support two viewing modes:
 get_header();
 ?>
 
-<div class="bj-archive">
-    <?php do_action('bj_before_checkins_list'); ?>
+<div class="jb-archive">
+    <?php do_action('jb_before_checkins_list'); ?>
     
-    <div class="bj-archive-header">
+    <div class="jb-archive-header">
         <h1><?php echo esc_html(get_the_archive_title()); ?></h1>
         
-        <div class="bj-view-toggle">
-            <button class="bj-view-grid active">Grid</button>
-            <button class="bj-view-table">Table</button>
+        <div class="jb-view-toggle">
+            <button class="jb-view-grid active">Grid</button>
+            <button class="jb-view-table">Table</button>
         </div>
         
-        <div class="bj-filters">
+        <div class="jb-filters">
             <!-- Filters here -->
         </div>
     </div>
     
-    <div class="bj-checkins-grid">
+    <div class="jb-checkins-grid">
         <?php
         if (have_posts()) {
             while (have_posts()) {
@@ -179,7 +179,7 @@ get_header();
     
     <?php
     the_posts_pagination();
-    do_action('bj_after_checkins_list');
+    do_action('jb_after_checkins_list');
     ?>
 </div>
 
@@ -198,14 +198,14 @@ get_footer();
 get_header();
 ?>
 
-<div class="bj-single">
+<div class="jb-single">
     <?php while (have_posts()) : the_post(); ?>
         
-        <article id="post-<?php the_ID(); ?>" <?php post_class('bj-checkin'); ?>>
+        <article id="post-<?php the_ID(); ?>" <?php post_class('jb-checkin'); ?>>
             
-            <header class="bj-checkin-header">
+            <header class="jb-checkin-header">
                 <?php if (has_post_thumbnail()) : ?>
-                    <div class="bj-checkin-hero">
+                    <div class="jb-checkin-hero">
                         <?php the_post_thumbnail('large'); ?>
                     </div>
                 <?php endif; ?>
@@ -213,17 +213,17 @@ get_header();
                 <h1><?php the_title(); ?></h1>
             </header>
             
-            <div class="bj-checkin-content">
-                <div class="bj-checkin-main">
+            <div class="jb-checkin-content">
+                <div class="jb-checkin-main">
                     <?php the_content(); ?>
                 </div>
                 
-                <aside class="bj-checkin-sidebar">
+                <aside class="jb-checkin-sidebar">
                     <?php get_template_part('partials/checkin-metadata'); ?>
                 </aside>
             </div>
             
-            <nav class="bj-checkin-navigation">
+            <nav class="jb-checkin-navigation">
                 <?php
                 the_post_navigation([
                     'prev_text' => '← Previous Check-in',
@@ -232,7 +232,7 @@ get_header();
                 ?>
             </nav>
             
-            <div class="bj-checkin-related">
+            <div class="jb-checkin-related">
                 <?php get_template_part('partials/related-checkins'); ?>
             </div>
             
@@ -266,7 +266,7 @@ get_template_part('partials/checkin-card');
 
 **Usage**:
 ```php
-bj_rating_stars(get_post_meta(get_the_ID(), '_bj_rating_rounded', true));
+jb_rating_stars(get_post_meta(get_the_ID(), '_jb_rating_rounded', true));
 ```
 
 ---
@@ -289,7 +289,7 @@ Copy template files to your theme:
 
 ```
 /wp-content/themes/{theme}/
-├── beer-journal/
+├── jardin-beer/
 │   ├── archive-beer.php
 │   ├── single-beer.php
 │   └── taxonomy-beer-style.php
@@ -305,7 +305,7 @@ Add custom CSS to your theme:
 
 ```css
 /* Override plugin styles */
-.bj-checkin-card {
+.jb-checkin-card {
     /* Your custom styles */
 }
 ```

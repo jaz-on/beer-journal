@@ -2,7 +2,7 @@
 
 ## Overview
 
-Beer Journal embarque un balisage SEO par défaut:
+Jardin Beer embarque un balisage SEO par défaut:
 - JSON-LD (Schema.org) de type `Review` avec `itemReviewed` (`Product`)
 - Microformats `h-entry` et `e-content` dans les templates
 
@@ -12,8 +12,8 @@ Ces fonctionnalités sont activées par défaut et peuvent être désactivées v
 
 | Option | Type | Default | Description |
 |-------|------|---------|-------------|
-| `bj_schema_enabled` | bool | `true` | Active/désactive l’injection JSON-LD |
-| `bj_microformats_enabled` | bool | `true` | Active/désactive les microformats dans les templates |
+| `jb_schema_enabled` | bool | `true` | Active/désactive l’injection JSON-LD |
+| `jb_microformats_enabled` | bool | `true` | Active/désactive les microformats dans les templates |
 
 Ces options résident dans `wp_options` (voir `docs/db/options.md`) et sont exposées dans Settings > Advanced.
 

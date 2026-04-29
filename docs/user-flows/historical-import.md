@@ -38,7 +38,7 @@ flowchart TD
 
 ### Step 1: Access Import Page
 
-**Location**: `Beer Journal > Settings > Historical Import`
+**Location**: `Jardin Beer > Settings > Historical Import`
 
 **Actions**:
 1. User navigates to import page
@@ -133,7 +133,7 @@ flowchart TD
    - Total imported count
    - Last check-in ID
    - Start timestamp
-2. Store in `bj_import_checkpoint` option
+2. Store in `jb_import_checkpoint` option
 
 **Checkpoint Structure**:
 ```php
@@ -258,7 +258,7 @@ flowchart TD
 4. Skip already imported check-ins (deduplication)
 
 **Deduplication**:
-- Check `_bj_checkin_id` before importing
+- Check `_jb_checkin_id` before importing
 - Skip if already exists
 
 ---

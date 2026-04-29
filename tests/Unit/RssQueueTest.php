@@ -2,10 +2,10 @@
 /**
  * RSS queue helpers.
  *
- * @package BeerJournal
+ * @package JardinBeer
  */
 
-namespace BJ\Tests;
+namespace JB\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class RssQueueTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function test_bj_rss_queue_merge_unique_replaces_duplicate_in_queue() {
+	public function test_jb_rss_queue_merge_unique_replaces_duplicate_in_queue() {
 		$queue = array(
 			array(
 				'checkin_id' => '1',
@@ -32,7 +32,7 @@ class RssQueueTest extends TestCase {
 				'beer_name'  => 'New',
 			),
 		);
-		$merged = bj_rss_queue_merge_unique( $queue, $add );
+		$merged = jb_rss_queue_merge_unique( $queue, $add );
 		$this->assertCount( 1, $merged );
 		$this->assertSame( 'New', $merged[0]['beer_name'] );
 	}
@@ -42,10 +42,10 @@ class RssQueueTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function test_bj_rss_queue_merge_unique_appends_new_ids() {
+	public function test_jb_rss_queue_merge_unique_appends_new_ids() {
 		$queue = array( array( 'checkin_id' => '1' ) );
 		$add   = array( array( 'checkin_id' => '2' ) );
-		$merged = bj_rss_queue_merge_unique( $queue, $add );
+		$merged = jb_rss_queue_merge_unique( $queue, $add );
 		$this->assertCount( 2, $merged );
 		$this->assertSame( '1', (string) $merged[0]['checkin_id'] );
 		$this->assertSame( '2', (string) $merged[1]['checkin_id'] );

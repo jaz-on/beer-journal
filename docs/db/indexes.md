@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes recommended database indexes for optimal performance with Beer Journal. WordPress automatically creates some indexes, but additional indexes may be needed for specific queries.
+This document describes recommended database indexes for optimal performance with Jardin Beer. WordPress automatically creates some indexes, but additional indexes may be needed for specific queries.
 
 ## WordPress Automatic Indexes
 
@@ -41,9 +41,9 @@ WordPress automatically creates these indexes:
 
 **Index**:
 ```sql
-CREATE UNIQUE INDEX bj_checkin_id_unique 
+CREATE UNIQUE INDEX jb_checkin_id_unique 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_checkin_id';
+WHERE meta_key = '_jb_checkin_id';
 ```
 
 **Note**: MySQL/MariaDB limit on index key length is 767 bytes (191 characters for utf8mb4). The `meta_value(191)` limits the indexed portion.
@@ -55,7 +55,7 @@ $args = [
     'post_type' => 'beer',
     'meta_query' => [
         [
-            'key' => '_bj_checkin_id',
+            'key' => '_jb_checkin_id',
             'value' => '1527514863',
             'compare' => '=',
         ],
@@ -66,9 +66,9 @@ $args = [
 
 **Alternative** (if unique constraint not possible):
 ```sql
-CREATE INDEX bj_checkin_id_idx 
+CREATE INDEX jb_checkin_id_idx 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_checkin_id';
+WHERE meta_key = '_jb_checkin_id';
 ```
 
 ---
@@ -81,7 +81,7 @@ WHERE meta_key = '_bj_checkin_id';
 
 **Index**:
 ```sql
-CREATE INDEX bj_post_type_date_idx 
+CREATE INDEX jb_post_type_date_idx 
 ON wp_posts (post_type, post_date);
 ```
 
@@ -107,9 +107,9 @@ $args = [
 
 **Index**:
 ```sql
-CREATE INDEX bj_rating_rounded_idx 
+CREATE INDEX jb_rating_rounded_idx 
 ON wp_postmeta (meta_key, meta_value)
-WHERE meta_key = '_bj_rating_rounded';
+WHERE meta_key = '_jb_rating_rounded';
 ```
 
 **Usage**:
@@ -117,7 +117,7 @@ WHERE meta_key = '_bj_rating_rounded';
 // Get top-rated check-ins
 $args = [
     'post_type' => 'beer',
-    'meta_key' => '_bj_rating_rounded',
+    'meta_key' => '_jb_rating_rounded',
     'orderby' => 'meta_value_num',
     'order' => 'DESC',
 ];
@@ -135,9 +135,9 @@ $args = [
 
 **Index**:
 ```sql
-CREATE INDEX bj_beer_name_idx 
+CREATE INDEX jb_beer_name_idx 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_beer_name';
+WHERE meta_key = '_jb_beer_name';
 ```
 
 **Usage**:
@@ -147,7 +147,7 @@ $args = [
     'post_type' => 'beer',
     'meta_query' => [
         [
-            'key' => '_bj_beer_name',
+            'key' => '_jb_beer_name',
             'value' => 'IPA',
             'compare' => 'LIKE',
         ],
@@ -167,9 +167,9 @@ $args = [
 
 **Index**:
 ```sql
-CREATE INDEX bj_brewery_name_idx 
+CREATE INDEX jb_brewery_name_idx 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_brewery_name';
+WHERE meta_key = '_jb_brewery_name';
 ```
 
 **Usage**:
@@ -179,7 +179,7 @@ $args = [
     'post_type' => 'beer',
     'meta_query' => [
         [
-            'key' => '_bj_brewery_name',
+            'key' => '_jb_brewery_name',
             'value' => 'Brasserie Meteor',
             'compare' => '=',
         ],
@@ -200,13 +200,13 @@ Indexes can be created manually via SQL:
 USE wordpress_db;
 
 -- Create indexes
-CREATE UNIQUE INDEX bj_checkin_id_unique 
+CREATE UNIQUE INDEX jb_checkin_id_unique 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_checkin_id';
+WHERE meta_key = '_jb_checkin_id';
 
-CREATE INDEX bj_rating_rounded_idx 
+CREATE INDEX jb_rating_rounded_idx 
 ON wp_postmeta (meta_key, meta_value)
-WHERE meta_key = '_bj_rating_rounded';
+WHERE meta_key = '_jb_rating_rounded';
 ```
 
 **Note**: MySQL 8.0+ supports filtered indexes with `WHERE` clause. For older versions, create regular indexes.
@@ -216,9 +216,9 @@ WHERE meta_key = '_bj_rating_rounded';
 Create indexes on plugin activation:
 
 ```php
-register_activation_hook(__FILE__, 'bj_create_indexes');
+register_activation_hook(__FILE__, 'jb_create_indexes');
 
-function bj_create_indexes() {
+function jb_create_indexes() {
     global $wpdb;
     
     $table = $wpdb->postmeta;
@@ -229,14 +229,14 @@ function bj_create_indexes() {
         FROM information_schema.statistics
         WHERE table_schema = DATABASE()
         AND table_name = '{$wpdb->postmeta}'
-        AND index_name = 'bj_checkin_id_unique'
+        AND index_name = 'jb_checkin_id_unique'
     ");
     
     if (!$index_exists) {
         $wpdb->query("
-            CREATE UNIQUE INDEX bj_checkin_id_unique 
+            CREATE UNIQUE INDEX jb_checkin_id_unique 
             ON {$wpdb->postmeta} (meta_key, meta_value(191))
-            WHERE meta_key = '_bj_checkin_id'
+            WHERE meta_key = '_jb_checkin_id'
         ");
     }
 }
@@ -247,7 +247,7 @@ function bj_create_indexes() {
 Use WordPress `dbDelta()` for safer index creation:
 
 ```php
-function bj_create_indexes() {
+function jb_create_indexes() {
     global $wpdb;
     
     $charset_collate = $wpdb->get_charset_collate();
@@ -265,7 +265,7 @@ function bj_create_indexes() {
 -- Check if indexes are being used
 EXPLAIN SELECT * 
 FROM wp_postmeta 
-WHERE meta_key = '_bj_checkin_id' 
+WHERE meta_key = '_jb_checkin_id' 
 AND meta_value = '1527514863';
 ```
 
@@ -282,10 +282,10 @@ If indexes become fragmented:
 
 ```sql
 -- Rebuild index
-ALTER TABLE wp_postmeta DROP INDEX bj_checkin_id_unique;
-CREATE UNIQUE INDEX bj_checkin_id_unique 
+ALTER TABLE wp_postmeta DROP INDEX jb_checkin_id_unique;
+CREATE UNIQUE INDEX jb_checkin_id_unique 
 ON wp_postmeta (meta_key, meta_value(191))
-WHERE meta_key = '_bj_checkin_id';
+WHERE meta_key = '_jb_checkin_id';
 ```
 
 ## Performance Considerations
@@ -305,7 +305,7 @@ Always use indexed fields in WHERE clauses:
 ```php
 // Good: Uses index
 $args = [
-    'meta_key' => '_bj_checkin_id',
+    'meta_key' => '_jb_checkin_id',
     'meta_value' => '1527514863',
 ];
 
@@ -313,7 +313,7 @@ $args = [
 $args = [
     'meta_query' => [
         [
-            'key' => '_bj_checkin_id',
+            'key' => '_jb_checkin_id',
             'value' => '1527514863',
             'compare' => 'LIKE', // Won't use index efficiently
         ],

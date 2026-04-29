@@ -2,7 +2,7 @@
 
 ## Overview
 
-Testing strategy for Beer Journal: unit tests, integration tests, and manual testing.
+Testing strategy for Jardin Beer: unit tests, integration tests, and manual testing.
 
 ## Testing Framework
 
@@ -57,7 +57,7 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 require_once getenv('WP_TESTS_DIR') . '/includes/functions.php';
 
 // Load plugin
-require_once dirname(__DIR__) . '/beer-journal.php';
+require_once dirname(__DIR__) . '/jardin-beer.php';
 ```
 
 ---
@@ -78,13 +78,13 @@ require_once dirname(__DIR__) . '/beer-journal.php';
 ```php
 class Test_RSS_Parser extends WP_UnitTestCase {
     public function test_fetch_rss_feed() {
-        $parser = new BJ_RSS_Parser();
+        $parser = new JB_RSS_Parser();
         $feed = $parser->fetch_feed('https://untappd.com/rss/user/test');
         $this->assertNotFalse($feed);
     }
     
     public function test_parse_rss_item() {
-        $parser = new BJ_RSS_Parser();
+        $parser = new JB_RSS_Parser();
         $item = $parser->parse_item($rss_item);
         $this->assertArrayHasKey('beer_name', $item);
     }

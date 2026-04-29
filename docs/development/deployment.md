@@ -2,7 +2,7 @@
 
 ## Overview
 
-Process for deploying Beer Journal to WordPress.org and production environments.
+Process for deploying Jardin Beer to WordPress.org and production environments.
 
 ## Pre-Deployment Checklist
 
@@ -48,7 +48,7 @@ Process for deploying Beer Journal to WordPress.org and production environments.
 
 **Initial Setup**:
 ```bash
-svn co https://plugins.svn.wordpress.org/beer-journal/trunk beer-journal-svn
+svn co https://plugins.svn.wordpress.org/jardin-beer/trunk jardin-beer-svn
 ```
 
 ---
@@ -57,8 +57,8 @@ svn co https://plugins.svn.wordpress.org/beer-journal/trunk beer-journal-svn
 
 **Required Structure**:
 ```
-beer-journal/
-├── beer-journal.php
+jardin-beer/
+├── jardin-beer.php
 ├── readme.txt
 ├── LICENSE
 ├── .wordpress-org/
@@ -122,7 +122,7 @@ svn ci -m "Tag version 1.0.0"
 ### Update Version
 
 **Files to Update**:
-- `beer-journal.php` (header)
+- `jardin-beer.php` (header)
 - `readme.txt` (Stable tag)
 - `CHANGELOG.md`
 - `package.json` (if applicable)
@@ -190,12 +190,12 @@ During development phase, GitHub Updater allows automatic updates from GitHub re
 
 ### Configuration
 
-**Plugin Headers** (in `beer-journal.php`):
+**Plugin Headers** (in `jardin-beer.php`):
 ```php
 /**
- * Plugin Name: Beer Journal
+ * Plugin Name: Jardin Beer
  * ...
- * GitHub Plugin URI: jaz-on/beer-journal
+ * GitHub Plugin URI: jaz-on/jardin-beer
  * GitHub Branch: main
  * Primary Branch: main
  */

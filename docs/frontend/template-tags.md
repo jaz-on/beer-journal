@@ -2,7 +2,7 @@
 
 ## Overview
 
-Template tags are helper functions for displaying check-in data in templates. All functions are prefixed with `bj_` and are available in theme templates.
+Template tags are helper functions for displaying check-in data in templates. All functions are prefixed with `jb_` and are available in theme templates.
 
 ## Core Functions
 
@@ -15,7 +15,7 @@ Template tags are helper functions for displaying check-in data in templates. Al
  * @param int $post_id Post ID
  * @return array Check-in data
  */
-function bj_get_checkin_data($post_id)
+function jb_get_checkin_data($post_id)
 ```
 
 **Returns**:
@@ -37,7 +37,7 @@ function bj_get_checkin_data($post_id)
 
 **Usage**:
 ```php
-$data = bj_get_checkin_data(get_the_ID());
+$data = jb_get_checkin_data(get_the_ID());
 echo esc_html($data['beer_name']);
 ```
 
@@ -54,23 +54,23 @@ echo esc_html($data['beer_name']);
  * @param bool $show_raw   Show original rating in tooltip
  * @return string HTML output
  */
-function bj_display_rating($post_id, $show_label = true, $show_raw = true)
+function jb_display_rating($post_id, $show_label = true, $show_raw = true)
 ```
 
 **Usage**:
 ```php
 // Display with label and tooltip
-echo bj_display_rating(get_the_ID());
+echo jb_display_rating(get_the_ID());
 
 // Display stars only
-echo bj_display_rating(get_the_ID(), false, false);
+echo jb_display_rating(get_the_ID(), false, false);
 ```
 
 **Output**:
 ```html
-<div class="bj-rating">
-    <span class="bj-stars" title="Original rating: 4.25">⭐⭐⭐⭐</span>
-    <p class="bj-rating-label">Great - Now we're talking! A real pleasure</p>
+<div class="jb-rating">
+    <span class="jb-stars" title="Original rating: 4.25">⭐⭐⭐⭐</span>
+    <p class="jb-rating-label">Great - Now we're talking! A real pleasure</p>
 </div>
 ```
 
@@ -86,15 +86,15 @@ echo bj_display_rating(get_the_ID(), false, false);
  * @param bool $echo   Echo or return
  * @return string|void
  */
-function bj_rating_stars($rating, $echo = true)
+function jb_rating_stars($rating, $echo = true)
 ```
 
 **Usage**:
 ```php
-$rating = get_post_meta(get_the_ID(), '_bj_rating_rounded', true);
-bj_rating_stars($rating); // Echo
+$rating = get_post_meta(get_the_ID(), '_jb_rating_rounded', true);
+jb_rating_stars($rating); // Echo
 // or
-echo bj_rating_stars($rating, false); // Return
+echo jb_rating_stars($rating, false); // Return
 ```
 
 ---
@@ -109,16 +109,16 @@ echo bj_rating_stars($rating, false); // Return
  * @param bool $link    Link to style archive
  * @return string HTML output
  */
-function bj_beer_style($post_id, $link = true)
+function jb_beer_style($post_id, $link = true)
 ```
 
 **Usage**:
 ```php
 // With link
-echo bj_beer_style(get_the_ID());
+echo jb_beer_style(get_the_ID());
 
 // Without link
-echo bj_beer_style(get_the_ID(), false);
+echo jb_beer_style(get_the_ID(), false);
 ```
 
 **Output**:
@@ -137,12 +137,12 @@ echo bj_beer_style(get_the_ID(), false);
  * @param int $post_id Post ID
  * @return string HTML output
  */
-function bj_brewery_link($post_id)
+function jb_brewery_link($post_id)
 ```
 
 **Usage**:
 ```php
-echo bj_brewery_link(get_the_ID());
+echo jb_brewery_link(get_the_ID());
 ```
 
 **Output**:
@@ -161,17 +161,17 @@ echo bj_brewery_link(get_the_ID());
  * @param int $post_id Post ID
  * @return string HTML output
  */
-function bj_venue_info($post_id)
+function jb_venue_info($post_id)
 ```
 
 **Usage**:
 ```php
-echo bj_venue_info(get_the_ID());
+echo jb_venue_info(get_the_ID());
 ```
 
 **Output**:
 ```html
-<span class="bj-venue">Home, Strasbourg, France</span>
+<span class="jb-venue">Home, Strasbourg, France</span>
 ```
 
 ---
@@ -186,24 +186,24 @@ echo bj_venue_info(get_the_ID());
  * @param string $size    Image size (thumbnail, medium, large, full)
  * @return string HTML output
  */
-function bj_beer_image($post_id, $size = 'medium')
+function jb_beer_image($post_id, $size = 'medium')
 ```
 
 **Usage**:
 ```php
 // Medium size
-echo bj_beer_image(get_the_ID());
+echo jb_beer_image(get_the_ID());
 
 // Large size
-echo bj_beer_image(get_the_ID(), 'large');
+echo jb_beer_image(get_the_ID(), 'large');
 
 // Full size
-echo bj_beer_image(get_the_ID(), 'full');
+echo jb_beer_image(get_the_ID(), 'full');
 ```
 
 **Output**:
 ```html
-<img src="..." alt="Meteor Blonde De Garde - Brasserie Meteor" class="bj-beer-image" />
+<img src="..." alt="Meteor Blonde De Garde - Brasserie Meteor" class="jb-beer-image" />
 ```
 
 ---
@@ -219,7 +219,7 @@ echo bj_beer_image(get_the_ID(), 'full');
  * @param int $post_id Post ID
  * @return string Beer name
  */
-function bj_get_beer_name($post_id)
+function jb_get_beer_name($post_id)
 ```
 
 ---
@@ -233,7 +233,7 @@ function bj_get_beer_name($post_id)
  * @param int $post_id Post ID
  * @return string Brewery name
  */
-function bj_get_brewery_name($post_id)
+function jb_get_brewery_name($post_id)
 ```
 
 ---
@@ -248,13 +248,13 @@ function bj_get_brewery_name($post_id)
  * @param bool $raw     Get raw rating (true) or rounded (false)
  * @return float|int Rating
  */
-function bj_get_rating($post_id, $raw = false)
+function jb_get_rating($post_id, $raw = false)
 ```
 
 **Usage**:
 ```php
-$raw_rating = bj_get_rating(get_the_ID(), true); // 4.25
-$rounded = bj_get_rating(get_the_ID(), false);   // 4
+$raw_rating = jb_get_rating(get_the_ID(), true); // 4.25
+$rounded = jb_get_rating(get_the_ID(), false);   // 4
 ```
 
 ---
@@ -268,7 +268,7 @@ $rounded = bj_get_rating(get_the_ID(), false);   // 4
  * @param int $post_id Post ID
  * @return float|null ABV or null
  */
-function bj_get_abv($post_id)
+function jb_get_abv($post_id)
 ```
 
 ---
@@ -282,7 +282,7 @@ function bj_get_abv($post_id)
  * @param int $post_id Post ID
  * @return int|null IBU or null
  */
-function bj_get_ibu($post_id)
+function jb_get_ibu($post_id)
 ```
 
 ---
@@ -297,16 +297,16 @@ function bj_get_ibu($post_id)
  * @param string $format Date format (default: WordPress date format)
  * @return string Formatted date
  */
-function bj_get_checkin_date($post_id, $format = '')
+function jb_get_checkin_date($post_id, $format = '')
 ```
 
 **Usage**:
 ```php
 // WordPress format
-echo bj_get_checkin_date(get_the_ID());
+echo jb_get_checkin_date(get_the_ID());
 
 // Custom format
-echo bj_get_checkin_date(get_the_ID(), 'F j, Y');
+echo jb_get_checkin_date(get_the_ID(), 'F j, Y');
 ```
 
 ---
@@ -320,7 +320,7 @@ echo bj_get_checkin_date(get_the_ID(), 'F j, Y');
  * @param int $post_id Post ID
  * @return string Venue name
  */
-function bj_get_venue($post_id)
+function jb_get_venue($post_id)
 ```
 
 ---
@@ -334,7 +334,7 @@ function bj_get_venue($post_id)
  * @param int $post_id Post ID
  * @return string Serving type (Draft, Bottle, Can, etc.)
  */
-function bj_get_serving_type($post_id)
+function jb_get_serving_type($post_id)
 ```
 
 ---
@@ -350,7 +350,7 @@ function bj_get_serving_type($post_id)
  * @param int $post_id Post ID
  * @return bool
  */
-function bj_has_rating($post_id)
+function jb_has_rating($post_id)
 ```
 
 ---
@@ -364,7 +364,7 @@ function bj_has_rating($post_id)
  * @param int $post_id Post ID
  * @return bool
  */
-function bj_has_image($post_id)
+function jb_has_image($post_id)
 ```
 
 ---
@@ -378,7 +378,7 @@ function bj_has_image($post_id)
  * @param int $post_id Post ID
  * @return bool
  */
-function bj_has_comment($post_id)
+function jb_has_comment($post_id)
 ```
 
 ---
@@ -389,13 +389,13 @@ All template tags are filterable:
 
 ```php
 // Filter rating display
-add_filter('bj_rating_display', function($output, $post_id, $raw, $rounded) {
+add_filter('jb_rating_display', function($output, $post_id, $raw, $rounded) {
     // Customize output
     return $output;
 }, 10, 4);
 
 // Filter beer name
-add_filter('bj_beer_name', function($name, $post_id) {
+add_filter('jb_beer_name', function($name, $post_id) {
     // Customize name
     return $name;
 }, 10, 2);
@@ -407,23 +407,23 @@ add_filter('bj_beer_name', function($name, $post_id) {
 
 ```php
 <?php while (have_posts()) : the_post(); ?>
-    <article class="bj-checkin-card">
-        <?php if (bj_has_image(get_the_ID())) : ?>
-            <div class="bj-checkin-image">
-                <?php echo bj_beer_image(get_the_ID(), 'medium'); ?>
+    <article class="jb-checkin-card">
+        <?php if (jb_has_image(get_the_ID())) : ?>
+            <div class="jb-checkin-image">
+                <?php echo jb_beer_image(get_the_ID(), 'medium'); ?>
             </div>
         <?php endif; ?>
         
-        <div class="bj-checkin-content">
-            <h2><?php echo esc_html(bj_get_beer_name(get_the_ID())); ?></h2>
-            <p class="bj-brewery"><?php echo bj_brewery_link(get_the_ID()); ?></p>
+        <div class="jb-checkin-content">
+            <h2><?php echo esc_html(jb_get_beer_name(get_the_ID())); ?></h2>
+            <p class="jb-brewery"><?php echo jb_brewery_link(get_the_ID()); ?></p>
             
-            <div class="bj-rating">
-                <?php echo bj_display_rating(get_the_ID(), false); ?>
+            <div class="jb-rating">
+                <?php echo jb_display_rating(get_the_ID(), false); ?>
             </div>
             
-            <p class="bj-style"><?php echo bj_beer_style(get_the_ID()); ?></p>
-            <p class="bj-date"><?php echo bj_get_checkin_date(get_the_ID()); ?></p>
+            <p class="jb-style"><?php echo jb_beer_style(get_the_ID()); ?></p>
+            <p class="jb-date"><?php echo jb_get_checkin_date(get_the_ID()); ?></p>
         </div>
     </article>
 <?php endwhile; ?>
@@ -432,43 +432,43 @@ add_filter('bj_beer_name', function($name, $post_id) {
 ### In Single Template
 
 ```php
-<article class="bj-checkin">
+<article class="jb-checkin">
     <header>
-        <h1><?php echo esc_html(bj_get_beer_name(get_the_ID())); ?></h1>
-        <p class="bj-brewery"><?php echo bj_brewery_link(get_the_ID()); ?></p>
+        <h1><?php echo esc_html(jb_get_beer_name(get_the_ID())); ?></h1>
+        <p class="jb-brewery"><?php echo jb_brewery_link(get_the_ID()); ?></p>
     </header>
     
-    <div class="bj-checkin-meta">
-        <div class="bj-rating">
-            <?php echo bj_display_rating(get_the_ID()); ?>
+    <div class="jb-checkin-meta">
+        <div class="jb-rating">
+            <?php echo jb_display_rating(get_the_ID()); ?>
         </div>
         
-        <dl class="bj-details">
+        <dl class="jb-details">
             <dt>Style:</dt>
-            <dd><?php echo bj_beer_style(get_the_ID()); ?></dd>
+            <dd><?php echo jb_beer_style(get_the_ID()); ?></dd>
             
-            <?php if ($abv = bj_get_abv(get_the_ID())) : ?>
+            <?php if ($abv = jb_get_abv(get_the_ID())) : ?>
                 <dt>ABV:</dt>
                 <dd><?php echo esc_html($abv); ?>%</dd>
             <?php endif; ?>
             
-            <?php if ($ibu = bj_get_ibu(get_the_ID())) : ?>
+            <?php if ($ibu = jb_get_ibu(get_the_ID())) : ?>
                 <dt>IBU:</dt>
                 <dd><?php echo esc_html($ibu); ?></dd>
             <?php endif; ?>
             
             <dt>Date:</dt>
-            <dd><?php echo bj_get_checkin_date(get_the_ID()); ?></dd>
+            <dd><?php echo jb_get_checkin_date(get_the_ID()); ?></dd>
             
-            <?php if ($venue = bj_get_venue(get_the_ID())) : ?>
+            <?php if ($venue = jb_get_venue(get_the_ID())) : ?>
                 <dt>Venue:</dt>
                 <dd><?php echo esc_html($venue); ?></dd>
             <?php endif; ?>
         </dl>
     </div>
     
-    <?php if (bj_has_comment(get_the_ID())) : ?>
-        <div class="bj-comment">
+    <?php if (jb_has_comment(get_the_ID())) : ?>
+        <div class="jb-comment">
             <?php the_content(); ?>
         </div>
     <?php endif; ?>
