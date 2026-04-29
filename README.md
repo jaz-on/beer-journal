@@ -33,7 +33,6 @@ Further detail: [CHANGELOG.md](CHANGELOG.md), [DEVELOPMENT.md](DEVELOPMENT.md), 
 | [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm / listens |
 | **jardin-toasts** (this repo) | Untappd check-ins |
 | [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks) | Feedbin → favorites / blogroll |
-| [jardin-feed](https://github.com/jaz-on/jardin-feed) | Legacy Feedbin package |
 
 ## Development
 
