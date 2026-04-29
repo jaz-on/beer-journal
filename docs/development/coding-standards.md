@@ -112,7 +112,7 @@ $rating_raw
 /**
  * File: class-importer.php
  * 
- * @package Beer_Journal
+ * @package JardinBeer
  * @subpackage Includes
  */
 
