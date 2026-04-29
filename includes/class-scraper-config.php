@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Scraper_Config
+ * Class JT_Scraper_Config
  */
-class JB_Scraper_Config {
+class JT_Scraper_Config {
 
 	/**
 	 * Increment when check-in page parsing strategy changes materially (for logs / support).
@@ -34,7 +34,7 @@ class JB_Scraper_Config {
 			'venue'   => array( '.venue-name', '.top-location' ),
 			'photo'   => array( '.photo img', '.label img' ),
 		);
-		$filtered = apply_filters( 'jb_scraper_dom_selectors', $selectors );
+		$filtered = apply_filters( 'jt_scraper_dom_selectors', $selectors );
 		return is_array( $filtered ) ? $filtered : $selectors;
 	}
 }

@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Admin
+ * Class JT_Admin
  */
-class JB_Admin {
+class JT_Admin {
 
 	/**
 	 * Slug for the tabbed settings page under the CPT (admin.php?page=…).
@@ -28,9 +28,9 @@ class JB_Admin {
 		add_action( 'admin_init', array( $this, 'maybe_redirect_legacy_settings_url' ) );
 		add_action( 'admin_menu', array( $this, 'register_settings_submenu' ), 100 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_jb_sync_now', array( $this, 'ajax_sync_now' ) );
-		add_action( 'wp_ajax_jb_crawl_discover', array( $this, 'ajax_crawl_discover' ) );
-		add_action( 'wp_ajax_jb_crawl_batch', array( $this, 'ajax_crawl_batch' ) );
+		add_action( 'wp_ajax_jt_sync_now', array( $this, 'ajax_sync_now' ) );
+		add_action( 'wp_ajax_jt_crawl_discover', array( $this, 'ajax_crawl_discover' ) );
+		add_action( 'wp_ajax_jt_crawl_batch', array( $this, 'ajax_crawl_batch' ) );
 		add_filter( 'bulk_actions-edit-beer_checkin', array( $this, 'beer_checkin_bulk_actions' ) );
 		add_filter( 'handle_bulk_actions-edit-beer_checkin', array( $this, 'handle_beer_checkin_bulk' ), 10, 3 );
 		add_action( 'admin_notices', array( $this, 'bulk_rescrape_admin_notice' ) );
@@ -48,6 +48,7 @@ class JB_Admin {
 			'jardin-beer',
 			'jardin-beer-settings',
 			'jb_jardin_beer_settings',
+			'jt_jardin_beer_settings',
 		);
 		if ( ! in_array( $page, $legacy_pages, true ) ) {
 			return;
@@ -72,7 +73,7 @@ class JB_Admin {
 	 */
 	public function register_settings_submenu() {
 		add_submenu_page(
-			JB_Post_Type::ADMIN_MENU_SLUG,
+			JT_Post_Type::ADMIN_MENU_SLUG,
 			__( 'Jardin Toasts Settings', 'jardin-toasts' ),
 			__( 'Settings', 'jardin-toasts' ),
 			'manage_options',
@@ -97,41 +98,41 @@ class JB_Admin {
 	 * @return void
 	 */
 	public function enqueue_assets( $hook_suffix ) {
-		$settings_hook = JB_Post_Type::POST_TYPE . '_page_' . self::SETTINGS_PAGE_SLUG;
+		$settings_hook = JT_Post_Type::POST_TYPE . '_page_' . self::SETTINGS_PAGE_SLUG;
 		if ( $settings_hook !== $hook_suffix ) {
 			return;
 		}
-		$shell_path = JB_PLUGIN_DIR . 'admin/assets/css/jardin-admin-shell.css';
-		$shell_ver  = is_readable( $shell_path ) ? (string) filemtime( $shell_path ) : JB_VERSION;
+		$shell_path = JT_PLUGIN_DIR . 'admin/assets/css/jardin-admin-shell.css';
+		$shell_ver  = is_readable( $shell_path ) ? (string) filemtime( $shell_path ) : JT_VERSION;
 		wp_enqueue_style(
 			'jardin-admin-shell',
-			JB_PLUGIN_URL . 'admin/assets/css/jardin-admin-shell.css',
+			JT_PLUGIN_URL . 'admin/assets/css/jardin-admin-shell.css',
 			array( 'dashicons' ),
 			$shell_ver
 		);
 		wp_enqueue_style(
 			'jardin-toasts-admin',
-			JB_PLUGIN_URL . 'admin/assets/css/admin.css',
+			JT_PLUGIN_URL . 'admin/assets/css/admin.css',
 			array( 'jardin-admin-shell' ),
-			JB_VERSION
+			JT_VERSION
 		);
 		wp_enqueue_media();
 		wp_enqueue_script(
 			'jardin-toasts-admin',
-			JB_PLUGIN_URL . 'admin/assets/js/admin.js',
+			JT_PLUGIN_URL . 'admin/assets/js/admin.js',
 			array( 'jquery', 'media' ),
-			JB_VERSION,
+			JT_VERSION,
 			true
 		);
-		$placeholder_id = absint( JB_Settings::get( 'jb_placeholder_image_id' ) );
+		$placeholder_id = absint( JT_Settings::get( 'jt_placeholder_image_id' ) );
 		$placeholder_thumb = $placeholder_id ? wp_get_attachment_image_url( $placeholder_id, 'thumbnail' ) : '';
 		wp_localize_script(
 			'jardin-toasts-admin',
-			'jbAdmin',
+			'jtAdmin',
 			array(
 				'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
-				'nonce'             => wp_create_nonce( 'jb_admin' ),
-				'rssUsername'       => jb_parse_username_from_rss_url( jb_get_rss_feed_url() ),
+				'nonce'             => wp_create_nonce( 'jt_admin' ),
+				'rssUsername'       => jt_parse_username_from_rss_url( jt_get_rss_feed_url() ),
 				'placeholderId'     => $placeholder_id,
 				'placeholderThumb' => $placeholder_thumb ? $placeholder_thumb : '',
 				'i18n'              => array(
@@ -167,7 +168,7 @@ class JB_Admin {
 		}
 
 		settings_errors( 'jardin_toasts' );
-		include JB_PLUGIN_DIR . 'admin/views/settings-page.php';
+		include JT_PLUGIN_DIR . 'admin/views/settings-page.php';
 	}
 
 	/**
@@ -176,15 +177,15 @@ class JB_Admin {
 	 * @return void
 	 */
 	public function ajax_sync_now() {
-		check_ajax_referer( 'jb_admin', 'nonce' );
+		check_ajax_referer( 'jt_admin', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'jardin-toasts' ) ), 403 );
 		}
-		$parser   = new JB_RSS_Parser();
-		$importer = new JB_Importer();
+		$parser   = new JT_RSS_Parser();
+		$importer = new JT_Importer();
 		$result   = $parser->sync_new_items( $importer, array( 'manual' => true ) );
 		if ( is_wp_error( $result ) ) {
-			jb_send_notification_email(
+			jt_send_notification_email(
 				'[Jardin Toasts] ' . __( 'RSS sync failed', 'jardin-toasts' ),
 				$result->get_error_message(),
 				'error'
@@ -200,7 +201,7 @@ class JB_Admin {
 	 * @return void
 	 */
 	public function ajax_crawl_discover() {
-		check_ajax_referer( 'jb_admin', 'nonce' );
+		check_ajax_referer( 'jt_admin', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'jardin-toasts' ) ), 403 );
 		}
@@ -210,7 +211,7 @@ class JB_Admin {
 			wp_send_json_error( array( 'message' => __( 'Username required.', 'jardin-toasts' ) ), 400 );
 		}
 
-		$crawler = new JB_Crawler();
+		$crawler = new JT_Crawler();
 		$ids     = $crawler->discover_checkins( $username, $max_pages );
 		if ( is_wp_error( $ids ) ) {
 			wp_send_json_error( array( 'message' => $ids->get_error_message() ), 500 );
@@ -218,13 +219,13 @@ class JB_Admin {
 
 		$queue = array();
 		foreach ( $ids as $id ) {
-			if ( ! jb_get_post_id_by_checkin_id( $id ) ) {
+			if ( ! jt_get_post_id_by_checkin_id( $id ) ) {
 				$queue[] = $id;
 			}
 		}
 
 		update_option(
-			'jb_import_checkpoint',
+			'jt_import_checkpoint',
 			array(
 				'queue'          => $queue,
 				'username'       => $username,
@@ -271,26 +272,26 @@ class JB_Admin {
 	 * @return void
 	 */
 	public function ajax_crawl_batch() {
-		check_ajax_referer( 'jb_admin', 'nonce' );
+		check_ajax_referer( 'jt_admin', 'nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'jardin-toasts' ) ), 403 );
 		}
 
-		$cp = get_option( 'jb_import_checkpoint', array() );
+		$cp = get_option( 'jt_import_checkpoint', array() );
 		if ( ! is_array( $cp ) || empty( $cp['queue'] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Nothing to import. Run discovery first.', 'jardin-toasts' ) ), 400 );
 		}
 
-		$batch_size = absint( get_option( 'jb_import_batch_size', 25 ) );
+		$batch_size = absint( get_option( 'jt_import_batch_size', 25 ) );
 		$batch_size = max( 1, min( 100, $batch_size ) );
 		$queue      = $cp['queue'];
 		$chunk      = array_splice( $queue, 0, $batch_size );
 		$username   = isset( $cp['username'] ) ? (string) $cp['username'] : '';
 
-		$importer = new JB_Importer();
+		$importer = new JT_Importer();
 		$imported = 0;
 		foreach ( $chunk as $checkin_id ) {
-			if ( jb_get_post_id_by_checkin_id( (string) $checkin_id ) ) {
+			if ( jt_get_post_id_by_checkin_id( (string) $checkin_id ) ) {
 				continue;
 			}
 			$url  = 'https://untappd.com/user/' . rawurlencode( $username ) . '/checkin/' . $checkin_id;
@@ -300,7 +301,7 @@ class JB_Admin {
 				'checkin_date' => gmdate( 'c' ),
 			);
 
-			$scraper = new JB_Scraper();
+			$scraper = new JT_Scraper();
 			$scraped = $scraper->scrape_checkin_url( $url );
 			if ( ! is_wp_error( $scraped ) ) {
 				$data = array_merge( $data, $scraped );
@@ -316,7 +317,7 @@ class JB_Admin {
 		$cp['total_imported'] = isset( $cp['total_imported'] ) ? absint( $cp['total_imported'] ) + $imported : $imported;
 		$cp['status']         = empty( $queue ) ? 'done' : 'running';
 		$cp['last_run']       = time();
-		update_option( 'jb_import_checkpoint', $cp, false );
+		update_option( 'jt_import_checkpoint', $cp, false );
 
 		wp_send_json_success(
 			array(
@@ -335,7 +336,7 @@ class JB_Admin {
 	 * @return array<string, string>
 	 */
 	public function beer_checkin_bulk_actions( $actions ) {
-		$actions['jb_bulk_rescrape'] = __( 'Re-scrape from Untappd', 'jardin-toasts' );
+		$actions['jt_bulk_rescrape'] = __( 'Re-scrape from Untappd', 'jardin-toasts' );
 		return $actions;
 	}
 
@@ -348,10 +349,10 @@ class JB_Admin {
 	 * @return string
 	 */
 	public function handle_beer_checkin_bulk( $redirect_url, $action, $post_ids ) {
-		if ( 'jb_bulk_rescrape' !== $action || ! is_array( $post_ids ) ) {
+		if ( 'jt_bulk_rescrape' !== $action || ! is_array( $post_ids ) ) {
 			return $redirect_url;
 		}
-		$cap   = (int) apply_filters( 'jb_bulk_rescrape_max_per_request', 5 );
+		$cap   = (int) apply_filters( 'jt_bulk_rescrape_max_per_request', 5 );
 		$cap   = max( 1, min( 25, $cap ) );
 		$done  = 0;
 		$total = count( $post_ids );
@@ -363,16 +364,16 @@ class JB_Admin {
 			if ( ! $pid || ! current_user_can( 'edit_post', $pid ) ) {
 				continue;
 			}
-			$res = jb_rescrape_checkin_post( $pid );
+			$res = jt_rescrape_checkin_post( $pid );
 			if ( ! is_wp_error( $res ) ) {
 				++$done;
 			}
 		}
 		return add_query_arg(
 			array(
-				'jb_rescraped'      => $done,
-				'jb_rescrape_total' => $total,
-				'jb_rescrape_cap'   => $cap,
+				'jt_rescraped'      => $done,
+				'jt_rescrape_total' => $total,
+				'jt_rescrape_cap'   => $cap,
 			),
 			$redirect_url
 		);
@@ -384,16 +385,16 @@ class JB_Admin {
 	 * @return void
 	 */
 	public function bulk_rescrape_admin_notice() {
-		if ( ! isset( $_GET['jb_rescraped'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['jt_rescraped'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( ! $screen || 'edit-beer_checkin' !== $screen->id ) {
 			return;
 		}
-		$done = absint( wp_unslash( $_GET['jb_rescraped'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$total = isset( $_GET['jb_rescrape_total'] ) ? absint( wp_unslash( $_GET['jb_rescrape_total'] ) ) : $done; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$cap   = isset( $_GET['jb_rescrape_cap'] ) ? absint( wp_unslash( $_GET['jb_rescrape_cap'] ) ) : 5; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$done = absint( wp_unslash( $_GET['jt_rescraped'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$total = isset( $_GET['jt_rescrape_total'] ) ? absint( wp_unslash( $_GET['jt_rescrape_total'] ) ) : $done; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$cap   = isset( $_GET['jt_rescrape_cap'] ) ? absint( wp_unslash( $_GET['jt_rescrape_cap'] ) ) : 5; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $total > $cap && $done === $cap ) {
 			echo '<div class="notice notice-warning is-dismissible"><p>';
 			echo esc_html(

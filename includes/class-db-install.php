@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_DB_Install
+ * Class JT_DB_Install
  */
-class JB_DB_Install {
+class JT_DB_Install {
 
 	/**
 	 * Add composite index on postmeta for check-in ID lookups (best-effort, once).
@@ -20,7 +20,7 @@ class JB_DB_Install {
 	 * @return void
 	 */
 	public static function maybe_add_indexes() {
-		$state = get_option( 'jb_db_index_checkin_v1', '' );
+		$state = get_option( 'jt_db_index_checkin_v1', '' );
 		if ( in_array( $state, array( 'ok', 'failed' ), true ) ) {
 			return;
 		}
@@ -29,21 +29,21 @@ class JB_DB_Install {
 		$wpdb->suppress_errors( true );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->query(
-			"ALTER TABLE {$wpdb->postmeta} ADD INDEX jb_checkin_meta (meta_key(20), meta_value(64))"
+			"ALTER TABLE {$wpdb->postmeta} ADD INDEX jt_checkin_meta (meta_key(20), meta_value(64))"
 		);
 		$wpdb->suppress_errors( false );
 
 		$err = $wpdb->last_error;
 		if ( ! $err ) {
-			update_option( 'jb_db_index_checkin_v1', 'ok', true );
+			update_option( 'jt_db_index_checkin_v1', 'ok', true );
 			return;
 		}
 		if ( false !== strpos( $err, 'Duplicate' ) || false !== strpos( $err, 'duplicate' ) ) {
-			update_option( 'jb_db_index_checkin_v1', 'ok', true );
+			update_option( 'jt_db_index_checkin_v1', 'ok', true );
 			return;
 		}
 
-		update_option( 'jb_db_index_checkin_v1', 'failed', true );
-		JB_Logger::warning( 'DB index jb_checkin_meta not added: ' . $err );
+		update_option( 'jt_db_index_checkin_v1', 'failed', true );
+		JT_Logger::warning( 'DB index jt_checkin_meta not added: ' . $err );
 	}
 }

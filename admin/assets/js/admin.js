@@ -5,78 +5,78 @@
 		$( el ).text( msg );
 	}
 
-	$( document ).on( 'click', '#jb-sync-now', function () {
+	$( document ).on( 'click', '#jt-sync-now', function () {
 		var $btn = $( this );
 		$btn.prop( 'disabled', true );
-		setStatus( '#jb-sync-status', jbAdmin.i18n.working );
+		setStatus( '#jt-sync-status', jtAdmin.i18n.working );
 		$.post(
-			jbAdmin.ajaxUrl,
+			jtAdmin.ajaxUrl,
 			{
-				action: 'jb_sync_now',
-				nonce: jbAdmin.nonce,
+				action: 'jt_sync_now',
+				nonce: jtAdmin.nonce,
 			}
 		)
 			.done( function ( res ) {
 				if ( res.success ) {
-					setStatus( '#jb-sync-status', res.data.message || jbAdmin.i18n.done );
+					setStatus( '#jt-sync-status', res.data.message || jtAdmin.i18n.done );
 				} else {
-					setStatus( '#jb-sync-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jt-sync-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#jb-sync-status', 'Request failed.' );
+				setStatus( '#jt-sync-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	$( document ).on( 'click', '#jb-discover', function () {
+	$( document ).on( 'click', '#jt-discover', function () {
 		var $btn = $( this );
-		var username = $( '#jb_untappd_username' ).val();
-		var maxPages = $( '#jb-discover-max-pages' ).val() || 10;
+		var username = $( '#jt_untappd_username' ).val();
+		var maxPages = $( '#jt-discover-max-pages' ).val() || 10;
 		$btn.prop( 'disabled', true );
-		setStatus( '#jb-import-status', jbAdmin.i18n.working );
+		setStatus( '#jt-import-status', jtAdmin.i18n.working );
 		$.post(
-			jbAdmin.ajaxUrl,
+			jtAdmin.ajaxUrl,
 			{
-				action: 'jb_crawl_discover',
-				nonce: jbAdmin.nonce,
+				action: 'jt_crawl_discover',
+				nonce: jtAdmin.nonce,
 				username: username,
 				max_pages: maxPages,
 			}
 		)
 			.done( function ( res ) {
 				if ( res.success ) {
-					setStatus( '#jb-import-status', res.data.message );
+					setStatus( '#jt-import-status', res.data.message );
 				} else {
-					setStatus( '#jb-import-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jt-import-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#jb-import-status', 'Request failed.' );
+				setStatus( '#jt-import-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	$( document ).on( 'click', '#jb-import-batch', function () {
+	$( document ).on( 'click', '#jt-import-batch', function () {
 		var $btn = $( this );
 		$btn.prop( 'disabled', true );
-		setStatus( '#jb-import-status', jbAdmin.i18n.working );
+		setStatus( '#jt-import-status', jtAdmin.i18n.working );
 		$.post(
-			jbAdmin.ajaxUrl,
+			jtAdmin.ajaxUrl,
 			{
-				action: 'jb_crawl_batch',
-				nonce: jbAdmin.nonce,
+				action: 'jt_crawl_batch',
+				nonce: jtAdmin.nonce,
 			}
 		)
 			.done( function ( res ) {
 				if ( res.success ) {
 					var d = res.data;
 					setStatus(
-						'#jb-import-status',
+						'#jt-import-status',
 						'Imported ' +
 							d.imported +
 							'. Remaining: ' +
@@ -85,26 +85,26 @@
 							d.total_imported
 					);
 					if ( d.done ) {
-						setStatus( '#jb-import-status', 'Import complete.' );
+						setStatus( '#jt-import-status', 'Import complete.' );
 					}
 				} else {
-					setStatus( '#jb-import-status', res.data && res.data.message ? res.data.message : 'Error' );
+					setStatus( '#jt-import-status', res.data && res.data.message ? res.data.message : 'Error' );
 				}
 			} )
 			.fail( function () {
-				setStatus( '#jb-import-status', 'Request failed.' );
+				setStatus( '#jt-import-status', 'Request failed.' );
 			} )
 			.always( function () {
 				$btn.prop( 'disabled', false );
 			} );
 	} );
 
-	var $phToggle = $( '#jb_use_placeholder_image' );
-	var $phPicker = $( '#jb-placeholder-picker' );
-	var $phId = $( '#jb_placeholder_image_id' );
-	var $phPreview = $( '#jb-placeholder-preview' );
-	var $phSelect = $( '#jb-placeholder-select' );
-	var $phClear = $( '#jb-placeholder-clear' );
+	var $phToggle = $( '#jt_use_placeholder_image' );
+	var $phPicker = $( '#jt-placeholder-picker' );
+	var $phId = $( '#jt_placeholder_image_id' );
+	var $phPreview = $( '#jt-placeholder-preview' );
+	var $phSelect = $( '#jt-placeholder-select' );
+	var $phClear = $( '#jt-placeholder-clear' );
 
 	function bjTogglePlaceholderPicker() {
 		if ( ! $phToggle.length || ! $phPicker.length ) {
@@ -127,8 +127,8 @@
 				return;
 			}
 			frame = wp.media( {
-				title: jbAdmin.i18n.chooseImage,
-				button: { text: jbAdmin.i18n.chooseImage },
+				title: jtAdmin.i18n.chooseImage,
+				button: { text: jtAdmin.i18n.chooseImage },
 				multiple: false,
 				library: { type: 'image' },
 			} );
@@ -140,7 +140,7 @@
 						? att.sizes.thumbnail.url
 						: att.url;
 				$phPreview.html( '<img src="' + url + '" alt="" />' );
-				$phSelect.text( jbAdmin.i18n.replaceImage );
+				$phSelect.text( jtAdmin.i18n.replaceImage );
 			} );
 			frame.open();
 		} );
@@ -150,20 +150,20 @@
 		e.preventDefault();
 		$phId.val( '0' );
 		$phPreview.empty();
-		$phSelect.text( jbAdmin.i18n.chooseImage );
+		$phSelect.text( jtAdmin.i18n.chooseImage );
 	} );
 
-	if ( jbAdmin.placeholderThumb && $phPreview.length && parseInt( jbAdmin.placeholderId, 10 ) > 0 ) {
+	if ( jtAdmin.placeholderThumb && $phPreview.length && parseInt( jtAdmin.placeholderId, 10 ) > 0 ) {
 		$phPreview.html(
-			'<img src="' + jbAdmin.placeholderThumb + '" alt="" />'
+			'<img src="' + jtAdmin.placeholderThumb + '" alt="" />'
 		);
-		$phSelect.text( jbAdmin.i18n.replaceImage );
+		$phSelect.text( jtAdmin.i18n.replaceImage );
 	}
 
-	$( '#jb-use-rss-username' ).on( 'click', function ( e ) {
+	$( '#jt-use-rss-username' ).on( 'click', function ( e ) {
 		e.preventDefault();
-		if ( jbAdmin.rssUsername ) {
-			$( '#jb_untappd_username' ).val( jbAdmin.rssUsername );
+		if ( jtAdmin.rssUsername ) {
+			$( '#jt_untappd_username' ).val( jtAdmin.rssUsername );
 		}
 	} );
 }( jQuery ) );

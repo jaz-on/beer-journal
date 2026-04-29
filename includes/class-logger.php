@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Logger
+ * Class JT_Logger
  */
-class JB_Logger {
+class JT_Logger {
 
 	public const LEVEL_ERROR   = 'ERROR';
 	public const LEVEL_WARNING = 'WARNING';
@@ -27,11 +27,11 @@ class JB_Logger {
 	 * @return void
 	 */
 	public static function log( $level, $message ) {
-		$dir = jb_get_log_directory();
+		$dir = jt_get_log_directory();
 		if ( ! $dir ) {
 			return;
 		}
-		$debug = (bool) get_option( 'jb_debug_mode', false );
+		$debug = (bool) get_option( 'jt_debug_mode', false );
 		if ( self::LEVEL_DEBUG === $level && ! $debug ) {
 			return;
 		}
@@ -88,7 +88,7 @@ class JB_Logger {
 	 * @return string
 	 */
 	public static function tail_today( $lines = 200 ) {
-		$dir = jb_get_log_directory();
+		$dir = jt_get_log_directory();
 		if ( ! $dir ) {
 			return '';
 		}

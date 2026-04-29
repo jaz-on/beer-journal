@@ -1,6 +1,6 @@
 <?php
 /**
- * One-time migrations: beer-journal / bj_ → jb_ keys; theme paths in post content; product rename jardin-beer → jardin-toasts.
+ * One-time migrations: beer-journal / bj_ → jt_; legacy jb_ options/meta → jt_; product paths jardin-beer → jardin-toasts.
  *
  * @package JardinToasts
  */
@@ -12,14 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Migrates wp_options, post meta, serialized blocks, clears legacy cron/AS hooks.
  */
-class JB_Storage_Migration {
-
-	public const FLAG_OPTION = 'jb_storage_migrated_v1';
+class JT_Storage_Migration {
 
 	/**
-	 * Set after post content + Action Scheduler group cleanup for the jardin-toasts rename.
+	 * Beer-journal / bj_ import completed (or skipped because legacy jb migration already ran historically).
 	 */
-	public const PRODUCT_RENAME_FLAG = 'jb_jardin_toasts_product_rename_v1';
+	public const BEER_JOURNAL_FLAG = 'jt_beer_journal_storage_imported_v1';
+
+	/**
+	 * All `jb_*` options and `_jb_*` post meta copied/renamed to `jt_*` / `_jt_*`.
+	 */
+	public const JB_PREFIX_UPGRADE_FLAG = 'jt_jb_prefix_storage_migrated_v1';
+
+	/**
+	 * Post content path / block namespace rename from jardin-beer → jardin-toasts.
+	 */
+	public const PRODUCT_RENAME_FLAG = 'jt_product_paths_migrated_v1';
 
 	/**
 	 * Legacy Action Scheduler group slug.
@@ -37,12 +45,28 @@ class JB_Storage_Migration {
 	);
 
 	/**
-	 * Run once per site (sets {@see FLAG_OPTION}).
+	 * @return string[]
+	 */
+	private static function rss_hook_names() {
+		return array(
+			'jt_rss_sync',
+			'jt_rss_queue_tick',
+			'jt_background_import_batch',
+			'jt_daily_log_cleanup',
+			'jb_rss_sync',
+			'jb_rss_queue_tick',
+			'jb_background_import_batch',
+			'jb_daily_log_cleanup',
+		);
+	}
+
+	/**
+	 * Import from beer-journal / bj_* once (or skip if an older plugin release already ran the jb-era migration).
 	 *
 	 * @return void
 	 */
 	public static function maybe_migrate() {
-		if ( get_option( self::FLAG_OPTION, '' ) ) {
+		if ( get_option( self::BEER_JOURNAL_FLAG, '' ) || get_option( 'jb_storage_migrated_v1', '' ) ) {
 			return;
 		}
 
@@ -54,16 +78,36 @@ class JB_Storage_Migration {
 		self::clear_legacy_schedulers();
 		self::delete_legacy_transients( $wpdb );
 
-		update_option( self::FLAG_OPTION, '1', false );
+		update_option( self::BEER_JOURNAL_FLAG, '1', false );
 	}
 
 	/**
-	 * Rename persisted block/theme paths and clear Action Scheduler jobs in the legacy `jardin-beer` group (superseded by `jardin-toasts`).
+	 * Copy/rename all `jb_*` wp_options and `_jb_*` post meta to `jt_*` / `_jt_*` (sites upgraded from jb-prefixed releases).
+	 *
+	 * @return void
+	 */
+	public static function maybe_migrate_jb_prefix_storage_to_jt() {
+		if ( get_option( self::JB_PREFIX_UPGRADE_FLAG, '' ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		self::migrate_jb_options_to_jt( $wpdb );
+		self::migrate_jb_postmeta_to_jt( $wpdb );
+		self::delete_jb_transients( $wpdb );
+		self::clear_all_legacy_plugin_cron_and_as();
+
+		update_option( self::JB_PREFIX_UPGRADE_FLAG, '1', false );
+	}
+
+	/**
+	 * Rename persisted block/theme paths and clear Action Scheduler jobs in the legacy `jardin-beer` group.
 	 *
 	 * @return void
 	 */
 	public static function maybe_migrate_product_rename() {
-		if ( get_option( self::PRODUCT_RENAME_FLAG, '' ) ) {
+		if ( get_option( self::PRODUCT_RENAME_FLAG, '' ) || get_option( 'jb_jardin_toasts_product_rename_v1', '' ) ) {
 			return;
 		}
 
@@ -108,9 +152,9 @@ class JB_Storage_Migration {
 		if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
 			return;
 		}
-		$hooks = array( 'jb_rss_sync', 'jb_rss_queue_tick', 'jb_background_import_batch', 'jb_daily_log_cleanup' );
+		$hooks = self::rss_hook_names();
 		$group = 'jardin-beer';
-		jb_when_action_scheduler_store_ready(
+		jt_when_action_scheduler_store_ready(
 			static function () use ( $hooks, $group ) {
 				foreach ( $hooks as $hook ) {
 					as_unschedule_all_actions( $hook, array(), $group );
@@ -134,7 +178,37 @@ class JB_Storage_Migration {
 			if ( ! is_string( $old ) || '' === $old || 0 !== strpos( $old, 'bj_' ) ) {
 				continue;
 			}
-			$new = 'jb_' . substr( $old, 3 );
+			$new = 'jt_' . substr( $old, 3 );
+			$raw = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $old ) );
+			if ( null === $raw ) {
+				continue;
+			}
+			$val = maybe_unserialize( $raw );
+			if ( ! self::option_row_exists( $wpdb, $new ) ) {
+				add_option( $new, $val, '', false );
+			} else {
+				update_option( $new, $val, false );
+			}
+			delete_option( $old );
+		}
+	}
+
+	/**
+	 * @param \wpdb $wpdb WordPress DB object.
+	 * @return void
+	 */
+	private static function migrate_jb_options_to_jt( $wpdb ) {
+		$rows = $wpdb->get_col(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE 'jb\\_%'"
+		);
+		if ( ! is_array( $rows ) ) {
+			return;
+		}
+		foreach ( $rows as $old ) {
+			if ( ! is_string( $old ) || '' === $old || 0 !== strpos( $old, 'jb_' ) ) {
+				continue;
+			}
+			$new = 'jt_' . substr( $old, 3 );
 			$raw = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $old ) );
 			if ( null === $raw ) {
 				continue;
@@ -167,7 +241,21 @@ class JB_Storage_Migration {
 		$like = $wpdb->esc_like( '_bj_' ) . '%';
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$wpdb->postmeta} SET meta_key = REPLACE(meta_key, '_bj_', '_jb_') WHERE meta_key LIKE %s",
+				"UPDATE {$wpdb->postmeta} SET meta_key = REPLACE(meta_key, '_bj_', '_jt_') WHERE meta_key LIKE %s",
+				$like
+			)
+		);
+	}
+
+	/**
+	 * @param \wpdb $wpdb WordPress DB object.
+	 * @return void
+	 */
+	private static function migrate_jb_postmeta_to_jt( $wpdb ) {
+		$like = $wpdb->esc_like( '_jb_' ) . '%';
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->postmeta} SET meta_key = REPLACE(meta_key, '_jb_', '_jt_') WHERE meta_key LIKE %s",
 				$like
 			)
 		);
@@ -190,14 +278,42 @@ class JB_Storage_Migration {
 		foreach ( self::LEGACY_CRON_HOOKS as $hook ) {
 			wp_clear_scheduled_hook( $hook );
 		}
+		foreach ( self::rss_hook_names() as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
 		if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
 			return;
 		}
-		$hooks = array_merge( self::LEGACY_CRON_HOOKS, array( 'jb_rss_sync', 'jb_rss_queue_tick', 'jb_background_import_batch', 'jb_daily_log_cleanup' ) );
-		jb_when_action_scheduler_store_ready(
+		$hooks = array_merge( self::LEGACY_CRON_HOOKS, self::rss_hook_names() );
+		jt_when_action_scheduler_store_ready(
 			static function () use ( $hooks ) {
 				foreach ( $hooks as $hook ) {
 					as_unschedule_all_actions( $hook, array(), self::LEGACY_AS_GROUP );
+				}
+			}
+		);
+	}
+
+	/**
+	 * Clear WP-Cron and Action Scheduler entries for both jb_ and jt_ hook names across legacy groups.
+	 *
+	 * @return void
+	 */
+	private static function clear_all_legacy_plugin_cron_and_as() {
+		foreach ( self::rss_hook_names() as $hook ) {
+			wp_clear_scheduled_hook( $hook );
+		}
+		if ( ! function_exists( 'as_unschedule_all_actions' ) ) {
+			return;
+		}
+		$hooks  = self::rss_hook_names();
+		$groups = array( 'beer-journal', 'jardin-beer', 'jardin-toasts' );
+		jt_when_action_scheduler_store_ready(
+			static function () use ( $hooks, $groups ) {
+				foreach ( $groups as $group ) {
+					foreach ( $hooks as $hook ) {
+						as_unschedule_all_actions( $hook, array(), $group );
+					}
 				}
 			}
 		);
@@ -210,6 +326,22 @@ class JB_Storage_Migration {
 	private static function delete_legacy_transients( $wpdb ) {
 		$p1 = $wpdb->esc_like( '_transient_bj_' ) . '%';
 		$p2 = $wpdb->esc_like( '_transient_timeout_bj_' ) . '%';
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				$p1,
+				$p2
+			)
+		);
+	}
+
+	/**
+	 * @param \wpdb $wpdb WordPress DB object.
+	 * @return void
+	 */
+	private static function delete_jb_transients( $wpdb ) {
+		$p1 = $wpdb->esc_like( '_transient_jb_' ) . '%';
+		$p2 = $wpdb->esc_like( '_transient_timeout_jb_' ) . '%';
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",

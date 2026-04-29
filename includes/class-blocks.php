@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Blocks
+ * Class JT_Blocks
  */
-class JB_Blocks {
+class JT_Blocks {
 
 	/**
 	 * Block slugs relative to blocks/.
@@ -40,7 +40,7 @@ class JB_Blocks {
 	 */
 	public function register_block_types() {
 		foreach ( self::BLOCKS as $slug ) {
-			$dir = JB_PLUGIN_DIR . 'blocks/' . $slug;
+			$dir = JT_PLUGIN_DIR . 'blocks/' . $slug;
 			if ( is_readable( $dir . '/block.json' ) ) {
 				register_block_type( $dir );
 			}

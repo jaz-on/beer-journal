@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Activator
+ * Class JT_Activator
  */
-class JB_Activator {
+class JT_Activator {
 
 	/**
 	 * Run on activation.
@@ -20,10 +20,10 @@ class JB_Activator {
 	 * @return void
 	 */
 	public static function activate() {
-		JB_Storage_Migration::maybe_migrate();
-		JB_Settings::ensure_defaults();
-		JB_DB_Install::maybe_add_indexes();
+		JT_Storage_Migration::maybe_migrate();
+		JT_Settings::ensure_defaults();
+		JT_DB_Install::maybe_add_indexes();
 		flush_rewrite_rules();
-		do_action( 'jb_plugin_activated' );
+		do_action( 'jt_plugin_activated' );
 	}
 }

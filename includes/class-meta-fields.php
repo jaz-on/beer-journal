@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Meta_Fields
+ * Class JT_Meta_Fields
  */
-class JB_Meta_Fields {
+class JT_Meta_Fields {
 
 	/**
 	 * Register hooks.
@@ -29,23 +29,23 @@ class JB_Meta_Fields {
 	 * @return void
 	 */
 	public function register_meta() {
-		$post_type = JB_Post_Type::POST_TYPE;
+		$post_type = JT_Post_Type::POST_TYPE;
 		$keys      = array(
-			'_jb_checkin_id'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_checkin_url'     => array( 'type' => 'string', 'sanitize_callback' => 'esc_url_raw' ),
-			'_jb_beer_name'       => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_brewery_name'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_beer_style'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_beer_abv'        => array( 'type' => 'number', 'sanitize_callback' => 'floatval' ),
-			'_jb_beer_ibu'        => array( 'type' => 'integer', 'sanitize_callback' => 'absint' ),
-			'_jb_rating_raw'      => array( 'type' => 'number', 'sanitize_callback' => 'floatval' ),
-			'_jb_rating_rounded'  => array( 'type' => 'integer', 'sanitize_callback' => 'absint' ),
-			'_jb_serving_type'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_checkin_date'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_venue_name'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_exclude_sync'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_incomplete_reason' => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
-			'_jb_source'          => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_checkin_id'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_checkin_url'     => array( 'type' => 'string', 'sanitize_callback' => 'esc_url_raw' ),
+			'_jt_beer_name'       => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_brewery_name'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_beer_style'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_beer_abv'        => array( 'type' => 'number', 'sanitize_callback' => 'floatval' ),
+			'_jt_beer_ibu'        => array( 'type' => 'integer', 'sanitize_callback' => 'absint' ),
+			'_jt_rating_raw'      => array( 'type' => 'number', 'sanitize_callback' => 'floatval' ),
+			'_jt_rating_rounded'  => array( 'type' => 'integer', 'sanitize_callback' => 'absint' ),
+			'_jt_serving_type'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_checkin_date'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_venue_name'      => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_exclude_sync'    => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_incomplete_reason' => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
+			'_jt_source'          => array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ),
 		);
 
 		foreach ( $keys as $key => $schema ) {

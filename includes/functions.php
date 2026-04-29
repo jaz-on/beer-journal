@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param string $url Check-in URL.
  * @return string|null Numeric ID or null.
  */
-function jb_parse_checkin_id_from_url( $url ) {
+function jt_parse_checkin_id_from_url( $url ) {
 	if ( ! is_string( $url ) || '' === $url ) {
 		return null;
 	}
@@ -30,7 +30,7 @@ function jb_parse_checkin_id_from_url( $url ) {
  *
  * @return array<int, array{min: float, max: float, round: int}>
  */
-function jb_get_default_rating_rules() {
+function jt_get_default_rating_rules() {
 	return array(
 		array( 'min' => 0.0, 'max' => 0.49, 'round' => 0 ),
 		array( 'min' => 0.5, 'max' => 1.49, 'round' => 1 ),
@@ -46,7 +46,7 @@ function jb_get_default_rating_rules() {
  *
  * @return array<int, string>
  */
-function jb_get_default_rating_labels() {
+function jt_get_default_rating_labels() {
 	return array(
 		0 => __( 'Undrinkable', 'jardin-toasts' ),
 		1 => __( 'Terrible', 'jardin-toasts' ),
@@ -62,11 +62,11 @@ function jb_get_default_rating_labels() {
  *
  * @return array<int, string>
  */
-function jb_get_rating_labels() {
-	$defaults = jb_get_default_rating_labels();
-	$stored   = get_option( 'jb_rating_labels', false );
+function jt_get_rating_labels() {
+	$defaults = jt_get_default_rating_labels();
+	$stored   = get_option( 'jt_rating_labels', false );
 	if ( false === $stored || ! is_array( $stored ) ) {
-		return apply_filters( 'jb_rating_labels', $defaults );
+		return apply_filters( 'jt_rating_labels', $defaults );
 	}
 	$out = array();
 	for ( $i = 0; $i <= 5; $i++ ) {
@@ -74,22 +74,22 @@ function jb_get_rating_labels() {
 			? (string) $stored[ $i ]
 			: ( isset( $defaults[ $i ] ) ? $defaults[ $i ] : '' );
 	}
-	return apply_filters( 'jb_rating_labels', $out );
+	return apply_filters( 'jt_rating_labels', $out );
 }
 
 /**
  * Default Untappd RSS feed URL used when the option is not stored yet.
  *
- * Optional: define `JB_RSS_FEED_URL` in wp-config.php to override the default feed URL.
+ * Optional: define `JT_RSS_FEED_URL` in wp-config.php to override the default feed URL.
  *
  * @return string
  */
-function jb_get_default_rss_feed_url() {
-	if ( defined( 'JB_RSS_FEED_URL' ) && is_string( JB_RSS_FEED_URL ) && '' !== trim( JB_RSS_FEED_URL ) ) {
-		return apply_filters( 'jb_default_rss_feed_url', esc_url_raw( JB_RSS_FEED_URL ) );
+function jt_get_default_rss_feed_url() {
+	if ( defined( 'JT_RSS_FEED_URL' ) && is_string( JT_RSS_FEED_URL ) && '' !== trim( JT_RSS_FEED_URL ) ) {
+		return apply_filters( 'jt_default_rss_feed_url', esc_url_raw( JT_RSS_FEED_URL ) );
 	}
 	return apply_filters(
-		'jb_default_rss_feed_url',
+		'jt_default_rss_feed_url',
 		'https://untappd.com/rss/user/jaz_on?key=89731ff4bd5fc508dc3eae87a6cf93f4'
 	);
 }
@@ -101,10 +101,10 @@ function jb_get_default_rss_feed_url() {
  *
  * @return string
  */
-function jb_get_rss_feed_url() {
-	$stored = get_option( 'jb_rss_feed_url', false );
+function jt_get_rss_feed_url() {
+	$stored = get_option( 'jt_rss_feed_url', false );
 	if ( false === $stored ) {
-		return jb_get_default_rss_feed_url();
+		return jt_get_default_rss_feed_url();
 	}
 	return trim( (string) $stored );
 }
@@ -114,8 +114,8 @@ function jb_get_rss_feed_url() {
  *
  * @return string
  */
-function jb_get_default_untappd_username() {
-	return apply_filters( 'jb_default_untappd_username', 'jaz_on' );
+function jt_get_default_untappd_username() {
+	return apply_filters( 'jt_default_untappd_username', 'jaz_on' );
 }
 
 /**
@@ -123,10 +123,10 @@ function jb_get_default_untappd_username() {
  *
  * @return string
  */
-function jb_get_untappd_username() {
-	$stored = get_option( 'jb_untappd_username', false );
+function jt_get_untappd_username() {
+	$stored = get_option( 'jt_untappd_username', false );
 	if ( false === $stored ) {
-		return jb_get_default_untappd_username();
+		return jt_get_default_untappd_username();
 	}
 	return (string) $stored;
 }
@@ -137,7 +137,7 @@ function jb_get_untappd_username() {
  * @param string $url RSS URL.
  * @return string Username slug or empty.
  */
-function jb_parse_username_from_rss_url( $url ) {
+function jt_parse_username_from_rss_url( $url ) {
 	if ( ! is_string( $url ) || '' === trim( $url ) ) {
 		return '';
 	}
@@ -152,7 +152,7 @@ function jb_parse_username_from_rss_url( $url ) {
  *
  * @return string
  */
-function jb_get_checkin_archive_url() {
+function jt_get_checkin_archive_url() {
 	$pt = 'beer_checkin';
 	if ( ! post_type_exists( $pt ) ) {
 		return home_url( '/' );
@@ -167,7 +167,7 @@ function jb_get_checkin_archive_url() {
  * @param string $content Raw or HTML comment.
  * @return string
  */
-function jb_normalize_imported_post_content( $content ) {
+function jt_normalize_imported_post_content( $content ) {
 	$content = trim( (string) $content );
 	if ( '' === $content ) {
 		return '';
@@ -186,15 +186,15 @@ function jb_normalize_imported_post_content( $content ) {
  * @param float|null $raw Raw rating.
  * @return int|null Rounded 0–5 or null if unknown.
  */
-function jb_map_rating_raw_to_rounded( $raw ) {
+function jt_map_rating_raw_to_rounded( $raw ) {
 	if ( null === $raw || '' === $raw ) {
 		return null;
 	}
 	$raw = floatval( $raw );
-	$rules = get_option( 'jb_rating_rules', jb_get_default_rating_rules() );
-	$rules = apply_filters( 'jb_rating_rules', $rules );
+	$rules = get_option( 'jt_rating_rules', jt_get_default_rating_rules() );
+	$rules = apply_filters( 'jt_rating_rules', $rules );
 	if ( ! is_array( $rules ) || empty( $rules ) ) {
-		$rules = jb_get_default_rating_rules();
+		$rules = jt_get_default_rating_rules();
 	}
 	foreach ( $rules as $rule ) {
 		if ( ! is_array( $rule ) || ! isset( $rule['min'], $rule['max'], $rule['round'] ) ) {
@@ -213,7 +213,7 @@ function jb_map_rating_raw_to_rounded( $raw ) {
  * @param string $title Item title.
  * @return array{beer: string, brewery: string, venue: string}
  */
-function jb_parse_rss_item_title( $title ) {
+function jt_parse_rss_item_title( $title ) {
 	$out = array(
 		'beer'    => '',
 		'brewery' => '',
@@ -237,7 +237,7 @@ function jb_parse_rss_item_title( $title ) {
  *
  * @return string|false Absolute path or false.
  */
-function jb_get_log_directory() {
+function jt_get_log_directory() {
 	$upload = wp_upload_dir();
 	if ( ! empty( $upload['error'] ) ) {
 		return false;
@@ -259,13 +259,13 @@ function jb_get_log_directory() {
  * @param string $checkin_id Untappd check-in ID.
  * @return int Post ID or 0.
  */
-function jb_get_post_id_by_checkin_id( $checkin_id ) {
+function jt_get_post_id_by_checkin_id( $checkin_id ) {
 	global $wpdb;
 	$checkin_id = sanitize_text_field( (string) $checkin_id );
 	if ( '' === $checkin_id ) {
 		return 0;
 	}
-	$key = '_jb_checkin_id';
+	$key = '_jt_checkin_id';
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$post_id = $wpdb->get_var(
 		$wpdb->prepare(
@@ -283,7 +283,7 @@ function jb_get_post_id_by_checkin_id( $checkin_id ) {
  * @param array<int, string|int> $checkin_ids Check-in IDs.
  * @return array<string, int> checkin_id => post_id
  */
-function jb_get_post_ids_by_checkin_ids( array $checkin_ids ) {
+function jt_get_post_ids_by_checkin_ids( array $checkin_ids ) {
 	global $wpdb;
 	$clean = array();
 	foreach ( $checkin_ids as $id ) {
@@ -300,7 +300,7 @@ function jb_get_post_ids_by_checkin_ids( array $checkin_ids ) {
 	$placeholders = implode( ',', array_fill( 0, count( $ids ), '%s' ) );
 	// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnfinishedPlaceholder
 	$sql = "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value IN ({$placeholders})";
-	$params = array_merge( array( '_jb_checkin_id' ), $ids );
+	$params = array_merge( array( '_jt_checkin_id' ), $ids );
 	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$prepared = $wpdb->prepare( $sql, $params );
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -323,14 +323,14 @@ function jb_get_post_ids_by_checkin_ids( array $checkin_ids ) {
  * @param bool $manual True when triggered from admin AJAX.
  * @return int
  */
-function jb_get_rss_sync_max_per_run( $manual = false ) {
+function jt_get_rss_sync_max_per_run( $manual = false ) {
 	if ( $manual ) {
-		$max = (int) apply_filters( 'jb_rss_manual_sync_max_items', 500 );
+		$max = (int) apply_filters( 'jt_rss_manual_sync_max_items', 500 );
 		return max( 1, $max );
 	}
-	$n = class_exists( 'JB_Settings' ) ? (int) JB_Settings::get( 'jb_rss_max_per_run' ) : absint( get_option( 'jb_rss_max_per_run', 10 ) );
+	$n = class_exists( 'JT_Settings' ) ? (int) JT_Settings::get( 'jt_rss_max_per_run' ) : absint( get_option( 'jt_rss_max_per_run', 10 ) );
 	$n = max( 1, min( 100, $n ) );
-	return (int) apply_filters( 'jb_rss_max_per_run', $n );
+	return (int) apply_filters( 'jt_rss_max_per_run', $n );
 }
 
 /**
@@ -339,10 +339,10 @@ function jb_get_rss_sync_max_per_run( $manual = false ) {
  *
  * @return int
  */
-function jb_get_scraping_delay_seconds() {
-	$d = class_exists( 'JB_Settings' ) ? (int) JB_Settings::get( 'jb_scraping_delay' ) : absint( get_option( 'jb_scraping_delay', 3 ) );
+function jt_get_scraping_delay_seconds() {
+	$d = class_exists( 'JT_Settings' ) ? (int) JT_Settings::get( 'jt_scraping_delay' ) : absint( get_option( 'jt_scraping_delay', 3 ) );
 	$d = max( 1, $d );
-	return (int) apply_filters( 'jb_scraping_delay_seconds', $d );
+	return (int) apply_filters( 'jt_scraping_delay_seconds', $d );
 }
 
 /**
@@ -350,8 +350,8 @@ function jb_get_scraping_delay_seconds() {
  *
  * @return array<int, array<string, mixed>>
  */
-function jb_get_rss_sync_queue() {
-	$q = get_option( 'jb_rss_sync_queue', array() );
+function jt_get_rss_sync_queue() {
+	$q = get_option( 'jt_rss_sync_queue', array() );
 	return is_array( $q ) ? array_values( $q ) : array();
 }
 
@@ -361,8 +361,8 @@ function jb_get_rss_sync_queue() {
  * @param array<int, array<string, mixed>> $queue Rows (FIFO).
  * @return void
  */
-function jb_save_rss_sync_queue( array $queue ) {
-	update_option( 'jb_rss_sync_queue', array_values( $queue ), false );
+function jt_save_rss_sync_queue( array $queue ) {
+	update_option( 'jt_rss_sync_queue', array_values( $queue ), false );
 }
 
 /**
@@ -372,7 +372,7 @@ function jb_save_rss_sync_queue( array $queue ) {
  * @param array<int, array<string, mixed>> $rows  Rows to append.
  * @return array<int, array<string, mixed>>
  */
-function jb_rss_queue_merge_unique( array $queue, array $rows ) {
+function jt_rss_queue_merge_unique( array $queue, array $rows ) {
 	$seen = array();
 	$out  = array();
 	foreach ( $queue as $row ) {
@@ -403,30 +403,30 @@ function jb_rss_queue_merge_unique( array $queue, array $rows ) {
  *
  * @return void
  */
-function jb_maybe_schedule_rss_queue_tick() {
-	$q = jb_get_rss_sync_queue();
+function jt_maybe_schedule_rss_queue_tick() {
+	$q = jt_get_rss_sync_queue();
 	if ( empty( $q ) ) {
 		return;
 	}
-	$delay = max( 60, jb_get_scraping_delay_seconds() );
-	$group = jb_action_scheduler_group();
+	$delay = max( 60, jt_get_scraping_delay_seconds() );
+	$group = jt_action_scheduler_group();
 
-	if ( jb_using_action_scheduler() ) {
-		jb_when_action_scheduler_store_ready(
+	if ( jt_using_action_scheduler() ) {
+		jt_when_action_scheduler_store_ready(
 			static function () use ( $delay, $group ) {
-				if ( as_next_scheduled_action( 'jb_rss_queue_tick', array(), $group ) ) {
+				if ( as_next_scheduled_action( 'jt_rss_queue_tick', array(), $group ) ) {
 					return;
 				}
-				as_schedule_single_action( time() + $delay, 'jb_rss_queue_tick', array(), $group );
+				as_schedule_single_action( time() + $delay, 'jt_rss_queue_tick', array(), $group );
 			}
 		);
 		return;
 	}
 
-	if ( wp_next_scheduled( 'jb_rss_queue_tick' ) ) {
+	if ( wp_next_scheduled( 'jt_rss_queue_tick' ) ) {
 		return;
 	}
-	wp_schedule_single_event( time() + $delay, 'jb_rss_queue_tick' );
+	wp_schedule_single_event( time() + $delay, 'jt_rss_queue_tick' );
 }
 
 /**
@@ -436,7 +436,7 @@ function jb_maybe_schedule_rss_queue_tick() {
  * @param callable():void $callback Callback using Action Scheduler APIs.
  * @return void
  */
-function jb_when_action_scheduler_store_ready( callable $callback ) {
+function jt_when_action_scheduler_store_ready( callable $callback ) {
 	if ( ! function_exists( 'as_schedule_recurring_action' ) ) {
 		return;
 	}
@@ -452,7 +452,7 @@ function jb_when_action_scheduler_store_ready( callable $callback ) {
  *
  * @return bool
  */
-function jb_using_action_scheduler() {
+function jt_using_action_scheduler() {
 	return function_exists( 'as_schedule_recurring_action' )
 		&& function_exists( 'as_next_scheduled_action' )
 		&& function_exists( 'as_schedule_single_action' );
@@ -463,21 +463,21 @@ function jb_using_action_scheduler() {
  *
  * @return string
  */
-function jb_action_scheduler_group() {
+function jt_action_scheduler_group() {
 	return 'jardin-toasts';
 }
 
 /**
  * Transient-backed cache helper (see docs/development/caching.md).
  *
- * @param string   $key      Short key (prefix jb_ added).
+ * @param string   $key      Short key (prefix jt_ added).
  * @param callable $producer Callback returning data to cache.
  * @param int|null $ttl      TTL seconds; default 1 hour.
  * @return mixed
  */
-function jb_get_cached_data( $key, $producer, $ttl = null ) {
+function jt_get_cached_data( $key, $producer, $ttl = null ) {
 	$key       = preg_replace( '/[^a-z0-9_\-]/i', '', (string) $key );
-	$cache_key = 'jb_' . $key;
+	$cache_key = 'jt_' . $key;
 	$cached    = get_transient( $cache_key );
 	if ( false !== $cached ) {
 		return $cached;
@@ -493,9 +493,9 @@ function jb_get_cached_data( $key, $producer, $ttl = null ) {
  *
  * @return void
  */
-function jb_invalidate_stats_cache() {
-	delete_transient( 'jb_global_stats' );
-	delete_transient( 'jb_incomplete_checkin_count' );
+function jt_invalidate_stats_cache() {
+	delete_transient( 'jt_global_stats' );
+	delete_transient( 'jt_incomplete_checkin_count' );
 }
 
 /**
@@ -503,16 +503,16 @@ function jb_invalidate_stats_cache() {
  *
  * @return int
  */
-function jb_count_draft_incomplete_checkins() {
-	if ( ! post_type_exists( JB_Post_Type::POST_TYPE ) ) {
+function jt_count_draft_incomplete_checkins() {
+	if ( ! post_type_exists( JT_Post_Type::POST_TYPE ) ) {
 		return 0;
 	}
-	return (int) jb_get_cached_data(
+	return (int) jt_get_cached_data(
 		'incomplete_checkin_count',
 		static function () {
 			$q = new WP_Query(
 				array(
-					'post_type'              => JB_Post_Type::POST_TYPE,
+					'post_type'              => JT_Post_Type::POST_TYPE,
 					'post_status'            => 'draft',
 					'fields'                 => 'ids',
 					'posts_per_page'         => 200,
@@ -521,7 +521,7 @@ function jb_count_draft_incomplete_checkins() {
 					'update_post_term_cache' => false,
 					'meta_query'             => array(
 						array(
-							'key'     => '_jb_incomplete_reason',
+							'key'     => '_jt_incomplete_reason',
 							'compare' => 'EXISTS',
 						),
 					),
@@ -539,36 +539,36 @@ function jb_count_draft_incomplete_checkins() {
  * @param int $post_id Post ID.
  * @return int|WP_Error Post ID on success.
  */
-function jb_rescrape_checkin_post( $post_id ) {
+function jt_rescrape_checkin_post( $post_id ) {
 	$post_id = absint( $post_id );
 	if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
 		return new WP_Error( 'forbidden', __( 'You cannot edit this check-in.', 'jardin-toasts' ) );
 	}
-	if ( get_post_type( $post_id ) !== JB_Post_Type::POST_TYPE ) {
+	if ( get_post_type( $post_id ) !== JT_Post_Type::POST_TYPE ) {
 		return new WP_Error( 'wrong_type', __( 'Not a beer check-in post.', 'jardin-toasts' ) );
 	}
-	$url = get_post_meta( $post_id, '_jb_checkin_url', true );
+	$url = get_post_meta( $post_id, '_jt_checkin_url', true );
 	if ( ! is_string( $url ) || '' === $url || false === strpos( $url, 'untappd.com' ) ) {
 		return new WP_Error( 'no_url', __( 'No valid Untappd check-in URL on this post.', 'jardin-toasts' ) );
 	}
-	$cid = get_post_meta( $post_id, '_jb_checkin_id', true );
+	$cid = get_post_meta( $post_id, '_jt_checkin_id', true );
 	$data = array(
-		'checkin_id'   => is_string( $cid ) && '' !== $cid ? $cid : (string) jb_parse_checkin_id_from_url( $url ),
+		'checkin_id'   => is_string( $cid ) && '' !== $cid ? $cid : (string) jt_parse_checkin_id_from_url( $url ),
 		'checkin_url'  => esc_url_raw( $url ),
-		'checkin_date' => (string) get_post_meta( $post_id, '_jb_checkin_date', true ),
+		'checkin_date' => (string) get_post_meta( $post_id, '_jt_checkin_date', true ),
 	);
 	if ( '' === $data['checkin_id'] ) {
 		return new WP_Error( 'no_id', __( 'Missing check-in ID.', 'jardin-toasts' ) );
 	}
-	$scraper = new JB_Scraper();
+	$scraper = new JT_Scraper();
 	$scraped = $scraper->scrape_checkin_url( $url );
 	if ( ! is_wp_error( $scraped ) ) {
 		$data = array_merge( $data, $scraped );
 	} else {
-		JB_Logger::warning( 'Re-scrape failed for post ' . $post_id . ': ' . $scraped->get_error_message() );
+		JT_Logger::warning( 'Re-scrape failed for post ' . $post_id . ': ' . $scraped->get_error_message() );
 		return $scraped;
 	}
-	$importer = new JB_Importer();
+	$importer = new JT_Importer();
 	return $importer->import_checkin_data( $data, 'rss' );
 }
 
@@ -577,11 +577,11 @@ function jb_rescrape_checkin_post( $post_id ) {
  *
  * @return array{publish: int, draft: int}
  */
-function jb_get_global_stats() {
-	return jb_get_cached_data(
+function jt_get_global_stats() {
+	return jt_get_cached_data(
 		'global_stats',
 		function () {
-			$counts = wp_count_posts( JB_Post_Type::POST_TYPE );
+			$counts = wp_count_posts( JT_Post_Type::POST_TYPE );
 			return array(
 				'publish' => isset( $counts->publish ) ? (int) $counts->publish : 0,
 				'draft'   => isset( $counts->draft ) ? (int) $counts->draft : 0,
@@ -599,14 +599,14 @@ function jb_get_global_stats() {
  * @param string $type    sync|error.
  * @return void
  */
-function jb_send_notification_email( $subject, $body, $type = 'error' ) {
-	if ( 'sync' === $type && ! get_option( 'jb_notify_on_sync', false ) ) {
+function jt_send_notification_email( $subject, $body, $type = 'error' ) {
+	if ( 'sync' === $type && ! get_option( 'jt_notify_on_sync', false ) ) {
 		return;
 	}
-	if ( 'error' === $type && ! get_option( 'jb_notify_on_error', true ) ) {
+	if ( 'error' === $type && ! get_option( 'jt_notify_on_error', true ) ) {
 		return;
 	}
-	$to = get_option( 'jb_notification_email', '' );
+	$to = get_option( 'jt_notification_email', '' );
 	if ( ! is_string( $to ) || '' === trim( $to ) ) {
 		$to = (string) get_option( 'admin_email', '' );
 	}
@@ -622,16 +622,16 @@ function jb_send_notification_email( $subject, $body, $type = 'error' ) {
  *
  * @return void
  */
-function jb_touch_last_rss_sync_time() {
-	update_option( 'jb_last_rss_sync_at', gmdate( 'c' ), false );
+function jt_touch_last_rss_sync_time() {
+	update_option( 'jt_last_rss_sync_at', gmdate( 'c' ), false );
 }
 
 /**
- * Archive layout: grid or table (option jb_archive_layout).
+ * Archive layout: grid or table (option jt_archive_layout).
  *
  * @return string grid|table
  */
-function jb_get_archive_layout() {
-	$l = get_option( 'jb_archive_layout', 'grid' );
+function jt_get_archive_layout() {
+	$l = get_option( 'jt_archive_layout', 'grid' );
 	return in_array( $l, array( 'grid', 'table' ), true ) ? $l : 'grid';
 }

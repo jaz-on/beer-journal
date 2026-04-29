@@ -10,21 +10,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Plugin
+ * Class JT_Plugin
  */
-class JB_Plugin {
+class JT_Plugin {
 
 	/**
 	 * Singleton instance.
 	 *
-	 * @var JB_Plugin|null
+	 * @var JT_Plugin|null
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get instance.
 	 *
-	 * @return JB_Plugin
+	 * @return JT_Plugin
 	 */
 	public static function instance() {
 		if ( null === self::$instance ) {
@@ -39,32 +39,32 @@ class JB_Plugin {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'init', array( 'JB_DB_Install', 'maybe_add_indexes' ), 1 );
+		add_action( 'init', array( 'JT_DB_Install', 'maybe_add_indexes' ), 1 );
 
-		$post_type = new JB_Post_Type();
+		$post_type = new JT_Post_Type();
 		$post_type->register();
 
-		$tax = new JB_Taxonomies();
+		$tax = new JT_Taxonomies();
 		$tax->register();
 
-		$meta = new JB_Meta_Fields();
+		$meta = new JT_Meta_Fields();
 		$meta->register();
 
-		$settings = new JB_Settings();
+		$settings = new JT_Settings();
 		$settings->register();
 
-		$scheduler = new JB_Action_Scheduler();
+		$scheduler = new JT_Action_Scheduler();
 		$scheduler->register();
 
 		if ( is_admin() ) {
-			$admin = new JB_Admin();
+			$admin = new JT_Admin();
 			$admin->register();
 		}
 
-		$public = new JB_Public();
+		$public = new JT_Public();
 		$public->register();
 
-		$blocks = new JB_Blocks();
+		$blocks = new JT_Blocks();
 		$blocks->register();
 	}
 }

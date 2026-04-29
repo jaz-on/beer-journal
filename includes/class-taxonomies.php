@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Taxonomies
+ * Class JT_Taxonomies
  */
-class JB_Taxonomies {
+class JT_Taxonomies {
 
 	public const STYLE = 'beer_style';
 	public const BREWERY = 'brewery';
@@ -58,13 +58,13 @@ class JB_Taxonomies {
 
 		register_taxonomy(
 			self::STYLE,
-			JB_Post_Type::POST_TYPE,
+			JT_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => true,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JT_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
@@ -93,13 +93,13 @@ class JB_Taxonomies {
 
 		register_taxonomy(
 			self::BREWERY,
-			JB_Post_Type::POST_TYPE,
+			JT_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => false,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JT_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,
@@ -128,13 +128,13 @@ class JB_Taxonomies {
 
 		register_taxonomy(
 			self::VENUE,
-			JB_Post_Type::POST_TYPE,
+			JT_Post_Type::POST_TYPE,
 			array(
 				'labels'            => $labels,
 				'hierarchical'      => false,
 				'public'            => true,
 				'show_ui'           => true,
-				'show_in_menu'      => JB_Post_Type::ADMIN_MENU_SLUG,
+				'show_in_menu'      => JT_Post_Type::ADMIN_MENU_SLUG,
 				'show_admin_column' => true,
 				'show_in_nav_menus' => true,
 				'show_in_rest'      => true,

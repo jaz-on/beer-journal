@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Scraper
+ * Class JT_Scraper
  */
-class JB_Scraper {
+class JT_Scraper {
 
 	/**
 	 * Max retries per URL.
@@ -33,7 +33,7 @@ class JB_Scraper {
 			return new WP_Error( 'bad_url', __( 'Invalid Untappd check-in URL.', 'jardin-toasts' ) );
 		}
 
-		$this->respect_rate_limit( jb_get_scraping_delay_seconds() );
+		$this->respect_rate_limit( jt_get_scraping_delay_seconds() );
 
 		$attempts = 0;
 		$html     = '';
@@ -48,14 +48,14 @@ class JB_Scraper {
 						'Accept' => 'text/html,application/xhtml+xml',
 					),
 					'user-agent' => apply_filters(
-						'jb_http_user_agent',
-						'Jardin Toasts/' . JB_VERSION . '; ' . home_url( '/' )
+						'jt_http_user_agent',
+						'Jardin Toasts/' . JT_VERSION . '; ' . home_url( '/' )
 					),
 				)
 			);
 
 			if ( is_wp_error( $response ) ) {
-				JB_Logger::warning( 'Scrape attempt ' . $attempts . ' failed: ' . $response->get_error_message() );
+				JT_Logger::warning( 'Scrape attempt ' . $attempts . ' failed: ' . $response->get_error_message() );
 				sleep( min( 2 * $attempts, 10 ) );
 				continue;
 			}
@@ -65,7 +65,7 @@ class JB_Scraper {
 			if ( 200 === $code && is_string( $html ) && strlen( $html ) > 500 ) {
 				break;
 			}
-			JB_Logger::warning( 'Scrape HTTP ' . $code . ' attempt ' . $attempts );
+			JT_Logger::warning( 'Scrape HTTP ' . $code . ' attempt ' . $attempts );
 			sleep( min( 2 * $attempts, 10 ) );
 		}
 
@@ -83,7 +83,7 @@ class JB_Scraper {
 	 * @return void
 	 */
 	private function respect_rate_limit( $delay ) {
-		$key   = 'jb_last_scrape_ts';
+		$key   = 'jt_last_scrape_ts';
 		$last  = (int) get_transient( $key );
 		$now   = time();
 		$delay = max( 1, $delay );
@@ -102,7 +102,7 @@ class JB_Scraper {
 	 */
 	private function parse_html( $html, $url ) {
 		$data = array(
-			'checkin_id'    => jb_parse_checkin_id_from_url( $url ),
+			'checkin_id'    => jt_parse_checkin_id_from_url( $url ),
 			'checkin_url'   => $url,
 			'beer_name'     => '',
 			'brewery_name'  => '',
@@ -125,7 +125,7 @@ class JB_Scraper {
 			$crawler = new Crawler( $html );
 			$this->extract_from_dom( $crawler, $data );
 		} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-			JB_Logger::debug( 'DomCrawler: ' . $e->getMessage() );
+			JT_Logger::debug( 'DomCrawler: ' . $e->getMessage() );
 		}
 
 		$this->extract_from_regex( $html, $data );
@@ -178,7 +178,7 @@ class JB_Scraper {
 		}
 		if ( preg_match( '/property=["\']og:title["\'][^>]+content=["\']([^"\']+)["\']/i', $html, $m ) ) {
 			$title = html_entity_decode( $m[1], ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-			$parsed = jb_parse_rss_item_title( $title );
+			$parsed = jt_parse_rss_item_title( $title );
 			if ( '' === $data['beer_name'] && '' !== $parsed['beer'] ) {
 				$data['beer_name'] = $parsed['beer'];
 			}
@@ -199,7 +199,7 @@ class JB_Scraper {
 	 * @return void
 	 */
 	private function extract_from_dom( Crawler $crawler, array &$data ) {
-		$selectors = JB_Scraper_Config::dom_selectors();
+		$selectors = JT_Scraper_Config::dom_selectors();
 		$defaults  = array(
 			'beer'    => array(),
 			'brewery' => array(),

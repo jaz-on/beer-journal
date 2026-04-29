@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Image_Handler
+ * Class JT_Image_Handler
  */
-class JB_Image_Handler {
+class JT_Image_Handler {
 
 	/**
 	 * Sideload remote image as featured image for a post.
@@ -23,10 +23,10 @@ class JB_Image_Handler {
 	 * @return int|WP_Error Attachment ID or error.
 	 *
 	 * When sideload fails and placeholders are enabled, uses the saved attachment ID, then the
-	 * `jb_placeholder_attachment_id` filter so extensions can return another attachment (e.g. from an API).
+	 * `jt_placeholder_attachment_id` filter so extensions can return another attachment (e.g. from an API).
 	 */
 	public function import_for_post( $url, $post_id, $title = '' ) {
-		if ( ! get_option( 'jb_import_images', true ) ) {
+		if ( ! get_option( 'jt_import_images', true ) ) {
 			return new WP_Error( 'disabled', __( 'Image import is disabled.', 'jardin-toasts' ) );
 		}
 		$url = esc_url_raw( $url );
@@ -47,21 +47,21 @@ class JB_Image_Handler {
 
 		$att_id = media_sideload_image( $url, $post_id, $title, 'id' );
 		if ( is_wp_error( $att_id ) ) {
-			if ( ! JB_Settings::get( 'jb_use_placeholder_image' ) ) {
+			if ( ! JT_Settings::get( 'jt_use_placeholder_image' ) ) {
 				return $att_id;
 			}
-			$placeholder = absint( JB_Settings::get( 'jb_placeholder_image_id' ) );
-			$placeholder = (int) apply_filters( 'jb_placeholder_attachment_id', $placeholder, $post_id, $url, (string) $title );
+			$placeholder = absint( JT_Settings::get( 'jt_placeholder_image_id' ) );
+			$placeholder = (int) apply_filters( 'jt_placeholder_attachment_id', $placeholder, $post_id, $url, (string) $title );
 			if ( $placeholder && wp_attachment_is_image( $placeholder ) ) {
 				set_post_thumbnail( $post_id, $placeholder );
-				JB_Logger::info( 'Image sideload failed; using placeholder attachment ' . (string) $placeholder );
+				JT_Logger::info( 'Image sideload failed; using placeholder attachment ' . (string) $placeholder );
 				return $placeholder;
 			}
 			return $att_id;
 		}
 
-		update_post_meta( $att_id, '_jb_image_hash', $hash );
-		update_post_meta( $att_id, '_jb_image_source_url', $url );
+		update_post_meta( $att_id, '_jt_image_hash', $hash );
+		update_post_meta( $att_id, '_jt_image_source_url', $url );
 		set_post_thumbnail( $post_id, $att_id );
 
 		return (int) $att_id;
@@ -80,7 +80,7 @@ class JB_Image_Handler {
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1",
-				'_jb_image_hash',
+				'_jt_image_hash',
 				$hash
 			)
 		);
@@ -91,7 +91,7 @@ class JB_Image_Handler {
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND meta_value = %s LIMIT 1",
-				'_jb_image_source_url',
+				'_jt_image_source_url',
 				$url
 			)
 		);

@@ -5,7 +5,7 @@
  * @package JardinToasts
  */
 
-namespace JB\Tests;
+namespace JT\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +20,7 @@ class ScraperConfigTest extends TestCase {
 	 * @return void
 	 */
 	public function test_dom_selectors_structure() {
-		$s = JB_Scraper_Config::dom_selectors();
+		$s = JT_Scraper_Config::dom_selectors();
 		foreach ( array( 'beer', 'brewery', 'style', 'rating', 'comment', 'venue', 'photo' ) as $key ) {
 			$this->assertArrayHasKey( $key, $s );
 			$this->assertIsArray( $s[ $key ] );
@@ -34,6 +34,6 @@ class ScraperConfigTest extends TestCase {
 	 * @return void
 	 */
 	public function test_markup_version() {
-		$this->assertGreaterThan( 0, \JB_Scraper_Config::MARKUP_VERSION );
+		$this->assertGreaterThan( 0, \JT_Scraper_Config::MARKUP_VERSION );
 	}
 }

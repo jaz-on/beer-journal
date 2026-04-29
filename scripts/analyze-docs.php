@@ -40,14 +40,14 @@ function parse_markdown_file( $file_path ) {
 		'dependencies' => [],
 	];
 
-	// Extraire les classes JB_*
-	preg_match_all( '/`JB_([A-Za-z_]+)`/', $content, $classes );
+	// Extraire les classes JT_*
+	preg_match_all( '/`JT_([A-Za-z_]+)`/', $content, $classes );
 	if ( ! empty( $classes[1] ) ) {
 		$info['classes'] = array_unique( $classes[1] );
 	}
 
-	// Extraire les fonctions jb_*
-	preg_match_all( '/`jb_([a-z_]+)\(\)`/', $content, $functions );
+	// Extraire les fonctions jt_*
+	preg_match_all( '/`jt_([a-z_]+)\(\)`/', $content, $functions );
 	if ( ! empty( $functions[1] ) ) {
 		$info['functions'] = array_unique( $functions[1] );
 	}
@@ -122,7 +122,7 @@ echo "\n=== RAPPORT D'ANALYSE ===\n\n";
 
 echo "Composants documentés (" . count( $report['components'] ) . ") :\n";
 foreach ( $report['components'] as $class => $files ) {
-	echo "  - JB_$class (documenté dans " . count( $files ) . " fichier(s))\n";
+	echo "  - JT_$class (documenté dans " . count( $files ) . " fichier(s))\n";
 	foreach ( $files as $file ) {
 		echo "    → $file\n";
 	}
@@ -130,7 +130,7 @@ foreach ( $report['components'] as $class => $files ) {
 
 echo "\nFonctions documentées (" . count( $report['functions'] ) . ") :\n";
 foreach ( $report['functions'] as $function => $files ) {
-	echo "  - jb_$function() (documenté dans " . count( $files ) . " fichier(s))\n";
+	echo "  - jt_$function() (documenté dans " . count( $files ) . " fichier(s))\n";
 }
 
 echo "\nHooks documentés (" . count( $report['hooks'] ) . ") :\n";

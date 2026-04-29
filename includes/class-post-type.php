@@ -10,9 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class JB_Post_Type
+ * Class JT_Post_Type
  */
-class JB_Post_Type {
+class JT_Post_Type {
 
 	/**
 	 * Post type slug.

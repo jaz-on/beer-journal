@@ -35,7 +35,7 @@ class ComposerStaticInit9655599cbf609db15f57185486ff93bd
         ),
         'J' =>
         array (
-            'JB\\Tests\\' => 9,
+            'JT\\Tests\\' => 9,
         ),
         'D' =>
         array (
@@ -76,7 +76,7 @@ class ComposerStaticInit9655599cbf609db15f57185486ff93bd
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
-        'JB\\Tests\\' =>
+        'JT\\Tests\\' =>
         array (
             0 => __DIR__ . '/../..' . '/tests',
         ),
@@ -88,26 +88,26 @@ class ComposerStaticInit9655599cbf609db15f57185486ff93bd
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'JB_Action_Scheduler' => __DIR__ . '/../..' . '/includes/class-action-scheduler.php',
-        'JB_Activator' => __DIR__ . '/../..' . '/includes/class-activator.php',
-        'JB_Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
-        'JB_Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
-        'JB_Crawler' => __DIR__ . '/../..' . '/includes/class-crawler.php',
-        'JB_DB_Install' => __DIR__ . '/../..' . '/includes/class-db-install.php',
-        'JB_Deactivator' => __DIR__ . '/../..' . '/includes/class-deactivator.php',
-        'JB_Image_Handler' => __DIR__ . '/../..' . '/includes/class-image-handler.php',
-        'JB_Importer' => __DIR__ . '/../..' . '/includes/class-importer.php',
-        'JB_Logger' => __DIR__ . '/../..' . '/includes/class-logger.php',
-        'JB_Meta_Fields' => __DIR__ . '/../..' . '/includes/class-meta-fields.php',
-        'JB_Plugin' => __DIR__ . '/../..' . '/includes/class-plugin.php',
-        'JB_Post_Type' => __DIR__ . '/../..' . '/includes/class-post-type.php',
-        'JB_Public' => __DIR__ . '/../..' . '/public/class-public.php',
-        'JB_RSS_Parser' => __DIR__ . '/../..' . '/includes/class-rss-parser.php',
-        'JB_Scraper' => __DIR__ . '/../..' . '/includes/class-scraper.php',
-        'JB_Scraper_Config' => __DIR__ . '/../..' . '/includes/class-scraper-config.php',
-        'JB_Settings' => __DIR__ . '/../..' . '/includes/class-settings.php',
-        'JB_Storage_Migration' => __DIR__ . '/../..' . '/includes/class-storage-migration.php',
-        'JB_Taxonomies' => __DIR__ . '/../..' . '/includes/class-taxonomies.php',
+        'JT_Action_Scheduler' => __DIR__ . '/../..' . '/includes/class-action-scheduler.php',
+        'JT_Activator' => __DIR__ . '/../..' . '/includes/class-activator.php',
+        'JT_Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
+        'JT_Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
+        'JT_Crawler' => __DIR__ . '/../..' . '/includes/class-crawler.php',
+        'JT_DB_Install' => __DIR__ . '/../..' . '/includes/class-db-install.php',
+        'JT_Deactivator' => __DIR__ . '/../..' . '/includes/class-deactivator.php',
+        'JT_Image_Handler' => __DIR__ . '/../..' . '/includes/class-image-handler.php',
+        'JT_Importer' => __DIR__ . '/../..' . '/includes/class-importer.php',
+        'JT_Logger' => __DIR__ . '/../..' . '/includes/class-logger.php',
+        'JT_Meta_Fields' => __DIR__ . '/../..' . '/includes/class-meta-fields.php',
+        'JT_Plugin' => __DIR__ . '/../..' . '/includes/class-plugin.php',
+        'JT_Post_Type' => __DIR__ . '/../..' . '/includes/class-post-type.php',
+        'JT_Public' => __DIR__ . '/../..' . '/public/class-public.php',
+        'JT_RSS_Parser' => __DIR__ . '/../..' . '/includes/class-rss-parser.php',
+        'JT_Scraper' => __DIR__ . '/../..' . '/includes/class-scraper.php',
+        'JT_Scraper_Config' => __DIR__ . '/../..' . '/includes/class-scraper-config.php',
+        'JT_Settings' => __DIR__ . '/../..' . '/includes/class-settings.php',
+        'JT_Storage_Migration' => __DIR__ . '/../..' . '/includes/class-storage-migration.php',
+        'JT_Taxonomies' => __DIR__ . '/../..' . '/includes/class-taxonomies.php',
         'PHPCSUtils\\AbstractSniffs\\AbstractArrayDeclarationSniff' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/AbstractSniffs/AbstractArrayDeclarationSniff.php',
         'PHPCSUtils\\BackCompat\\BCFile' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/BackCompat/BCFile.php',
         'PHPCSUtils\\BackCompat\\BCTokens' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/BackCompat/BCTokens.php',

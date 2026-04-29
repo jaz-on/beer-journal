@@ -1,11 +1,11 @@
-# Legacy identifiers (post–`jardin-toasts` rename)
+# Identifiants et migration (`jb` → `jt`)
 
-Canonical product and repository name: **`jardin-toasts`**. The following identifiers are **intentionally unchanged** so existing databases, scheduled jobs, and third-party code keep working:
+Le code et la base utilisent désormais le préfixe **`jt_`** (options), **`_jt_`** (post meta), **`JT_`** (classes PHP), **`jt_`** (fonctions globales, hooks, actions AJAX, transients).
 
-- **WordPress options and post meta keys:** `jb_*` options, `_jb_*` meta keys (historical “beer journal” prefix, still the storage contract).
-- **PHP API:** class prefix `JB_`, global functions `jb_*`, constants `JB_*` (e.g. `JB_VERSION`, `JB_PLUGIN_DIR`).
-- **Hooks:** all `jb_*` actions and filters (changing names would silently break extensions).
-- **AJAX actions:** `jb_sync_now`, `jb_crawl_discover`, `jb_crawl_batch` (admin JS and nonces depend on them).
-- **Legacy admin query args:** `admin.php?page=jardin-beer`, `jardin-beer-settings`, and `jb_jardin_beer_settings` redirect to the current settings screen.
+À l’**activation / `plugins_loaded`**, `JT_Storage_Migration` enchaîne :
 
-One-time migrations live in `JB_Storage_Migration` (`includes/class-storage-migration.php`). The **legacy** Action Scheduler group slug `jardin-beer` is cleared on upgrade; new recurring actions use the `jardin-toasts` group.
+1. **`maybe_migrate()`** — import unique depuis beer-journal / `bj_*` vers `jt_*` (sauf si une ancienne version avait déjà posé `jb_storage_migrated_v1`).
+2. **`maybe_migrate_jb_prefix_storage_to_jt()`** — copie puis suppression de toutes les options `jb_*` vers `jt_*`, renommage des métas `_jb_*` → `_jt_*`, purge des transients `jb_*`, nettoyage WP-Cron / Action Scheduler pour les noms de hooks `jb_*` et `jt_*` sur les groupes `beer-journal`, `jardin-beer`, `jardin-toasts`.
+3. **`maybe_migrate_product_rename()`** — chemins / blocs `jardin-beer` → `jardin-toasts` dans `post_content` (sauf si l’ancien drapeau `jb_jardin_toasts_product_rename_v1` est déjà présent).
+
+Les signets admin obsolètes (`jardin-beer`, `jardin-beer-settings`, `jb_jardin_beer_settings`, …) sont toujours redirigés vers l’écran réglages actuel.
